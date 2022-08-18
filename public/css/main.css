@@ -1,0 +1,17 @@
+/*@import url("reset.css");*/
+@import url("normalize.css");
+@import url("base.css");
+
+/* Custom Styles Here */
+
+.whole{
+	background: #ddd;
+}
+
+div#wrapper {
+
+	/* margin: 20px auto; */
+	background: white;
+	max-width: 59rem;
+
+}

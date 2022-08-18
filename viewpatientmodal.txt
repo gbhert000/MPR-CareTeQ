@@ -1,0 +1,736 @@
+
+        {{-- <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary py-2 px-4">Click Here !</button> --}}
+        <!-- Modal-->
+        
+            {{-- @include ('partials.messages') --}}
+         <form action="update" method="POST" >
+            @csrf
+        <div class="modal fade" wire:ignore.self id="viewPatientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div role="document" class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header row d-flex justify-content-between mx-1 mx-sm-3 mb-0 pb-0 border-0">
+                        <div class=" col tabs active" id="tab01">
+                            <h6 class="font-weight-bold ">Personal Information</h6>
+                        </div>
+                        <div class="col tabs " id="tab02">
+                            <h6 class="text-muted">Background Information</h6>
+                        </div>
+                        <div class="col tabs" id="tab03">
+                            <h6 class="text-muted">Health Maintenance Organization</h6>
+                        </div>
+                        <div class="col tabs" id="tab04">
+                            <h6 class="text-muted">Medical Information</h6>
+                        </div>
+                        <div class="col float-right text-right">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closeReset" onclick="resetInput()"></button>
+                        </div>
+                    </div>
+                    
+                    <div class="line"></div>
+                    <div class="modal-body">
+                        {{-- PERSONAL INFORMATION --}}
+                        <fieldset id="tab011" class="show">
+                            <div class="row">
+                                <div class="col-sm-2 mx-2 ">
+                                  <div class="col mt-2">
+                                      <img src="img/profile.png" alt="" class="profile-pic mx-auto">
+                                  </div>
+                                  <div class="w-100"></div>
+                                  <div class="col">
+                                      <label>Master Patient ID</label>
+                                      <input type="text" class="form-control" name="CODE" id="CODE" wire:model="CODE" disabled>
+                                  </div>
+                                </div>
+                                <div class="col-md">
+                                    @if(Session::has('message'))
+                                        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+                                    @endif
+                                    <h3>Personal Information</h3>
+                                    <div class="row">
+                                        <div class="col pr-1-cust">
+                                            <label>Last Name</label>
+                                            <input type="text"  class="form-control" name="U_LASTNAME" id="U_LASTNAME" wire:model="U_LASTNAME">
+                                            {{-- @error('lastName') <span class="text-danger">{{ $message }}</span> @enderror --}}
+                                        </div>
+                                        <div class="col pr-1-cust">
+                                            <label>First Name</label>
+                                            <input type="text" class="form-control" name="U_FIRSTNAME" id="U_FIRSTNAME" wire:model="U_FIRSTNAME" required>
+                                            {{-- {{$firstName}} --}}
+                                            {{-- @error('U_FIRSTNAME') <span class="text-danger">{{ $message }}</span> @enderror --}}
+                                        </div>
+                                        <div class="col-sm pr-1-cust">
+                                            <label>Middle Name</label>
+                                            <input type="text"  class="form-control" name="U_MIDDLENAME" id="U_MIDDLENAME" wire:model="U_MIDDLENAME"  >
+                                            {{-- @error('middleName') <span class="text-danger">{{ $message }}</span> @enderror --}}
+                                        </div>
+                                        <div class="col-sm-2 pr-1-cust">
+                                            <label>Ext.</label>
+                                            <input type="text" wire:model="extensionName" name="extensionName" id="extensionName"class="form-control">
+                                            {{-- @error('extensionName') <span class="text-danger">{{ $message }}</span> @enderror --}}
+                                        </div>
+                      
+                                        <div class="w-100"></div>
+                                        <div class="col pr-1-cust">
+                                            <label>Birthdate</label>
+                                            <input type="text" class="form-control datepicker" name="U_BIRTHDATE" wire:model="U_BIRTHDATE" id="bday1" placeholder="mm/dd/yyyy">
+                                            {{-- @error('birthDate') <span class="text-danger">{{ $message }}</span> @enderror --}}
+                                        </div>
+                                        <div class="col pr-1-cust">
+                                          <label>Age</label>
+                                          <input type="text" class="form-control" id="age" wire:model.prevent="age" name="age" readonly>
+                                          @error('age') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+                                        <div class="pr-1-cust col">
+                                            <label>Sex</label>
+                                            <select name="updatesex" id="regSex" class="form-control" wire:model="updatesex" >
+                                                <option value="" selected>
+                                                  @if($sex=='M')
+                                                      Male
+                                                  @elseif($sex=='F')
+                                                      {{'Female'}}
+                                                  @else
+                                                      {{'Non-Binary'}}
+                                                  @endif
+                                              </option>
+                                                @foreach ($gender as $sex)
+                                                    <option value="{{$sex->U_GENDER}}">
+                                                      @if($sex->U_GENDER=='M')
+                                                        Male
+                                                      @elseif($sex->U_GENDER=='F')
+                                                      {{__('Female')}}
+                                                      @else
+                                                        {{__('Non-Binary')}}
+                                                      @endif
+                                                      </option>
+                                                @endforeach
+                                            </select>
+                                            {{-- @error('sex') <span class="text-danger">{{ $message }}</span> @enderror --}}
+                                        </div>
+                                        <div class="pr-1-cust col">
+                                            <label>Civil Status</label>
+                                            <select name="U_CIVILSTATUS" wire:model="U_CIVILSTATUS" id="U_CIVILSTATUS" class="form-control" >
+                                                <option value="{{$U_CIVILSTATUS}}"selected>{{$U_CIVILSTATUS}}</option>
+                                                <option value="Married">Married</option>
+                                                <option value="Single">Single</option>
+                                                <option value="Widowed">Widowed</option>
+                                                <option value="Annulled">Annulled</option>
+                                                <option value="Divorced">Divorced</option>
+                                                <option value="Separated">Separated</option>
+                                                <option value="Child">Child</option>
+                                            </select>
+                                        </div>
+                                        <div class="w-100"></div>
+                                        
+                                        <div class="pr-1-cust col">
+                                            <label>Place of Birth</label>
+                                            <input type="text" class="form-control" wire:model="U_BIRTHPLACE" name="U_BIRTHPLACE">
+                                            {{-- @error('age') <span class="text-danger">{{ $message }}</span> @enderror --}}
+                                        </div>
+                                        
+                                        <div class="pr-1-cust col">
+                                            <label>Nationality</label>
+                                            <input type="text" class="form-control" wire:model="U_NATIONALITY" name="U_NATIONALITY">
+                                            {{-- @error('age') <span class="text-danger">{{ $message }}</span> @enderror --}}
+                                        </div>
+                                        {{-- <div class="w-100"></div> --}}
+                                        <div class="pr-1-cust col">
+                                            <label>Religion</label>
+                                            <input type="text" class="form-control" wire:model="U_RELIGION" name="U_RELIGION">
+                                            {{-- @error('age') <span class="text-danger">{{ $message }}</span> @enderror --}}
+                                        </div>
+                                        
+                                        <div class="pr-1-cust col">
+                                            <label>Occupation</label>
+                                            <input type="text"class="form-control" wire:model="U_OCCUPATION" name="U_OCCUPATION">
+                                            {{-- @error('age') <span class="text-danger">{{ $message }}</span> @enderror --}}
+                                        </div>
+                                    </div>
+                                    {{-- ADDRESS --}}
+                                        
+                                </div>
+                                {{-- END ADDRESS --}}
+                                <div class="col-md-4">
+                                    <h3>Address</h3>
+                                        <div class="row">
+                                            <div class="w-100"></div>
+                                            <div class="col pr-1-cust" >
+                                                <label>Country</label>
+                                                <select  name="country1" id="regCountry1"  placeholder="Search"  class="form-control" style="width: 100%;">
+                                                    {{-- <option   > {{$country1}}</option> --}}
+                                                   
+                                                    <option value="{{$country1}}" selected>{{$country1}}</option>
+                                                        @foreach ($get_Country as $country)
+                                                        <option value="{{$country->country}}">{{$country->country}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <label>Province</label>
+                                                <select name="province1" id="regProvince1" class="form-control" placeholder="Search" style="width: 100%;">
+                                                    <option >{{$province1}}</option> 
+                                                </select>
+                                            </div>
+                                        </div>
+                        
+                                        <div class="w-100"></div>
+                                        <div class="row">
+                                            <div class="col pr-1-cust">
+                                                <label>Municipality</label>
+                                                            <select name="municipality1" id="regMunicipality1" class="form-control" placeholder="Search" style="width: 100%;">
+                                                                <option > {{$municipality1}}</option>
+                                                            </select>
+                                            </div>
+                                            <div class="col">
+                                                <label>Barangay</label>
+                                                            <select name="brgy1" id="regBarangay1"  class="form-control" placeholder="Search" style="width: 100%;">
+                                                                <option>{{$brgy}}</option>
+                                                            </select>
+                                            </div>
+                        
+                                            <div class="w-100"></div>  
+                                            <div class="col pr-1-cust">
+                                                <label>House No</label>
+                                                <input type="text"class="form-control" id="houseNo" name="houseNo" wire:model="houseNo">
+                                            </div>
+                                            <div class="col pr-1-cust">
+                                                <label>Street</label>
+                                                <input type="text"class="form-control" id="street" wire:model="street" name="street">
+                                            </div>
+                                            
+                                            <div class="col">
+                                                <label>Postal Code</label>
+                                                <input type="text" class="form-control" name="postal" id="regPostal1" wire:model="postal">
+                                            </div>                          
+                                        </div>
+                                </div>
+                                {{-- <hr> --}}
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-2"></div>
+                                <div class="col">
+                                    <hr>
+                                    <div class="row">
+                                        {{-- FIRST CONTACT --}}
+                                       <div class="col">
+                                           <h3>Contact Information</h3>
+                                       </div>
+                                       <div class="w-100"></div>
+                                       
+                                       <div class="w-100"></div>
+                                       <div class="col">
+                                           <label for="contactType1">Contact Type</label>
+                                           <select name="contactType1" id="contactType1" class="form-control" wire:model="contactType1">
+                                                <option value="{{$contactType1}}" selected>{{$contactType1}}</option> 
+                                               <option value="home">Home {{'(Telephone)'}}</option>
+                                               <option value="work">Work </option>
+                                               <option value="personal">Personal {{'(Mobile)'}} </option>
+                                           </select>
+                                       </div>
+                                   
+                                       <div class="col">
+                                           <label>Contact Number</label>
+                                           <input type="text"class="form-control" name="U_1STCONTACT" wire:model="U_1STCONTACT">
+                                       </div>
+                                       {{-- END FIRST CONTACT --}}
+                                       {{-- START 2ND CONTACT --}}
+                                       <div class="col" id="">
+                                        <label for="contactType2">2nd Contact No. Type</label>
+                                        <select name="contactType2" id="contactType2" class="form-control" wire:model="contactType2">
+                                            <option value="{{$contactType2}}" selected>{{$contactType2}}</option> 
+                                            <option value="home">Home {{'(Telephone)'}}</option>
+                                            <option value="work">Work </option>
+                                            <option value="personal">Personal {{'(Mobile)'}} </option>
+                                        </select>
+                                    </div>
+                                    <div class="col" id=""  >
+                                        <label>2nd Contact Number</label>
+                                        <input type="text" class="form-control" name="U_2NDCONTACT" wire:model="U_2NDCONTACT">
+                                    </div>
+                                    <div class="w-100"></div>                                
+                                       {{-- END 2ND CONTACT --}}
+                                       {{-- START 3RD CONTACT --}}
+                                       <div class="col" id="">
+                                           <label for="contactType3">3rd Contact No. Type</label>
+                                           <select name="contactType3" id="contactType23" class="form-control" wire:model="contactType3">
+                                                <option value="{{$contactType3}}" selected>{{$contactType3}}</option> 
+                                               <option value="home">Home {{'(Telephone)'}}</option>
+                                               <option value="work">Work </option>
+                                               <option value="personal">Personal {{'(Mobile)'}} </option>
+                                           </select>
+                                       </div>
+                                       <div class="col" id=""  >
+                                           <label>3rd Contact Number</label>
+                                           <input type="text" class="form-control" name="U_3RDCONTACT" wire:model="U_3RDCONTACT">
+                                       </div>
+
+                                       {{-- start 4th contact --}}
+    
+                                       <div class="col" id="">
+                                        <label for="contactType4">2nd Contact No. Type</label>
+                                        <select name="contactType4" id="contactType2" class="form-control" wire:model="contactType4">
+                                            <option value="{{$contactType4}}" selected>{{$contactType4}}</option> 
+                                            <option value="home">Home {{'(Telephone)'}}</option>
+                                            <option value="work">Work </option>
+                                            <option value="personal">Personal {{'(Mobile)'}} </option>
+                                        </select>
+                                    </div>
+                                       <div class="col" id=""  >
+                                        <label>4th Contact Number</label>
+                                        <input type="text" class="form-control" name="U_4THCONTACT" wire:model="U_4THCONTACT">
+                                    </div>
+                                    <div class="w-100"></div>
+                                       <div class="col">
+                                        <label>Email Address</label>
+                                        <input type="text"class="form-control w-50" name="email">
+                                        {{-- @error('age') <span class="text-danger">{{ $message }}</span> @enderror --}}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                                
+                                                
+                            <!--Health Insurance-->
+                                {{-- ADDRESS --}}
+                                
+                        </fieldset>
+                        {{-- END PERSONAL INFORMATIOM --}}
+
+                        {{-- Background INFORMATION --}}
+                        <fieldset class="p-3" id="tab021" >
+                             {{-- FATHER'S INFORMATION --}}
+                             <div class="row">
+                                <div class="col">
+                                    <h5>Father's Information</h5>
+                                </div>
+                                <div class="col">
+                                    <label for="sameFatherAddress">Same As Patient</label>
+                                    <input type="checkbox" name="sameFatherAddress" id="sameFatherAddress">
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col pr-1-cust" >
+                                    <label>Last Name</label>
+                                    <input type="text" class="form-control"  name="fatherLastName"   id="fatherLastName" placeholder="Last Name">
+                                </div>
+                                <div class="col pr-1-cust">
+                                    <label>First Name</label>
+                                    <input type="text"class="form-control" name="fatherFirstName" id="fatherFirstName" placeholder="First Name">
+                                </div>
+                                <div class="col pr-1-cust">
+                                    <label>Middle Name</label>
+                                    <input type="text"class="form-control" name="fatherMiddleName" id="fatherMiddleName"  placeholder="Middle Name">
+                                </div>
+                                <div class="col-sm-1">
+                                    <label>Ext</label>
+                                    <input type="text"class="form-control" name="fatherExtName" id="fatherMiddleName"  placeholder="Extension">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Contact Number</label>
+                                    <input type="text"class="form-control" name="fatherContactNo" id="fatherContactNo"  placeholder="Contact No.">
+                                </div>
+                                {{-- <div class="w-100"></div> --}}
+                                <div class="col-sm-1">
+                                    <label>House No.</label>
+                                    <input type="text"class="form-control" id="fatherHouseNo" name="fatherHouseNo" placeholder="House No">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Street</label>
+                                    <input type="text"class="form-control" id="fatherStreet" name="fatherStreet"  placeholder="Street">
+                                </div>
+                                <div class="w-100"></div>
+
+                                <div class="col">
+                                    <label>Country</label>
+                                    <select name="fathersCountry" id="regFathersCountry" class="form-control" placeholder="Search" style="width: 100%;">
+                                        {{-- <option selected value=""></option> --}}
+                                        {{-- <option value="" selected></option> --}}
+                                        {{-- <option value=""></option> --}}
+                                        {{-- <option value="{{$country1}}">{{$country1}}</option> --}}
+                                        {{-- @foreach ($get_Country as $country)
+                                           
+                                                <option value="{{$country->country}}">{{$country->country}}</option>
+                                            
+                                        @endforeach --}}
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label>Province</label>
+                                    <select name="fathersProvince" id="regFathersProvince" class="form-control" placeholder="Search" style="width: 100%;">
+                                        {{-- <option value="{{$province1}}" selected>{{$province1}}</option> --}}
+                                        <option value="" selected></option>
+                                        
+                                    </select>
+                                </div>
+                            
+                                <div class="col">
+                                    <label>Municipality</label>
+                                                <select name="fathersMunicipality" id="regfathersMunicipality" class="form-control" placeholder="Search" style="width: 100%;">
+                                                    {{-- <option value="{{$municipality1}}" selected>{{$municipality1}}</option> --}}
+                                                    <option selected value=""></option>
+                                                </select>
+                                </div>
+                                <div class="col">
+                                    <label>Barangay</label>
+                                                <select name="fathersBrgy" id="regFathersBarangay" class="form-control" placeholder="Search" style="width: 100%;">
+                                                     <option selected value=""></option>
+                                                    {{-- <option value="{{$brgy}}" selected></option> --}}
+                                                </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Postal Code</label>
+                                    <input type="text"class="form-control" name="fathersPostal" id="regFathersPostal">
+                                    {{-- <select disable name="postal" id="regPostal" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full empty" placeholder="Search" style="width: 100%; height: 100%;">
+                                        <option value=""></option>
+                                    </select> --}}
+                                </div>                    
+                            </div>
+                            <hr>
+
+                            {{-- MOTHER'S INFORMATION --}}
+                            <div class="row">
+                                <div class="col">
+                                    <h5>Mother's Information</h5>
+                                </div>
+                                <div class="col">
+                                    <label for="sameMotherAddress">Same As Patient</label>
+                                    <input type="checkbox" name="sameMotherAddress" id="sameMotherAddress">
+                                </div>
+                                <div class="w-100"> </div>
+                                <div class="col pr-1-cust">
+                                    <label>Last Name</label>
+                                    <input type="text"class="form-control" name="motherLastName" id="motherLastName" placeholder="Last Name">
+                                </div>
+                                <div class="col pr-1-cust">
+                                    <label>First Name</label>
+                                    <input type="text"class="form-control" name="motherFirstName" id="motherFirstName" placeholder="First Name">
+                                </div>
+                                <div class="col pr-1-cust">
+                                    <label>Middle Name</label>
+                                    <input type="text"class="form-control" name="motherMiddleName" id="motherMiddleName" placeholder="Middle Name">
+                                </div>
+                                <div class="col-sm-1">
+                                    <label>Ext</label>
+                                    <input type="text"class="form-control" name="motherExtName" id="motherExtName" placeholder="Extension">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Contact Number</label>
+                                    <input type="text"class="form-control" name="motherContactNo" id="motherContactNo" placeholder="Contact No.">
+                                </div>
+                                {{-- <div class="w-100"></div> --}}
+                                <div class="col-sm-1">
+                                    <label>House No.</label>
+                                    <input type="text"class="form-control" id="motherHouseNo" name="motherHouseNo"  placeholder="House No">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Street</label>
+                                    <input type="text"class="form-control" id="motherStreet" name="motherStreet"  placeholder="Street">
+                                </div>
+                                <div class="w-100"></div>
+
+                                <div class="col">
+                                    <label>Country</label>
+                                    <select name="mothersCountry" id="regmothersCountry" class="form-control" placeholder="Search" style="width: 100%;">
+                                        <option selected value=""></option>
+                                        @foreach ($get_Country as $country)
+                                            {{-- @if($country->country!=null)
+                                                <option selected value=""></option>
+                                            @else --}}
+                                                <option value="{{$country->country}}">{{$country->country}}</option>
+                                            {{-- @endif --}}
+                                            
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label>Province</label>
+                                    <select name="mothersProvince" id="regmothersProvince" class="form-control" placeholder="Search" style="width: 100%;">
+                                         <option selected value=""></option>
+                                        
+                                    </select>
+                                </div>
+                            
+                                <div class="col">
+                                    <label>Municipality</label>
+                                                <select name="mothersMunicipality" id="regmothersMunicipality" class="form-control" placeholder="Search" style="width: 100%;">
+                                                    <option selected value=""></option>
+                                                </select>
+                                </div>
+                                <div class="col">
+                                    <label>Barangay</label>
+                                                <select name="mothersBrgy" id="regmothersBarangay" class="form-control" placeholder="Search" style="width: 100%;">
+                                                    <option selected value=""></option>
+                                                </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Postal Code</label>
+                                    <input type="text"class="form-control" name="mothersPostal" id="regmothersPostal">
+                                    {{-- <select disable name="postal" id="regPostal" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full empty" placeholder="Search" style="width: 100%; height: 100%;">
+                                        <option value=""></option>
+                                    </select> --}}
+                                </div>
+                                <div class="w-100"></div>
+                            </div>
+                            <hr>
+                            {{-- SPOUSE'S INFORMATION --}}
+                            <div class="row">
+                                <div class="col">
+                                    <h5>Spouse's Information</h5>
+                                </div>
+                                <div class="col">
+                                    <label for="sameSpouseAddress">Same As Patient</label>
+                                    <input type="checkbox" name="sameSpouseAddress" id="sameSpouseAddress">
+                                </div>
+                                <div class="w-100"> </div>
+                                <div class="col pr-1-cust">
+                                    <label>Last Name</label>
+                                    <input type="text"class="form-control" name="spouseLastName" id="spouseLastName" placeholder="Last Name">
+                                </div>
+                                <div class="col pr-1-cust">
+                                    <label>First Name</label>
+                                    <input type="text"class="form-control" name="spouseFirstName" id="spouseFirstName" placeholder="First Name">
+                                </div>
+                                <div class="col pr-1-cust">
+                                    <label>Middle Name</label>
+                                    <input type="text"class="form-control" name="spouseMiddleName" id="spouseMiddleName" placeholder="Middle Name">
+                                </div>
+                                <div class="col-sm-1">
+                                    <label>Ext</label>
+                                    <input type="text"class="form-control" name="spouseExtName" id="spouseExtName" placeholder="Extension">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Contact Number</label>
+                                    <input type="text"class="form-control" name="spouseContactNo" placeholder="Contact No.">
+                                </div>
+                                {{-- <div class="w-100"></div> --}}
+                                <div class="col-sm-1">
+                                    <label>House No.</label>
+                                    <input type="text"class="form-control" id="spouseHouseNo" name="spouseHouseNo"  placeholder="House No">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Street</label>
+                                    <input type="text"class="form-control" id="spouseStreet" name="spouseStreet"  placeholder="Street">
+                                </div>
+                                <div class="w-100"></div>
+
+                                <div class="col">
+                                    <label>Country</label>
+                                    <select name="spousesCountry" id="regspousesCountry" class="form-control" placeholder="Search" style="width: 100%;">
+                                        {{-- <option value="{{$country1}}" selected>{{$country1}}</option> --}}
+                                        <option value=""></option>
+                                        @foreach ($get_Country as $country)
+                                            {{-- @if($country->country!=null)
+                                                <option selected value=""></option>
+                                            @else --}}
+                                                <option value="{{$country->country}}">{{$country->country}}</option>
+                                            {{-- @endif --}}
+                                            
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label>Province</label>
+                                    <select name="spousesProvince" id="regspousesProvince" class="form-control" placeholder="Search" style="width: 100%;">
+                                        {{-- <option value="{{$province1}}" selected>{{$province1}}</option> --}}
+                                         <option selected value=""></option>
+                                        
+                                    </select>
+                                </div>
+                            
+                                <div class="col">
+                                    <label>Municipality</label>
+                                                <select name="spousesMunicipality" id="regspousesMunicipality" class="form-control" placeholder="Search" style="width: 100%;">
+                                                    {{-- <option value="{{$municipality1}}" selected></option> --}}
+                                                    <option selected value=""></option>
+                                                </select>
+                                </div>
+                                <div class="col">
+                                    <label>Barangay</label>
+                                                <select name="spousesBrgy" id="regspousesBarangay" class="form-control" placeholder="Search" style="width: 100%;">
+                                                    {{-- <option value="{{$brgy}}" selected>{{$brgy}}</option> --}}
+                                                    <option selected value=""></option>
+                                                </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Postal Code</label>
+                                    <input type="text"class="form-control" name="spousesPostal" id="regspousesPostal">
+                                    {{-- <select disable name="postal" id="regPostal" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full empty" placeholder="Search" style="width: 100%; height: 100%;">
+                                        <option value=""></option>
+                                    </select> --}}
+                                </div>
+                                <div class="w-100"></div>      
+                            </div>
+                        </fieldset>
+                        <fieldset id="tab031">
+                            <div class="row">
+                                <h5>Provider</h5>
+                                <div class="col">
+                                    <label for="providerName">Health Care Provider Name:</label>
+                                    {{-- <div class="w-100"></div> --}}
+                                  
+                                    <select name="providerName" id="providerName" class="form-control" >
+                                        <option value="">{{'Select HMO'}}</option>
+                                    @foreach ($insCode as $provider)
+                                       <option value="{{$provider->U_INSNAME}}">{{$provider->U_INSNAME}}</option> 
+                                    @endforeach
+                                </select>
+                                </div>
+                                <div class="col">
+                                    <label for="memberID">ID/Account No.</label>
+                                    <input type="text" name="memberID" class="form-control">
+                                </div>
+                                <div class="col">
+                                    <label for="relationMem">Client Type</label>
+                                    <select name="relationMem" id="relationMem" class="form-control">
+                                        <option value="">Select Relation</option>
+                                        <option value="Member">Member</option>
+                                        <option value="Dependent">Dependent</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="insMemType">Member Type</label>
+                                    <select name="insMemType" id="insMemTypeID" class="form-control" >
+                                        <option value="">{{'Select Member Type'}}</option>
+                                    @foreach ($memType as $type)
+                                       <option value="{{$type->NAME}}">{{$type->NAME}}</option> 
+                                    @endforeach
+                                    </select>
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col">
+                                    <label for="memberLname">Member Last Name</label>
+                                    <input type="text" name="memberLname" class="form-control" id="memberLname">
+                                </div>
+                                <div class="col">
+                                    <label for="memberfname">Member First Name</label>
+                                    <input type="text" name="memberFname" class="form-control" id="memberFname">
+                                </div>
+                                <div class="col">
+                                    <label for="memberMname">Member Middle Name</label>
+                                    <input type="text" name="memberMname" class="form-control" id="memberMname">
+                                </div>
+                                <div class="col-sm-1">
+                                    <label for="memberEname">Ext.</label>
+                                    <input type="text" name="memberEname" class="form-control" id="memberEname">
+                                </div>
+                                <div class="col">
+                                    <label>Sex</label>
+                                    <select name="memberSex" id="memberSex" class="form-control" wire:model="memberSex" >
+                                        <option value="" selected>
+                                            @if($sex=='M')
+                                                Male
+                                            @elseif($sex=='F')
+                                                {{'Female'}}
+                                            @else
+                                                {{'Non-Binary'}}
+                                            @endif
+                                        </option>
+                                        @foreach ($gender as $sex)
+                                            <option value="{{$sex->U_GENDER}}">
+                                                @if($sex->U_GENDER=='M')
+                                                Male
+                                                @elseif($sex->U_GENDER=='F')
+                                                {{__('Female')}}
+                                                @else
+                                                {{__('Non-Binary')}}
+                                                @endif
+                                                </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="memberBDay">Birthdate</label>
+                                    <input type="text" name="memberBDay" class="form-control" id="memberBDay">
+                                </div>
+                                
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col">
+                                    <h5>Personal and Social History</h5>
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col">
+                                    <label for="smoker">Smoker:</label>
+                                    <input type="checkbox" name="smoker">
+                                </div>
+                                <div class="col">
+                                    <label for="alcoholic">Alcohol:</label>
+                                    <input type="checkbox" name="alcoholic">
+                                </div>
+                                <div class="col">
+                                    <label for="drugs">Illicit Drugs:</label>
+                                    <input type="checkbox" name="drugs">
+                                </div>
+                                <div class="col">
+                                    <label for="sexActive">Sexually Active:</label>
+                                    <input type="checkbox" name="sexActive">
+                                </div>
+                                
+                                
+                            </div>
+                        </fieldset>
+                        <fieldset id="tab041">
+                            <div class="bg-light">
+                                <h5 class="text-center mb-4 mt-0 pt-4">Education</h5>
+                               
+                                    <div class="form-group pb-2 px-3">
+                                        <input type="text" placeholder="Enter College Name" class="form-control">
+                                    </div>
+                                    <div class="form-group row pb-2 px-3">
+                                        <div class="col-6">
+                                            <input type="text" placeholder="Percentage" class="form-control">
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="text" placeholder="Grade" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group px-3 pb-2">
+                                        <label class="form-control-label"><h6>What are you good at ?</h6></label>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" id="option1" type="checkbox" value="">
+                                            <label class="custom-control-label" for="option1">Web Development</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" id="option2" type="checkbox" value="">
+                                            <label class="custom-control-label" for="option2">Data Structures & Algorithms</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" id="option3" type="checkbox" value="">
+                                            <label class="custom-control-label" for="option3">Android Development</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" id="option4" type="checkbox" value="">
+                                            <label class="custom-control-label" for="option4">Blockchain</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" id="option5" type="checkbox" value="">
+                                            <label class="custom-control-label" for="option5">Machine Learning Algorithms</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group pb-5 row justify-content-center">
+                                        <button type="button" class="btn btn-primary px-3">Submit</button>
+                                    </div>
+                               
+                            </div>
+                            <div class="px-3">
+                                <h6 class="pt-3 pb-3 mb-4 border-bottom"><span class="fa fa-rocket"></span> Trending Technologies</h6>
+                                <h6 class="text-primary pb-2"><a href="#">Augmented Reality and Virtual Reality</a></h6>
+                                <h6 class="text-primary pb-2"><a href="#">Angular and React</a></h6>
+                                <h6 class="text-primary pb-2"><a href="#">Big Data and Hadoop</a></h6>
+                                <h6 class="text-primary pb-4"><a href="#">Internet of Things (IoT)</a></h6>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal" id="closeReset" onclick="resetInput()">Close</button>
+                        <input type="text" class="hidden" id="hiddenInput" name="hiddenCode" value="{{$CODE}}">
+                        {{-- <button type="button" class="btn btn-primary" wire:click="update('{{$CODE}}')" id="updateBtn" data-bs-dismiss="modal">Save Changes</button> --}}
+                        <button type="submit" class="btn btn-primary" wire:click="resetInputFields()" id="submitButt">Save changes</button>
+                    </div>
+                      
+                
+                </div>
+            </div>
+        </div>
+    </form>
+
+    
