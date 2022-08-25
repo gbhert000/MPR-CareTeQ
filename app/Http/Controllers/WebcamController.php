@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
     
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Storage;
   
 class WebcamController extends Controller
@@ -14,7 +15,7 @@ class WebcamController extends Controller
      */
     public function index()
     {
-        return view('webcam');
+        // return view('webcam');
     }
   
     /**
@@ -25,6 +26,8 @@ class WebcamController extends Controller
     public function store(Request $request)
     {
         $img = $request->image;
+        // dd($request->image);
+        // dd($img);
         $folderPath = "uploads/";
         
         $image_parts = explode(";base64,", $img);
@@ -35,8 +38,26 @@ class WebcamController extends Controller
         $fileName = uniqid() . '.png';
         
         $file = $folderPath . $fileName;
-        Storage::put($file, $image_base64);
-        
-        dd('Image uploaded successfully: '.$fileName);
+
+        // $uploadStorage=$img->store('toPath', ['disk' => 'my_files']);
+        // dd($file);
+        $uploadStorage=Storage::disk('my_files')->put($file, $image_base64);
+
+        $fullName=strtoupper(join('',[$request->lnameImage,',',$request->fnameImage, $request->mnameImage, $request->enameImage]));
+
+        $uploadDatabase=DB::table('u_hisimages')->updateOrInsert(
+            ['patientCode'=>$request->patientCode],
+                ['imageName'=>$fileName,'patientCode'=>$request->patientCode,'patientName'=>$fullName]
+        );
+          if($uploadStorage&&$uploadDatabase){
+            // dd(($selectRecord1));
+            return response()->json(['success' => true,
+                        'msg' => 'Uploaded Successfully',       
+            ]);
+        }
+        else{
+            return response()->json(['success' => false, 'msg' => 'Patient Successfully Registered.']);
+        }
+        // return view('home');
     }
 }

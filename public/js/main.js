@@ -1,5 +1,6 @@
 var get_ID="";
 var patient = new Object();
+$code =''
 
 // var fname='';
 // var lname='';
@@ -7,11 +8,26 @@ var patient = new Object();
 
 $(document).ready(function(){
     var getAdd=1;
-    var updateAdd=0;
+    // var updateAdd=0;
     $getCount =0;
-    $initialCount=0
-    
+    // $initialCount=0
 
+    $(".viewReportModal").click(function(){
+        $('#reportModal').modal('show');
+    });
+    $("#closeAddImageModal").click(function(){
+        $('#addImageModal').modal('hide');
+    });
+
+    $("#resetFilter").on('click', function(){
+        $("input[type=date]").val("");
+    });
+
+    $("#resetFilter").on("click", function(){
+        // alert("asd0");
+        // $("#HPI").val("");
+        // $("#HPI").text("");
+    });
 
      // ADD REMOVE CONTACT REGISTRATION
 
@@ -66,17 +82,47 @@ $(document).ready(function(){
         
         
     });
-
+    // remove contact on update
     $("#removeaContactUpdate").click(function(){
-        
-        if(!(updateAdd<$initialCount)){
+        if(updateAdd==initialCount){
+            updateAdd=initialCount;
+        }else if(updateAdd>initialCount){
+            // alert(updateAdd);
             updateAdd--;
+            $("#countContactUpdate").val(updateAdd);
             
-        }else if(updateAdd=$initialCount){
-            updateAdd=updateAdd;
+        }else if(updateAdd==0&&initialCount==0){
+            updateAdd=0;
+            // $('.colsUpdate'+updateAdd).addClass("hidden");
         }
-        $('.colsUpdate'+updateAdd).addClass("hidden");
+        else{
+            updateAdd=initialCount;
+            // alert(updateAdd)
+        }
+        switch(updateAdd){
+            case 0:
+                $('.colsUpdate1').addClass("hidden");
+                $('.colsUpdate2').addClass("hidden");
+                $('.colsUpdate3').addClass("hidden");
+                $('.colsUpdate4').addClass("hidden");
+                break;
+            case 1:
+                $('.colsUpdate2').addClass("hidden");
+                $('.colsUpdate3').addClass("hidden");
+                $('.colsUpdate4').addClass("hidden");
+                break;
+            case 2:
+                $('.colsUpdate3').addClass("hidden");
+                $('.colsUpdate4').addClass("hidden");
+                break;
+            case 3:
+                $('.colsUpdate4').addClass("hidden");
+                break
+            default:
+    
+        }
         
+
         // $getCount=$("#countContact").val(getAdd);
         // if(!(getAdd<=0)){
         //     getAdd=1;
@@ -95,6 +141,20 @@ $(document).ready(function(){
     $("#addingPatient").click(function(){
         $('#studentModal').modal('show');
     });
+    // $("#addingImage").click(function(){
+    //     $('#viewPatientModal').modal('hide');
+    //     $('#addImageModal').modal('show');
+    // });
+
+
+
+    $("#closeAddImageModal").click(function(){
+        $('#addImageModal').modal('hide');
+    });
+
+    // $("#addPicture").click(function(){
+    //     $('#addImageModal').modal('show');
+    // });
     // $("#U_FIRSTNAME").focusout(function(){
     //     fname=document.getElementById('U_FIRSTNAME').value;
     // });
@@ -774,21 +834,19 @@ $(document).ready(function(){
 
         });
 
-
-
-
-        // $('#bday1').change(function() {
-        //     var now = new Date();   //Current Date
-        //     var past = new Date($('#bday1').val());  //Date of Birth
-        //     if (past > now) {
-        //         alert('Entered Date is Greater than Current Date');
-        //         return false;
-        //     }
-        //     var nowYear = now.getFullYear();  //Get current year
-        //     var pastYear = past.getFullYear();//Get Date of Birth year
-        //     var age = nowYear - pastYear;  //calculate the difference
-        //     $('#age').val(age + " years old");
-        // });
+        $('#bday1').change(function() {
+            var now = new Date();   //Current Date
+            var past = new Date($('#bday1').val());  //Date of Birth
+            if (past > now) {
+                alert('Entered Date is Greater than Current Date');
+                return false;
+            }
+            var nowYear = now.getFullYear();  //Get current year
+            var pastYear = past.getFullYear();//Get Date of Birth year
+            var age = nowYear - pastYear;  //calculate the difference
+            $('#age').val(age);
+            $('#age').text(age+"years old");
+        });
         
     
         //     $('.datepicker').datepicker({
@@ -854,8 +912,10 @@ $(document).ready(function(){
       $("#providerName").on('change',function() {
         // alert($(this).val());
         // alert($("#bday1").val());
-        $("#relationMem").prop('disabled', false); //disable 
-        $("#insMemTypeID").prop('disabled', false); //disable
+        // alert($("#providerName").val());
+        $("#relationMem").prop('readonly', false); //disable 
+        $("#insMemTypeID").prop('readonly', false); //disable
+        // alert($("#U_LASTNAME").val());
 
         if ($("#providerName").val() == "Philhealth Care, lnc") {
             $("#memberLname").val('');
@@ -864,20 +924,23 @@ $(document).ready(function(){
             $("#memberEname").val('');
             $("#memberSex").val('');
             $("#memberBDay").val('');
-
-         
-        } else {
+        }else if($("#providerName").val()=="Others:Please Specify"){
+            $('#otherHmo').prop('readonly', false);
+            // alert('s');
+        }else {
             $("#relationMem").val('');
             $("#insMemTypeID").val('');
             // $("#insMemTypeID").text('');
-            $("#relationMem").prop('disabled', true); //disable 
-            $("#insMemTypeID").prop('disabled', true); //disable
-            $("#memberLname").prop('disabled', true); //disable 
-            $("#memberFname").prop('disabled', true); //disable 
-            $("#memberMname").prop('disabled', true); //disable 
-            $("#memberEname").prop('disabled', true); //disable 
-            $("#memberBDay").prop('disabled', true); //disable
-            $("#memberSex").prop('disabled', true); //disable
+            $("#relationMem").prop('readonly', true); //disable 
+            $("#insMemTypeID").prop('readonly', true); //disable
+            $("#memberLname").prop('readonly', true); //disable 
+            $("#memberFname").prop('readonly', true); //disable 
+            $("#memberMname").prop('readonly', true); //disable 
+            $("#memberEname").prop('readonly', true); //disable 
+            $("#memberBDay").prop('readonly', true); //disable
+            $("#memberSex").prop('readonly', true); //disable
+
+            
             $("#memberLname").val( $("#U_LASTNAME").val());
             $("#memberLname").val( $("#U_LASTNAME").val());
             $("#memberFname").val( $("#U_FIRSTNAME").val());
@@ -893,27 +956,30 @@ $(document).ready(function(){
         if ($(this).val() == "Member") {
             // $("#relationMem").prop('disabled', false); //disable 
             // $("#insMemTypeID").prop('disabled', true); //disable
-            $("#memberLname").prop('disabled', true); //disable 
-            $("#memberFname").prop('disabled', true); //disable 
-            $("#memberMname").prop('disabled', true); //disable 
-            $("#memberEname").prop('disabled', true); //disable 
-            $("#memberBDay").prop('disabled', true); //disable 
+            $("#memberLname").prop('readonly', true); //disable 
+            $("#memberFname").prop('readonly', true); //disable 
+            $("#memberMname").prop('readonly', true); //disable 
+            $("#memberEname").prop('readonly', true); //disable 
+            $("#memberBDay").prop('readonly', true); //disable 
+            // alert($("#U_LASTNAME").val());
             $("#memberLname").val( $("#U_LASTNAME").val());
             $("#memberFname").val( $("#U_FIRSTNAME").val());
             $("#memberMname").val( $("#U_MIDDLENAME").val());
             $("#memberEname").val( $("#extensionName").val());
-            $("#memberSex").val( $("#regSex").val());
+            // $("#memberSex").val( $("#updatesex option:selected").val());
+            $("#memberSex").append('<option value="'+$("#updatesex option:selected").text()+'">'+$("#updatesex option:selected").text()+'</option>');
             $("#memberBDay").val( $("#bday1").val());
+            alert( $("#memberLname").val());
         }
-        if($(this).val() == "Dependent") {
+        else if($(this).val() == "Dependent") {
             // $("#memberLname").prop('disabled', false); //disable
             // $("#relationMem").prop('disabled', false); //disable 
             // $("#insMemTypeID").prop('disabled', true); //disable
-            $("#memberLname").prop('disabled', false); //disable 
-            $("#memberFname").prop('disabled', false); //disable 
-            $("#memberMname").prop('disabled', false); //disable 
-            $("#memberEname").prop('disabled', false); //disable 
-            $("#memberBDay").prop('disabled', false); //disable 
+            $("#memberLname").prop('readonly', false); //disable 
+            $("#memberFname").prop('readonly', false); //disable 
+            $("#memberMname").prop('readonly', false); //disable 
+            $("#memberEname").prop('readonly', false); //disable 
+            $("#memberBDay").prop('readonly', false); //disable 
             $("#memberLname").val('');
             $("#memberFname").val('');
             $("#memberMname").val('');
@@ -921,7 +987,7 @@ $(document).ready(function(){
             $("#memberBDay").val('');
           }
          else {
-            $("#memberLname").prop('disabled', true); //disable 
+            $("#memberLname").prop('readonly', true); //disable 
         }
       });
 
@@ -1126,6 +1192,8 @@ $(document).ready(function(){
 });
 function resetInput(){
     $('#viewPatientModal').modal('hide');
+
+    $("#patientImage").attr("src",'img/profile.png');
     $(".active").removeClass("active");
     $("#tab01").addClass("active");
     $(".show").removeClass("show");
@@ -1202,20 +1270,35 @@ function viewRecord($id){
             url: `home/`+$id,
             method: "GET",
             success: function(response) {
+                // alert(response.hmos);
                 $obj=JSON.stringify(response.mpr);
+                // alert($obj);
                 $hispatients = JSON.parse($obj);
 
                 $obj1=JSON.stringify(response.contacts);
                 // alert($obj1);
                 $cont = JSON.parse($obj1);
+                // alert($cont);
+                $obj2=JSON.stringify(response.hmos);
+                // alert($obj2);
+                $hmoObjects = JSON.parse($obj2);
+
+                $obj3=JSON.stringify(response.img);
+                $imageObject = JSON.parse($obj3);
+                // ale
+                // alert($hmoObjects[0]['memberFname']);
+                // alert($hispatients.countContacts);
+                // alert($hmoObjects.memberFname);
             //    alert($o.NAME);
                
                 // $patientCode=response.U_FIRSTNAME;
                 // alert($patientCode);
-                // alert($cont[0].contactNumber);
+                // alert($hmoObjects[0]['hmoName']);
 
                 
                 if(response) {
+
+                    // $("#").attr("href", "/masterpatientrecord/"+$hispatients.CODE);
                     
                     if($hispatients.U_GENDER=="M"){
                         $patientGender="MALE";
@@ -1260,66 +1343,67 @@ function viewRecord($id){
                             alert($hispatients.countContacts);
     
                     }
-                
-                updateAdd = $hispatients.countContacts;
-                $initialCount=$hispatients.countContacts;
-                $("#countContactUpdate").val($hispatients.countContacts);
-                $("#hiddenInput").val($hispatients.CODE);
+                    
+                    $patientIndex=$hispatients.CODE;
+                    // personal information
+                        updateAdd = $hispatients.countContacts;
+                        initialCount = $hispatients.countContacts;
+                        $initialCount=$hispatients.countContacts;
+                        $("#countContactUpdate").val($hispatients.countContacts);
+                        $("#hiddenInput").val($hispatients.CODE);
+                        $("#CODE").val($hispatients.CODE);
+                        $("#U_FIRSTNAME").val($hispatients.U_FIRSTNAME);
+                        $("#U_MIDDLENAME").val($hispatients.U_MIDDLENAME);
+                        $("#U_LASTNAME").val($hispatients.U_LASTNAME);
+                        $("#extensionName").val($hispatients.U_EXTNAME);
+                        $("#bday1").val($hispatients.U_BIRTHDATE);
+                        $("#age").val($hispatients.U_AGE);
+                        
+                        $("#updatesex").val($hispatients.U_GENDER);
+                        
+                        $("#civilStat").val($hispatients.U_CIVILSTATUS);
+                        $("#U_CIVILSTATUS").val($hispatients.U_CIVILSTATUS);
+                        $("#U_BIRTHPLACE").val($hispatients.U_BIRTHPLACE);
+                        // $("#U_NATIONALITY").text($hispatients.U_NATIONALITY);
+                        $('#U_NATIONALITY option:selected').text($hispatients.U_NATIONALITY);
+                        $('#U_NATIONALITY option:selected').val($hispatients.U_NATIONALITY);
+                        $("#U_RELIGION").val($hispatients.U_RELIGION);
+                        $("#U_OCCUPATION").val($hispatients.U_OCCUPATION);
+                    
+                        $('#regCountryUpdate option:selected').val($hispatients.U_COUNTRY);
+                        $('#regCountryUpdate option:selected').text($hispatients.U_COUNTRY);
+                        // alert($hispatients.U_COUNTRY);
+                        
+                        $("#getProvince").text($hispatients.U_PROVINCE);
+                        $("#getProvince").val($hispatients.U_PROVINCE);
+                        $("#getCity").text($hispatients.U_CITY);
+                        $("#getCity").val($hispatients.U_CITY);
+                        $("#getBrgy").text($hispatients.U_BARANGAY);
+                        $("#getBrgy").val($hispatients.U_BARANGAY);
+                       
+                        $("#houseNo").val($hispatients.U_HOUSENO);
+                        $("#street").val($hispatients.U_STREET);
+                        $("#regPostalUpdate").val($hispatients.U_ZIP);
+                        
 
-                $("#CODE").val($hispatients.CODE);
-                $("#U_FIRSTNAME").val($hispatients.U_FIRSTNAME);
-                // alert($hispatients.CODE);
-                // $("#U_FIRSTNAME").val($hispatients.U_FIRSTNAME);
-                $("#U_MIDDLENAME").val($hispatients.U_MIDDLENAME);
-                $("#U_LASTNAME").val($hispatients.U_LASTNAME);
-                $("#extensionName").val($hispatients.U_EXTNAME);
-                $("#bday1").val($hispatients.U_BIRTHDATE);
-                $("#age").val($hispatients.U_AGE);
-                
-                $("#updatesex").val($hispatients.U_GENDER);
-                
-                $("#civilStat").val($hispatients.U_CIVILSTATUS);
-                $("#U_CIVILSTATUS").val($hispatients.U_CIVILSTATUS);
-                $("#U_BIRTHPLACE").val($hispatients.U_BIRTHPLACE);
-                // $("#U_NATIONALITY").text($hispatients.U_NATIONALITY);
-                $('#U_NATIONALITY option:selected').text($hispatients.U_NATIONALITY);
-                $('#U_NATIONALITY option:selected').val($hispatients.U_NATIONALITY);
-                $("#U_RELIGION").val($hispatients.U_RELIGION);
-                $("#U_OCCUPATION").val($hispatients.U_OCCUPATION);
-               
-                $('#regCountryUpdate').val($hispatients.U_COUNTRY);
-                //$("#getCountry").text($hispatients.U_COUNTRY);
-                //$("#getCountry").val($hispatients.U_COUNTRY);
-                $("#getProvince").text($hispatients.U_PROVINCE);
-                $("#getProvince").val($hispatients.U_PROVINCE);
-                $("#getCity").text($hispatients.U_CITY);
-                $("#getCity").val($hispatients.U_CITY);
-                $("#getBrgy").text($hispatients.U_BARANGAY);
-                $("#getBrgy").val($hispatients.U_BARANGAY);
-                // $("#brgyGet").val($hispatients.U_BARANGAY);
-                $("#houseNo").val($hispatients.U_HOUSENO);
-                $("#street").val($hispatients.U_STREET);
-                $("#regPostalUpdate").val($hispatients.U_ZIP);
-                
+                    
 
-               
+                    $("#fatherFirstName").val($hispatients.U_FATHERSFIRSTNAME);
+                    $("#fatherLastName").val($hispatients.U_FATHERSLASTNAME);
+                    $("#fatherMiddleName").val($hispatients.U_FATHERSMIDDLENAME);
+                    $("#fatherExtName").val($hispatients.U_FATHERSEXTNAME);
 
-                $("#fatherFirstName").val($hispatients.U_FATHERSFIRSTNAME);
-                $("#fatherLastName").val($hispatients.U_FATHERSLASTNAME);
-                $("#fatherMiddleName").val($hispatients.U_FATHERSMIDDLENAME);
-                $("#fatherExtName").val($hispatients.U_FATHERSEXTNAME);
+                    $("#motherFirstName").val($hispatients.U_MOTHERSFIRSTNAME);
+                    $("#motherLastName").val($hispatients.U_MOTHERSLASTNAME);
+                    $("#motherMiddleName").val($hispatients.U_MOTHERSMIDDLENAME);
+                    $("#motherExtName").val($hispatients.U_MOTHERSEXTNAME);
 
-                $("#motherFirstName").val($hispatients.U_MOTHERSFIRSTNAME);
-                $("#motherLastName").val($hispatients.U_MOTHERSLASTNAME);
-                $("#motherMiddleName").val($hispatients.U_MOTHERSMIDDLENAME);
-                $("#motherExtName").val($hispatients.U_MOTHERSEXTNAME);
+                        
 
-                
-
-                $("#spouseFirstName").val($hispatients.U_SPOUSEFIRSTNAME);
-                $("#spouseLastName").val($hispatients.U_SPOUSELASTNAME);
-                $("#spouseMiddleName").val($hispatients.U_SPOUSEMIDDLENAME);
-                $("#spouseExtName").val($hispatients.U_SPOUSEEXTNAME);
+                        $("#spouseFirstName").val($hispatients.U_SPOUSEFIRSTNAME);
+                        $("#spouseLastName").val($hispatients.U_SPOUSELASTNAME);
+                        $("#spouseMiddleName").val($hispatients.U_SPOUSEMIDDLENAME);
+                        $("#spouseExtName").val($hispatients.U_SPOUSEEXTNAME);
             
                   $('#regFathersCountry').val($hispatients.U_FATHERCOUNTRY);
                   $('#getFathersProvince').text($hispatients.U_FATHERPROVINCE);
@@ -1373,17 +1457,217 @@ function viewRecord($id){
                     }
                   }
                 //   alert( $("#hideContact1").val());
-                  
-                  
+                //   HMOS
+                //   alert($("#providerName option:selected").val());
+                
+                // alert($hmoObjects);
+                if($hmoObjects!=""){
+                    $("#providerName").val($hmoObjects[0]['hmoName']);
+                    $("#memberID").val($hmoObjects[0]['hmoAccountID']);
+                    $("#relationMem").val($hmoObjects[0]['clientType']);
+                    $("#insMemTypeID").val($hmoObjects[0]['memberType']);
+                    $("#memberLname").val($hmoObjects[0]['memberLname']);
+                    $("#memberFname").val($hmoObjects[0]['memberFname']);
+                    $("#memberMname").val($hmoObjects[0]['memberMname']);
+                    $("#memberEname").val($hmoObjects[0]['memberEname']);
+                    $("#memberSex").val($hmoObjects[0]['memberSex']);
+                    $("#memberBDay").val($hmoObjects[0]['memberBDay']);
+                }
+                
+
+                $imageUrl = $("#storage").val();
+
+                $("#dateUpdated").text($hispatients.DATECREATED);
+                $("#code").text($hispatients.CODE);
+                // storage_path('app/uploads/');
+                //  alert($imageObject.imageName);
+
+                if($imageObject!=null){
+                    if($imageObject.imageName!=""){
+                    // alert($imageObject.imageName);
+                    $("#patientImage").attr("src",$imageUrl+'/'+$imageObject.imageName);
+                  }
+                }
 
                 
-                
-                 
+                // else{
+                //     $("#patientImage").attr("src",$("#patientImage").attr('src')+'/profile.png');
+                // }
+
                 }
             }  
           });
+          $("#addingImage").on('click', function(){
+            addImage($patientIndex);
+
+            // $.ajax({
+            //     url: `home/`+$id,
+            //     method: "GET",
+            //     success: function(response) {
+
+            //     }
+            // });
+
+
+          });
+          
+          
           
 }
+function addImage($patientIndex){
+
+    $code=$patientIndex;
+    // alert(fname+lname);
+    
+  Webcam.set({
+      width: 490,
+    //   width: 350,
+      height: 350,
+      image_format: 'jpeg',
+      jpeg_quality: 90
+  });
+  
+  Webcam.attach( '#my_camera' );
+  
+    $('#viewPatientModal').modal('hide');
+    // alert("asd");
+    $('#addImageModal').modal('show');
+
+//   alert($patientIndex);
+
+    $("#saveImage").click($code,function(){
+
+        Webcam.reset( '#my_camera' )
+        var image=document.getElementById('imageID').value;
+
+        var fnameImage=document.getElementById('U_FIRSTNAME').value;
+        var lnameImage=document.getElementById('U_LASTNAME').value;
+        var mnameImage=document.getElementById('U_MIDDLENAME').value;
+        var enameImage=document.getElementById('extensionName').value;
+        // var lname=document.getElementById('addLastName').value;
+        // $image1=JSON.stringify($code);
+        var patientCode =$code;
+        // alert($code);
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        // alert($id);
+        $('#titleError').text('');
+        $('#descriptionError').text('');
+        // $('#viewPatientModal').modal('show');
+        $.ajax({
+            type: "POST",
+            url: "/home/image/"+$code,
+            data:{
+                image,
+                patientCode,
+                lnameImage,
+                fnameImage,
+                mnameImage,
+                enameImage,
+
+            },
+            success: function(response) {
+
+                if(response.msg=="Uploaded Successfully"){
+                     $('#addImageModal').modal('hide');
+                viewRecord($code);
+                }
+               
+            }
+        });
+        
+    });
+
+
+}
+function take_snapshot() {
+    Webcam.snap( function(data_uri) {
+        $(".image-tag").val(data_uri);
+        document.getElementById('results').innerHTML = '<img src="'+data_uri+'"/>';
+    } );
+}
+
+function getreport($patients){
+    alert($patients);
+}
+
+
+function print(){
+    pdf();
+    
+    $('#reportModal').modal('hide');
+
+
+  }
+    function pdf(){
+       var HTML_Width = $(".html-content").width();
+               var HTML_Height = $(".html-content").height();
+               var top_left_margin = 15;
+               var PDF_Width = HTML_Width + (top_left_margin * 2);
+               var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+               var canvas_image_width = HTML_Width;
+               var canvas_image_height = HTML_Height;
+
+               var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+               html2canvas($(".html-content")[0]).then(function (canvas) {
+                   var imgData = canvas.toDataURL("image/jpeg", 1.0);
+                   var pdf = new jsPDF('p','pt', [PDF_Width, PDF_Height]);
+                   pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+                   for (var i = 1; i <= totalPDFPages; i++) {
+                       pdf.addPage(PDF_Width, PDF_Height);
+                       pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
+                   }
+                   pdf.save("MASTERPATIENTLIST.pdf");
+                   //window.location = "/home"
+                   $(".html-content").hide();
+               });
+    }
+function getRecord($temp_array){
+    // alert($temp_array);
+}
+
+function resetWebcam(){
+
+    Webcam.reset( '#my_camera' );
+    $('#addImageModal').modal('hide');
+    $('#viewPatientModal').modal('show');
+}
+function print2(){
+    pdf();
+
+    $('#reportModal').modal('hide');
+
+
+  }
+    function pdf(){
+       var HTML_Width = $(".html-content").width();
+               var HTML_Height = $(".html-content").height();
+               var top_left_margin = 15;
+               var PDF_Width = HTML_Width + (top_left_margin * 4);
+               var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+               var canvas_image_width = HTML_Width;
+               var canvas_image_height = HTML_Height;
+
+               var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+               html2canvas($(".html-content")[0]).then(function (canvas) {
+                   var imgData = canvas.toDataURL("image/jpeg", 1.0);
+                   var pdf = new jsPDF('p','pt', [PDF_Width, PDF_Height]);
+                   pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+                   for (var i = 1; i <= totalPDFPages; i++) {
+                       pdf.addPage(PDF_Width, PDF_Height);
+                       pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
+                   }
+                   pdf.save("MASTERPATIENTLIST.pdf");
+                   //window.location = "/home"
+                   $(".html-content").hide();
+               });
+    }
 
 
 

@@ -15,11 +15,13 @@ use Illuminate\Support\Facades\Response;
 use App\Models\U_hispatient as u_hispatient;
 use Illuminate\Console\View\Components\Alert;
 use App\Components\FlashMessages;
+use Illuminate\Support\Facades\Auth;
 
 class UHispatients extends Component
 {
     use FlashMessages;
     use WithPagination;
+    protected $paginationTheme = 'bootstrap';
 
     public $search = '';
     public $sortColumnName = 'CODE';
@@ -116,12 +118,13 @@ class UHispatients extends Component
 
         // dd($new_code);
         
-        $address=join(' ',[$request->houseNo, $request->street,$request->brgy,$request->municipality,$request->province, $request->U_COUNTRY ]);
+        $address=join(' ',[$request->houseNo, $request->street,$request->brgy,$request->municipality,$request->province, $request->country1 ]);
         
         $fullName=strtoupper(join(' ',[$request->U_LASTNAME, ',',$request->U_FIRSTNAME,$request->U_MIDDLENAME,$request->extensionName ]));
 
         $selectRecord=u_hispatient::where(['U_FIRSTNAME'=>$request->U_FIRSTNAME, 'U_LASTNAME'=>$request->U_LASTNAME, 'U_BIRTHDATE'=>$request->U_BIRTHDATE])->first();
         // if()
+
         $getContactCount=$request->countContact;
         
         $contactArray=[
@@ -134,17 +137,7 @@ class UHispatients extends Component
         
         $newPatient=false;
 
-       
-        if(!$selectRecord){
-            
-            $getPatientContact=$this->getContacts($fullName,$new_code,$getContactCount, $contactArray);
-            // dd($getPatientContact);
-            
-            $query3=DB::table('u_hiscontacts')->insert($getPatientContact);
-            
-        
-            $query = DB::table('u_hispatients')->insert([
-
+        $patientInfoArray=[
                 'CODE'=>$new_code,
                 'NAME'=>$fullName,
                 'U_FIRSTNAME'=>strtoupper($request->U_FIRSTNAME),
@@ -160,29 +153,61 @@ class UHispatients extends Component
                 'U_RELIGION'=>strtoupper($request->religion),
                 'U_OCCUPATION'=>strtoupper($request->occupation),
                 'U_ADDRESS' =>strtoupper($address),
+                
+        ];
+
+
+       
+        if(!$selectRecord){
+            
+            $getPatientContact=$this->getContacts($fullName,$new_code,$getContactCount, $contactArray);
+            // dd($getPatientContact);
+            
+            if($getPatientContact==""){
+                $contactCounter=0;
+                $insertCount=$contactCounter;
+
+            }else{
+                $query3=DB::table('u_hiscontacts')->insert($getPatientContact);
+                $insertCount=$getContactCount;
+            }
+            
+            $patientInfoArray2=[
                 'U_STREET' =>strtoupper($request->street),
-                'U_HOUSENO' =>strtoupper($request->houseNo),
+                
                 'U_BARANGAY'=>strtoupper($request->brgy),
+                'U_COUNTRY'=>strtoupper($request->country1),
                 'U_CITY'=>strtoupper($request->municipality),
                 'U_PROVINCE'=>strtoupper($request->province),
-                'U_COUNTRY'=>strtoupper($request->country),
+                // 'U_COUNTRY'=>strtoupper($request->country),
                 'U_ZIP'=>strtoupper($request->postal),
-                'U_STREET'=>strtoupper($request->street),
-                // 'U_TELNO'=>strtoupper($request->U_TELNO),
-                // 'U_1STCONTACT'=>strtoupper($request->U_1STCONTACT),
-                // 'U_2NDCONTACT'=>strtoupper($request->U_2NDCONTACT),
-                // 'U_3RDCONTACT'=>strtoupper($request->U_3RDCONTACT),
-                // 'U_4THCONTACT'=>strtoupper($request->U_4THCONTACT),
-                // 'U_1STCONTACTTYPE'=>strtoupper($request->U_1STCONTACTTYPE),
-                // 'U_2NDCONTACTTYPE'=>strtoupper($request->U_2NDCONTACTTYPE),
-                // 'U_3RDCONTACTTYPE'=>strtoupper($request->U_3RDCONTACTTYPE),
-                // 'U_4THCONTACTTYPE'=>strtoupper($request->U_4THCONTACTTYPE),
-                'U_ACTIVE'=>1,
-                'U_VISITCOUNT'=>1,
-                'countContacts'=>$getContactCount,
-                // DATES
-                'DATECREATED'=>DATE('Y-m-d H:i:s'),
-                'LASTUPDATED'=>date('Y-m-d H:i:s')
+                'U_HOUSENO' =>strtoupper($request->houseNo)
+            ];
+            // dd($patientInfoArray);
+
+            $patientInfoArray3=[
+                    'U_ACTIVE'=>1,
+                    'U_VISITCOUNT'=>1,
+                    'countContacts'=>$insertCount,
+                    'LASTUPDATEDBY'=>Auth::user()->userName,
+
+                    'COMPANY'=>Auth::user()->COMPANY,
+                    // DATES
+                    'DATECREATED'=>DATE('Y-m-d H:i:s'),
+                    'LASTUPDATED'=>date('Y-m-d H:i:s')
+            ];
+        
+            $query = DB::table('u_hispatients')->insert([
+
+                $patientInfoArray+
+                $patientInfoArray2+
+                $patientInfoArray3
+                
+            ]);
+
+            $insertNewPatient=DB::table('u_patientprofiles')->insert([
+                    $patientInfoArray +
+                    $patientInfoArray2
             ]);
             
             
@@ -215,10 +240,9 @@ class UHispatients extends Component
             ]);
         }
         else{
-            return response()->json(['success' => false, 'msg' => 'Welcome, nasdew player.']);
+            return response()->json(['success' => false, 'msg' => 'Patient Successfully Registered.']);
         }
-        
-        
+                
     }
 
     public function getBackground($CODE){
@@ -226,13 +250,21 @@ class UHispatients extends Component
         // dd($CODE);
         $post3 = U_hispatient::where('CODE','=',$CODE)->first();
         $post2 = DB::table('u_hiscontacts')->where(['CODE'=>$CODE])->get();
+        $post4 = DB::table('u_hispatientshealthcare')->where(['patientCode'=>$CODE])->get();
+        $post5 = DB::table('u_hisimages')->where(['patientCode'=>$CODE])->first();
         // return Response::json([
-        //     'as'=>$post1,
+        //     'mpr'=>$post3,
+        //     'contacts'=>$post2,
+        //     'hmos'=>$post4
         // ]);
+        // dd($post4);
         return response()->json([
             'mpr'=>$post3,
-            'contacts'=>$post2
+            'contacts'=>$post2,
+            'hmos'=>$post4,
+            'img'=>$post5,
         ]);
+
     }
     public function edit($CODE, Request $request){
 
@@ -360,12 +392,15 @@ class UHispatients extends Component
         ];
 
         $getContactNumber=[
-            [$request->contact1],
-            [$request->contact2],
-            [$request->contact3],
-            [$request->contact4],
+            $request->contact1,
+            $request->contact2,
+            $request->contact3,
+            $request->contact4,
         ];
-        // dd($request->hideContact1);
+
+        $getHmos=[
+            
+        ];
 
         $countCheckContactInfo=count($checkContactInfo);
         // dd($countCheckContactInfo);
@@ -375,59 +410,72 @@ class UHispatients extends Component
         $countContactsUpdate=count($checkContactInfo);
         $getPatientContactUpdate=$this->getContacts($updatefullName,$get_code,$countContactsUpdate, $contactArrayUpdate);
         $getPatientContactInsert=$this->getContacts($updatefullName,$get_code,$getContactCountUpdate, $contactArrayUpdate);
-        // dd($getPatientContactInsert);
-        // dd($getPatientContactInsert[0]);
-        // dd($countContactsUpdate-$getContactCountUpdate);
+        // ADD CONTACT INFORMATION
+        for($p=1; $p<=$getContactCountUpdate; $p++){
+            $checkDBContact[$p-1]=DB::table('u_hiscontacts')->where('CODE',$request->hiddenCode)
+                    ->where('contactID',$getUpdateContactID[$p-1])->first();
+                    // dd($p);
 
-        // for($c=0;$c<count($getContactNumber);$c++){
-        //     $checkDBContact[$c]=DB::table('u_hiscontacts')->where('CODE',$request->hiddenCode)
-        //                         ->where('contactNumber',$getContactNumber[$c])->first();
-        // }
-        // // dd(count($checkDBContact));     
-        // dd($checkDBContact[0]->contactNumber);
-        if($getContactCountUpdate>=$countCheckContactInfo){
-            // dd($checkDBContact);     
-            
-                for($i=0; $i<=$getContactCountUpdate;$i++){
-                    // dd($i);
-                    $checkDBContact[$i]=DB::table('u_hiscontacts')->where('CODE',$request->hiddenCode)
-                    ->where('contactNumber',$getContactNumber[$i])->first();
-                // }
-                // dd($checkDBContact[$i]->contactNumber);
-                    if($checkDBContact[$i]->contactNumber==""){
-                        // dd($checkDBContact[$i]->contactNumber);
-                        $insertPatientContact=DB::table('u_hiscontacts')
+            // dd(is_null($checkDBContact[$p-1]));
+
+            if(is_null($checkDBContact[$p-1])){
+                $insertPatientContact=DB::table('u_hiscontacts')
                                 ->insert(
                                         // dd($getPatientContactUpdate)
-                                        [$getPatientContactInsert[$i-1]]
+                                        [$getPatientContactInsert[$p-1]]
                                         );
                         if($insertPatientContact){
                             // dd("asd");
                                 $updateCountingContacts=DB::table('u_hispatients')
                                     ->where(['CODE'=>$request->hiddenCode])
-                                    ->update(['countContacts'=>$i]);    
+                                    ->update(['countContacts'=>$p]);    
                             }
-                    }else{
+            }else{
                         // dd("asd");
-                        $updatePatientContact=DB::table('u_hiscontacts')
-                            ->where('contactID',$getUpdateContactID[$i])
-                            ->update(
-                                // dd($getPatientContactUpdate)
-                                [
-                                    'contactNumber'=>$checkDBContact[$i]->contactNumber,
-                                ]
-                            );
-                    }
-                        
-                }        
-            
-        }
-        
-       
+                $updatePatientContact=DB::table('u_hiscontacts')
+                    ->where('contactID',$getUpdateContactID[$p-1])
+                    ->update(
+                        // dd($getPatientContactUpdate)
+                        [
+                            'contactNumber'=>$getContactNumber[$p-1],
+                        ]
+                    );
+                }
+            }
+
+        // END CONTACT INFORMATION
+
+        $patientPersonalInfo=[
+            'NAME'=>$updatefullName,
+                'U_FIRSTNAME'=>strtoupper($request->U_FIRSTNAME),
+                'U_LASTNAME'=>strtoupper($request->U_LASTNAME),
+                'U_MIDDLENAME'=>strtoupper($request->U_MIDDLENAME),
+                'U_EXTNAME' =>strtoupper($request->extensionName),
+                'U_CIVILSTATUS' =>strtoupper($request->U_CIVILSTATUS),
+                'U_BIRTHDATE'=>($request->U_BIRTHDATE),
+                'U_AGE'=>strtoupper($request->age),
+                
+                'U_GENDER'=>strtoupper($request->updatesex),
+                'U_BIRTHPLACE'=>strtoupper($request->U_BIRTHPLACE),
+                'U_NATIONALITY'=>strtoupper($request->U_NATIONALITY),
+                'U_RELIGION'=>strtoupper($request->U_RELIGION),
+                'U_OCCUPATION'=>strtoupper($request->U_OCCUPATION),
+                'U_ADDRESS' =>strtoupper($updateaddress),
+
+                'U_HOUSENO' =>strtoupper($request->houseNo),
+                'U_BARANGAY'=>strtoupper($request->brgy1),
+                'U_CITY'=>strtoupper($request->municipality1),
+                'U_PROVINCE'=>strtoupper($request->province),
+                'U_COUNTRY'=>strtoupper($request->country),
+                'U_ZIP'=>strtoupper($request->postal),
+                'U_STREET'=>strtoupper($request->street),
+        ];
+        // dd($patientPersonalInfo);
         // UPDATE MASTER PATIENT RECORD
         $user = U_hispatient::where('CODE','=',$request->hiddenCode)->update([
 
             // Personal Information 
+                
             'NAME'=>$updatefullName,
             'U_FIRSTNAME'=>strtoupper($request->U_FIRSTNAME),
             'U_LASTNAME'=>strtoupper($request->U_LASTNAME),
@@ -436,15 +484,14 @@ class UHispatients extends Component
             'U_CIVILSTATUS' =>strtoupper($request->U_CIVILSTATUS),
             'U_BIRTHDATE'=>($request->U_BIRTHDATE),
             'U_AGE'=>strtoupper($request->age),
-            'U_FATHERNAME'=>$updateFathersName,
-            'U_MOTHERNAME'=>$updateMothersName,
+            
             'U_GENDER'=>strtoupper($request->updatesex),
             'U_BIRTHPLACE'=>strtoupper($request->U_BIRTHPLACE),
             'U_NATIONALITY'=>strtoupper($request->U_NATIONALITY),
             'U_RELIGION'=>strtoupper($request->U_RELIGION),
             'U_OCCUPATION'=>strtoupper($request->U_OCCUPATION),
             'U_ADDRESS' =>strtoupper($updateaddress),
-            'U_STREET' =>strtoupper($request->street),
+
             'U_HOUSENO' =>strtoupper($request->houseNo),
             'U_BARANGAY'=>strtoupper($request->brgy1),
             'U_CITY'=>strtoupper($request->municipality1),
@@ -452,68 +499,92 @@ class UHispatients extends Component
             'U_COUNTRY'=>strtoupper($request->country),
             'U_ZIP'=>strtoupper($request->postal),
             'U_STREET'=>strtoupper($request->street),
-
-                // CONTACT INFORMATION
-                // 'U_TELNO'=>strtoupper($this->U_TELNO),
-            // 'U_1STCONTACT'=>strtoupper($request->U_1STCONTACT),
-            // 'U_2NDCONTACT'=>strtoupper($request->U_2NDCONTACT),
-            // 'U_3RDCONTACT'=>strtoupper($request->U_3RDCONTACT),
-            // 'U_4THCONTACT'=>strtoupper($request->U_4THCONTACT),
-            // 'U_1STCONTACTTYPE'=>strtoupper($request->contactType1),
-            // 'U_2NDCONTACTTYPE'=>strtoupper($request->contactType2),
-            // 'U_3RDCONTACTTYPE'=>strtoupper($request->contactType3),
-            // 'U_4THCONTACTTYPE'=>strtoupper($request->contactType4),
-
+                'U_FATHERNAME'=>$updateFathersName,
+                'U_MOTHERNAME'=>$updateMothersName,
             // BACKGROUND INFORMATION
             // FATHER
-            'U_FATHERSLASTNAME'=>strtoupper($request->fatherLastName),
-            'U_FATHERSFIRSTNAME'=>strtoupper($request->fatherFirstName),
-            'U_FATHERSMIDDLENAME'=>strtoupper($request->fatherMiddleName),
-            'U_FATHERSEXTNAME'=>strtoupper($request->fatherExtName),
-            'U_FATHERTELNO'=>strtoupper($request->fatherContactNo),
-            'U_FATHERADDRESS'=>strtoupper($updateFathersAddress),
-            'U_FATHERSTREET'=>strtoupper($request->fatherStreet),
-            'U_FATHERBARANGAY'=>strtoupper($request->fathersBrgy),
-            'U_FATHERCITY'=>strtoupper($request->fathersMunicipality),
-            'U_FATHERPROVINCE'=>strtoupper($request->fathersProvince),
-            'U_FATHERCOUNTRY'=>strtoupper($request->fathersCountry),
-            'U_FATHERHOUSENO'=>strtoupper($request->fatherHouseNo),
-            'U_FATHERZIP'=>strtoupper($request->fathersPostal),
+                'U_FATHERSLASTNAME'=>strtoupper($request->fatherLastName),
+                'U_FATHERSFIRSTNAME'=>strtoupper($request->fatherFirstName),
+                'U_FATHERSMIDDLENAME'=>strtoupper($request->fatherMiddleName),
+                'U_FATHERSEXTNAME'=>strtoupper($request->fatherExtName),
+                'U_FATHERTELNO'=>strtoupper($request->fatherContactNo),
+                'U_FATHERADDRESS'=>strtoupper($updateFathersAddress),
+                'U_FATHERSTREET'=>strtoupper($request->fatherStreet),
+                'U_FATHERBARANGAY'=>strtoupper($request->fathersBrgy),
+                'U_FATHERCITY'=>strtoupper($request->fathersMunicipality),
+                'U_FATHERPROVINCE'=>strtoupper($request->fathersProvince),
+                'U_FATHERCOUNTRY'=>strtoupper($request->fathersCountry),
+                'U_FATHERHOUSENO'=>strtoupper($request->fatherHouseNo),
+                'U_FATHERZIP'=>strtoupper($request->fathersPostal),
 
             // MOTHER
-            'U_MOTHERSLASTNAME'=>strtoupper($request->motherLastName),
-            'U_MOTHERSFIRSTNAME'=>strtoupper($request->motherFirstName),
-            'U_MOTHERSMIDDLENAME'=>strtoupper($request->motherMiddleName),
-            'U_MOTHERSEXTNAME'=>strtoupper($request->motherExtName),
-            'U_MOTHERTELNO'=>strtoupper($request->motherContactNo),
-            'U_MOTHERADDRESS'=>strtoupper($updateMothersAddress),
-            'U_MOTHERSTREET'=>strtoupper($request->motherStreet),
-            'U_MOTHERBARANGAY'=>strtoupper($request->mothersBrgy),
-            'U_MOTHERCITY'=>strtoupper($request->mothersMunicipality),
-            'U_MOTHERPROVINCE'=>strtoupper($request->mothersProvince),
-            'U_MOTHERCOUNTRY'=>strtoupper($request->mothersCountry),
-            'U_MOTHERHOUSENO'=>strtoupper($request->motherHouseNo),
-            'U_MOTHERZIP'=>strtoupper($request->mothersPostal),
+                'U_MOTHERSLASTNAME'=>strtoupper($request->motherLastName),
+                'U_MOTHERSFIRSTNAME'=>strtoupper($request->motherFirstName),
+                'U_MOTHERSMIDDLENAME'=>strtoupper($request->motherMiddleName),
+                'U_MOTHERSEXTNAME'=>strtoupper($request->motherExtName),
+                'U_MOTHERTELNO'=>strtoupper($request->motherContactNo),
+                'U_MOTHERADDRESS'=>strtoupper($updateMothersAddress),
+                'U_MOTHERSTREET'=>strtoupper($request->motherStreet),
+                'U_MOTHERBARANGAY'=>strtoupper($request->mothersBrgy),
+                'U_MOTHERCITY'=>strtoupper($request->mothersMunicipality),
+                'U_MOTHERPROVINCE'=>strtoupper($request->mothersProvince),
+                'U_MOTHERCOUNTRY'=>strtoupper($request->mothersCountry),
+                'U_MOTHERHOUSENO'=>strtoupper($request->motherHouseNo),
+                'U_MOTHERZIP'=>strtoupper($request->mothersPostal),
             
             // SPOUSE
-            'U_SPOUSELASTNAME'=>strtoupper($request->spouseLastName),
-            'U_SPOUSEFIRSTNAME'=>strtoupper($request->spouseFirstName),
-            'U_SPOUSEMIDDLENAME'=>strtoupper($request->spouseMiddleName),
-            'U_SPOUSEEXTNAME'=>strtoupper($request->spouseExtName),
-            'U_SPOUSETELNO'=>strtoupper($request->spouseContactNo),
-            'U_SPOUSEADDRESS'=>strtoupper($updateSpousesAddress),
-            'U_SPOUSESTREET'=>strtoupper($request->spouseStreet),
-            'U_SPOUSEBARANGAY'=>strtoupper($request->spousesBrgy),
-            'U_SPOUSECITY'=>strtoupper($request->spousesMunicipality),
-            'U_SPOUSEPROVINCE'=>strtoupper($request->spousesProvince),
-            'U_SPOUSECOUNTRY'=>strtoupper($request->spousesCountry),
-            'U_SPOUSEHOUSENO'=>strtoupper($request->spouseHouseNo),
-            'U_SPOUSEZIP'=>strtoupper($request->spousesPostal),
+                'U_SPOUSELASTNAME'=>strtoupper($request->spouseLastName),
+                'U_SPOUSEFIRSTNAME'=>strtoupper($request->spouseFirstName),
+                'U_SPOUSEMIDDLENAME'=>strtoupper($request->spouseMiddleName),
+                'U_SPOUSEEXTNAME'=>strtoupper($request->spouseExtName),
+                'U_SPOUSETELNO'=>strtoupper($request->spouseContactNo),
+                'U_SPOUSEADDRESS'=>strtoupper($updateSpousesAddress),
+                'U_SPOUSESTREET'=>strtoupper($request->spouseStreet),
+                'U_SPOUSEBARANGAY'=>strtoupper($request->spousesBrgy),
+                'U_SPOUSECITY'=>strtoupper($request->spousesMunicipality),
+                'U_SPOUSEPROVINCE'=>strtoupper($request->spousesProvince),
+                'U_SPOUSECOUNTRY'=>strtoupper($request->spousesCountry),
+                'U_SPOUSEHOUSENO'=>strtoupper($request->spouseHouseNo),
+                'U_SPOUSEZIP'=>strtoupper($request->spousesPostal),
+                'LASTUPDATEDBY'=>Auth::user()->userName,
 
                 
 
                 // 'U_COUNTRY' => strtoupper($this->country_selected),
         ]);
+
+        $updatePatientProfile=DB::table('u_patientprofiles')->where('CODE','=',$request->hiddenCode)
+            ->update([
+                'NAME'=>$updatefullName,
+                'U_FIRSTNAME'=>strtoupper($request->U_FIRSTNAME),
+                'U_LASTNAME'=>strtoupper($request->U_LASTNAME),
+                'U_MIDDLENAME'=>strtoupper($request->U_MIDDLENAME),
+                'U_EXTNAME' =>strtoupper($request->extensionName),
+                'U_CIVILSTATUS' =>strtoupper($request->U_CIVILSTATUS),
+                'U_BIRTHDATE'=>($request->U_BIRTHDATE),
+                'U_AGE'=>strtoupper($request->age),
+                
+                'U_GENDER'=>strtoupper($request->updatesex),
+                'U_BIRTHPLACE'=>strtoupper($request->U_BIRTHPLACE),
+                'U_NATIONALITY'=>strtoupper($request->U_NATIONALITY),
+                'U_RELIGION'=>strtoupper($request->U_RELIGION),
+                'U_OCCUPATION'=>strtoupper($request->U_OCCUPATION),
+                'U_ADDRESS' =>strtoupper($updateaddress),
+
+                'U_HOUSENO' =>strtoupper($request->houseNo),
+                'U_BARANGAY'=>strtoupper($request->brgy1),
+                'U_CITY'=>strtoupper($request->municipality1),
+                'U_PROVINCE'=>strtoupper($request->province),
+                'U_COUNTRY'=>strtoupper($request->country),
+                'U_ZIP'=>strtoupper($request->postal),
+                'U_STREET'=>strtoupper($request->street),
+                'U_HEIGHT_CM'=>$request->patientHeightcm,
+                'U_HEIGHT_IN'=>$request->patientHeightin,
+                'U_WEIGHT_KG'=>$request->patientWeightkg,
+                'U_BMI'=>$request->patientBMI
+            ]);
+
+
         // END UPDATE MASTER PATIENT RECORD
 
         // UPDATE PATIENTS CONTACT
@@ -523,11 +594,37 @@ class UHispatients extends Component
         
         // ADD PATIENT HMO
         // $insertHmo1=DB::table('u_hispatientshealthcare')->insert([
+            // dd($request->otherHmo);
+
+            if($request->otherHmo==""){
+                $getHMOName=[
+                    ['hmoName'=>$request->providerName, 'patientName'=>join('',[$request->memberLname,',',$request->memberFname,$request->memberMname,$request->memberEname]),'hmoAccountID'=>$request->memberID, 'clientType'=>$request->relationMem,'memberType'=>$request->insMemType,
+                    'memberLname'=>$request->memberLname,'memberFname'=>$request->memberFname,'memberEname'=>$request->memberEname,'memberMname'=>$request->memberMname,
+                    'memberSex'=>$request->memberSex, 'memberBDay'=>$request->memberBDay,'patientCode'=>$request->CODE]
+                ];
+            }
+            else{
+                $getHMOName=[
+                    ['hmoName'=>$request->otherHmo, 'patientName'=>join('',[$request->memberLname,',',$request->memberFname,$request->memberMname,$request->memberEname]),'hmoAccountID'=>$request->memberID, 'clientType'=>$request->relationMem,'memberType'=>$request->insMemType,
+                    'memberLname'=>$request->memberLname,'memberFname'=>$request->memberFname,'memberEname'=>$request->memberEname,'memberMname'=>$request->memberMname,
+                    'memberSex'=>$request->memberSex, 'memberBDay'=>$request->memberBDay,'patientCode'=>$request->CODE]
+                ];
+            }
+            
+            
+            // dd($getHMOName);
+
+            // if($getHMOName[0]['patientName']==)
+            // $insertHMO=DB::table('u_hispatientshealthcare')->Insert(
+        
+            // $getHMOName);
+
+            $insertHMO=DB::table('u_hispatientshealthcare')->updateOrInsert(
+                    ['hmoName'=>$request->otherHmo,'patientCode'=>$request->CODE,'hmoAccountID'=>$request->memberID],
+
+                $getHMOName[0]);
 
         // ]);
-
-
-
 
         //END PATIENT HMO
         // $this->updateMode = false;
@@ -629,7 +726,7 @@ class UHispatients extends Component
     
     public function updatingSearch()
     {
-        $this->resetPage('bootstrap-5-custom');
+        $this->resetPage();
     }
 
     public function render(){
@@ -759,85 +856,9 @@ class UHispatients extends Component
         return $contacts;
     }
 
-    public function insertPatientContacts($fullName,$new_code,$getPatientContactUpdate, $contactArray){
+   public function getHMO(){
 
-        switch($getPatientContactUpdate){
-            case 1:
-                if($contactArray[0]['contactNumber']==""){
-                    // dd($contactArray[0]);
-                    $contacts="";
-                    
-                }else{
-                    $contacts = [
-                        ['contactType'=>strtoupper($contactArray[0]['contactType']),'contactNumber'=>strtoupper($contactArray[0]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                    ];
-                    // dd($contacts);
-                    
-                }
-                break;
-            case 2:
-                if($contactArray[1]['contactNumber']==""){
-                    $contacts = [
-                        ['contactType'=>strtoupper($contactArray[0]['contactType']),'contactNumber'=>strtoupper($contactArray[0]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                    ];
-                    
-                }else{
-                    $contacts = [
-                        ['contactType'=>strtoupper($contactArray[0]['contactType']),'contactNumber'=>strtoupper($contactArray[0]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                        ['contactType'=>strtoupper($contactArray[1]['contactType']),'contactNumber'=>strtoupper($contactArray[1]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                    ];
-                }
-                // $query3=DB::table('u_hiscontacts')->insert($contacts);
-                break;
-            case 3:
-                if($contactArray[2]['contactNumber']==""){
-                    $contacts = [
-                        ['contactType'=>strtoupper($contactArray[0]['contactType']),'contactNumber'=>strtoupper($contactArray[0]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                        ['contactType'=>strtoupper($contactArray[1]['contactType']),'contactNumber'=>strtoupper($contactArray[1]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                    ];
-                    
-                }else{
-                    $contacts = [
-                        
-                        ['contactType'=>strtoupper($contactArray[0]['contactType']),'contactNumber'=>strtoupper($contactArray[0]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                        ['contactType'=>strtoupper($contactArray[1]['contactType']),'contactNumber'=>strtoupper($contactArray[1]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                        ['contactType'=>strtoupper($contactArray[2]['contactType']),'contactNumber'=>strtoupper($contactArray[2]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-
-                    ];
-                }
-                // $query3=DB::table('u_hiscontacts')->insert($contacts);
-                break;
-            case 4:
-                if($contactArray[3]['contactNumber']==""){
-                    $contacts = [
-                        
-                        ['contactType'=>strtoupper($contactArray[0]['contactType']),'contactNumber'=>strtoupper($contactArray[0]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                        ['contactType'=>strtoupper($contactArray[1]['contactType']),'contactNumber'=>strtoupper($contactArray[1]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                        ['contactType'=>strtoupper($contactArray[2]['contactType']),'contactNumber'=>strtoupper($contactArray[2]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-
-                    ];
-                    
-                }else{
-                    $contacts=[
-                        ['contactType'=>strtoupper($contactArray[0]['contactType']),'contactNumber'=>strtoupper($contactArray[0]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                        ['contactType'=>strtoupper($contactArray[1]['contactType']),'contactNumber'=>strtoupper($contactArray[1]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                        ['contactType'=>strtoupper($contactArray[2]['contactType']),'contactNumber'=>strtoupper($contactArray[2]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-                        ['contactType'=>strtoupper($contactArray[3]['contactType']),'contactNumber'=>strtoupper($contactArray[3]['contactNumber']),'contactName'=>$fullName,'CODE'=>$new_code],
-
-                    ];
-                }
-                // $query3=DB::table('u_hiscontacts')->insert($contacts);
-                break;
-            default:
-                $contacts="";
-            
-            // $query3=DB::table('u_hiscontacts')->insert($contacts);
-            
-        }
-        // dd($contacts);
-        return $contacts;
-    }
-    
+   }
 
 
 }

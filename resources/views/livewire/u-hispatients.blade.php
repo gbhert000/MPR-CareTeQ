@@ -1,6 +1,8 @@
 <div>
+    @include('livewire.addImageModal')
     @include('livewire.viewPatientModal')
     @include('livewire.addPatientModal')
+
     
    <div class="row patient-list">
     <div class="col-md-8 float-right">
@@ -8,6 +10,9 @@
         <br>
         <input type="text" name="search"  id="search" placeholder="Search Patient" class=" searchbar" wire:model="search" />
         <button class="btn btn-primary" id="addingPatient"> Add Patient</button> 
+        
+        {{-- <button  name="Add Picture" class="btn btn-primary" data-toggle="modal" data-target="#addImageModal" >Add Picture</button> --}}
+
     </div>
 
     <div class="col-sm-2">
@@ -15,7 +20,7 @@
         <select name="itemPerPage" id=""wire:model="perPage" class="form-control">
             <option value="10">10</option>
             <option value="20">20</option>
-            <option value="30">30</option>
+            <option value="40">40</option>
         </select>
 
     </div>
@@ -68,7 +73,8 @@
                 <td>{{ $item->U_MIDDLENAME }}</td>
                 <td>{{ $item->U_EXTNAME }}</td>
                 <td>{{ $item->U_BIRTHDATE }}</td>
-                <td>{{ $item->U_GENDER }}</td>
+                <td>
+                    {{ $item->U_GENDER }}</td>
                 <td>{{ $item->U_VISITCOUNT }}</td>         
                 <td>
                     @if($item->U_ACTIVE==1)
@@ -84,8 +90,14 @@
             @endforeach
         </tbody>
     </table>
-    <div class="pagination-content">
+    <div class="row pagination-content mt-3">
         {{ $patients->links('pagination::bootstrap-5-custom') }}
+    </div>
+
+    
+    <div class="row">
+        
+        <a  href="report" id="getreport"><img src="icon/printer.png" alt="" class="iconPrinter"></a>
     </div>
 
     

@@ -7,7 +7,8 @@
                 <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ 
                     Session::get('message') }}</p>
                 @endif
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closeReset1" onclick="resetInput()"></button>
+                <button type="button" class="btn-close"  aria-label="Close" id="closeReset" onclick="resetInput()"></button>
+                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closeReset1" onclick="resetInput()"></button> --}}
             </div>
             <!-- START FORM -->
             <form action="add" method="POST">
@@ -184,7 +185,7 @@
 
                             <!-- START CONTACT -->
 
-                            <input type="number" class="" value="1" name="countContact" id="countContact">
+                            <input type="number" class="hidden" value="1" name="countContact" id="countContact">
                             <!-- START FIRST CONTACT -->
                             <div class="row">
                                 <div class="col">
@@ -193,7 +194,7 @@
                                     <span class="dis-inline ml-3" id="removeaContact"><img src="icon/minus.png" alt="" class="iconPlus"></span>
                                 </div>
                                 <div class="w-100"></div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <label for="contactType1">Label</label>
                                     <select name="contactType1" id="contactType1" class="form-control">
                                         <option value="">Select Label</option>
@@ -216,7 +217,7 @@
                             <!-- END FIRST CONTACT -->
                             <!-- START SECOND CONTACT -->
                             <div class="row">
-                                <div class="col-sm-2 cols2 hidden" id="anotherContactType2">
+                                <div class="col-sm-3 cols2 hidden" id="anotherContactType2">
                                     <label for="contactType2">Label</label>
                                     <select name="contactType2" id="contactType2" class="form-control">
                                         <option value="">Select Label</option>
@@ -239,7 +240,7 @@
                             <!-- END SECOND CONTACT -->
                             <!-- START THIRD CONTACT -->
                             <div class="row">
-                                <div class="col-sm-2 cols3 hidden" id="anotherContactType3">
+                                <div class="col-sm-3 cols3 hidden" id="anotherContactType3">
                                     <label for="contactType3">Label</label>
                                     <select name="contactType3" id="contactType3" class="form-control">
                                         <option value="">Select Label</option>
@@ -262,7 +263,7 @@
                             <!-- END THIRD CONTACT -->
                             <!-- START FOURTH CONTACT -->
                             <div class="row">
-                                <div class="col-sm-2 cols4 hidden" id="anotherContactType3">
+                                <div class="col-sm-3 cols4 hidden" id="anotherContactType3">
                                     <label for="contactType3">Label</label>
                                     <select name="contactType3" id="contactType3" class="form-control">
                                         <option value="">Select Label</option>

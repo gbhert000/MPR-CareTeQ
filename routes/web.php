@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\CustomAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,9 @@ Route::get('patients', function () {
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::get('/report', [App\Http\Controllers\ReportController::class, 'index'])->name('report');
 
 // ADDRESS
 
@@ -55,14 +59,7 @@ Route::get('/municipalitiesSpouse', [App\Http\Livewire\UHispatients::class, 'mun
 Route::get('/brgysSpouse', [App\Http\Livewire\UHispatients::class, 'barangays']);
 Route::get('/postalSpouse', [App\Http\Livewire\UHispatients::class, 'postal']);
 
-Route::post('/add', [App\Http\Livewire\UHispatients::class, 'savePatient'])->name('registerPatient');
-Route::post('/update', [App\Http\Livewire\UHispatients::class, 'update'])->name('updatePatient');
 
-
-Route::post('/show_teams', [App\Http\Livewire\UHispatients::class, 'checkPatient']);
-
-Route::get('webcam', [App\Http\Controllers\WebcamController::class, 'index']);
-Route::post('webcam', [App\Http\Controllers\WebcamController::class, 'store'])->name('webcam.capture');
 Route::get('/home/{id}', [App\Http\Livewire\UHispatients::class, 'getBackground']);
 
 Route::get('/clear', function() {
@@ -74,3 +71,21 @@ Route::get('/clear', function() {
 
 });
 
+
+Route::post('/add', [App\Http\Livewire\UHispatients::class, 'savePatient'])->name('registerPatient');
+Route::post('/update', [App\Http\Livewire\UHispatients::class, 'update'])->name('updatePatient');
+
+
+Route::post('/show_teams', [App\Http\Livewire\UHispatients::class, 'checkPatient']);
+
+// Route::get('webcam', [App\Http\Controllers\WebcamController::class, 'index']);
+Route::post('home/image/{id}', [App\Http\Controllers\WebcamController::class, 'store'])->name('webcam.capture');
+
+
+
+Route::get('dashboard', [CustomAuthController::class, 'dashboard']); 
+Route::get('login', [CustomAuthController::class, 'index'])->name('login');
+Route::post('custom-login', [CustomAuthController::class, 'customLogin'])->name('login.custom'); 
+Route::get('registration', [CustomAuthController::class, 'registration'])->name('register-user');
+Route::post('custom-registration', [CustomAuthController::class, 'customRegistration'])->name('register.custom'); 
+Route::get('signout', [CustomAuthController::class, 'signOut'])->name('signout');
