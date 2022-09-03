@@ -2235,9 +2235,13 @@ function viewVisit(){
                 $visitsObj=response.visits;
                 // alert($visitsObj.DOCNO);
                 // alert($visitsObj.U_ICDCODE);
+                if($visitsObj.MRN==null){
+                    $("#hpidVisitUpdate").attr("readonly", false);
+                }
+
                 $("#mpiUpdate").val($visitsObj.U_PATIENTID);
                 $("#nameVisitUpdate").val($visitsObj.U_PATIENTNAME);
-                $("#hpidVisitUpdate").val($visitsObj.U_PATIENTID);
+                $("#hpidVisitUpdate").val($visitsObj.MRN);
                 $("#visitIDUpdate").val($visitsObj.DOCNO);
                 $("#selectVisitUpdate").val($visitsObj.VISITTYPE);
                 $("#hospitalNameInputUpdate").val($visitsObj.COMPANY);

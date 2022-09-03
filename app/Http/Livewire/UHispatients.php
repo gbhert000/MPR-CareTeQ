@@ -477,8 +477,16 @@ class UHispatients extends Component
         ];
 
         $contactCounterUpdate=0;
-        for($ll=0;$ll<count($$contactArrayUpdate);$ll){
-            
+        for($ll=0;$ll<count($contactArrayUpdate);$ll++){
+            if($contactArrayUpdate[$ll]['contactNumber']!=null){
+                $contactCounterUpdate++;
+            }
+        }
+        $getContactEmailUpdate=$contactCounterUpdate;
+        for($kk=0;$kk<$getContactEmailUpdate;$kk++){
+            $insertContactArrayUpdate[]=[
+                $contactArrayUpdate[$kk]
+            ];
         }
         
         $emailcounterUpdate=0; 
@@ -487,6 +495,8 @@ class UHispatients extends Component
                 $emailcounterUpdate++;
             } 
         }
+
+
         $getEmailCountUpdate=$emailcounterUpdate;
 
         for($oo=0; $oo<$getEmailCountUpdate;$oo++){
@@ -566,7 +576,7 @@ class UHispatients extends Component
                 'U_COUNTRY'=>strtoupper($request->country),
                 'U_ZIP'=>strtoupper($request->postal),
                 'U_STREET'=>strtoupper($request->street),
-                'countContacts'=>$countCheckContactInfo,
+                'countContacts'=>$contactCounterUpdate,
                 'countEmail'=>$getEmailCountUpdate,
                 'idType'=>$request->idType,
                 'idNumber'=>$request->idNumber,
@@ -698,6 +708,25 @@ class UHispatients extends Component
                 }
                 
             }
+
+            for($jj=0; $jj<$contactCounterUpdate;$jj++){
+                $checkifContactExists=DB::table('u_hiscontacts')->where([
+                    'contactID'=>$getUpdateContactID[$jj],'CODE'=>$request->hiddenCode
+                ])->first();
+
+                if($checkifContactExists!=null){
+                    DB::table('u_hiscontacts')->where([
+                        'contactID'=>$getUpdateContactID[$jj],'CODE'=>$request->hiddenCode
+                    ])->update(
+                        $insertContactArrayUpdate[$jj][0]
+                    );
+                }else{
+                    Db::table('u_hiscontacts')->insert(
+                        $insertContactArrayUpdate[$pp][0]
+                    );
+
+                }
+            }
             if($user){
                 
                 
@@ -717,7 +746,7 @@ class UHispatients extends Component
         // $getLastIDTempUpdate=$this->getLastCode('u_hospitalids','idSeries');
         // $getLastHospitalIDUpdate=$getLastIDTempUpdate->idSeries;
         // $newIDupdate = str_pad((int)($getLastHospitalIDUpdate) + 1, (int)strlen($getLastHospitalIDUpdate), '0', STR_PAD_LEFT); // 000010
-        $checkHospitalID = DB::table('u_hospitalids')->where(['CODE'=>$request->hiddenCode, 'HOSPITALCODE'=>Auth::user()->companyCode])->get();
+        $checkHospitalID = DB::table('u_hospitalids')->where(['CODE'=>$request->hiddenCode,'idSeries'=>$request->hpidUpdate ,'HOSPITALCODE'=>Auth::user()->companyCode])->get();
         // dd($checkHospitalID);
         if(count($checkHospitalID)==0){
             // dd($checkHospitalID);
@@ -824,37 +853,37 @@ class UHispatients extends Component
 
 
             // ADD CONTACT INFORMATION
-        for($p=1; $p<=$getContactCountUpdate; $p++){
-            $checkDBContact[$p-1]=DB::table('u_hiscontacts')->where('CODE',$request->hiddenCode)
-                    ->where('contactID',$getUpdateContactID[$p-1])->first();
-                    // dd($p);
+        // for($p=1; $p<=$getContactCountUpdate; $p++){
+        //     $checkDBContact[$p-1]=DB::table('u_hiscontacts')->where('CODE',$request->hiddenCode)
+        //             ->where('contactID',$getUpdateContactID[$p-1])->first();
+        //             // dd($p);
 
-            // dd(is_null($checkDBContact[$p-1]));
+        //     // dd(is_null($checkDBContact[$p-1]));
 
-            if(is_null($checkDBContact[$p-1])){
-                $insertPatientContact=DB::table('u_hiscontacts')
-                                ->insert(
-                                        // dd($getPatientContactUpdate)
-                                        [$getPatientContactInsert[$p-1]]
-                                        );
-                        if($insertPatientContact){
-                            // dd("asd");
-                                $updateCountingContacts=DB::table('u_hispatients')
-                                    ->where(['CODE'=>$request->hiddenCode])
-                                    ->update(['countContacts'=>$p]);    
-                            }
-            }else{
-                        // dd("asd");
-                $updatePatientContact=DB::table('u_hiscontacts')
-                    ->where('contactID',$getUpdateContactID[$p-1])
-                    ->update(
-                        // dd($getPatientContactUpdate)
-                        [
-                            'contactNumber'=>$getContactNumber[$p-1],
-                        ]
-                    );
-                }
-            }
+        //     if(is_null($checkDBContact[$p-1])){
+        //         $insertPatientContact=DB::table('u_hiscontacts')
+        //                         ->insert(
+        //                                 // dd($getPatientContactUpdate)
+        //                                 [$getPatientContactInsert[$p-1]]
+        //                                 );
+        //                 if($insertPatientContact){
+        //                     // dd("asd");
+        //                         $updateCountingContacts=DB::table('u_hispatients')
+        //                             ->where(['CODE'=>$request->hiddenCode])
+        //                             ->update(['countContacts'=>$p]);    
+        //                     }
+        //     }else{
+        //                 // dd("asd");
+        //         $updatePatientContact=DB::table('u_hiscontacts')
+        //             ->where('contactID',$getUpdateContactID[$p-1])
+        //             ->update(
+        //                 // dd($getPatientContactUpdate)
+        //                 [
+        //                     'contactNumber'=>$getContactNumber[$p-1],
+        //                 ]
+        //             );
+        //         }
+        //     }
 
         // END CONTACT INFORMATION
 

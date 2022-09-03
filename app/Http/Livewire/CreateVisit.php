@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Components\GetLastCode;
-
+use PDO;
 
 class CreateVisit extends Component
 {
@@ -143,24 +143,15 @@ class CreateVisit extends Component
             $msg = 'Visit Successfully Created';
 
         }
-        // dd($msg);
-
-        if(($msg=="Visit Successfully Created")&&$request->hpidVisit!=null){
-           
+        if($createVisitRecord){
             $getCodeHospcode=DB::table('u_hospitalids')->where(['CODE'=>$request->mpi, 'HOSPITALCODE'=>Auth::user()->companyCode])->first();
             // dd($hospitalNHFRVisit);
-            // dd($checkHospitalIDVisit->note);
-            if($getCodeHospcode->HOSPITALID!=null){
-                $hospitalIDget=$getCodeHospcode->HOSPITALID;
-                $idSeriesGet=$getCodeHospcode->idSeries;
-                $nhfrGet=$getCodeHospcode->NHFR;
-            }else{
+            // dd($getCodeHospcode->HOSPITALID);
+            if($request->mrnUpdate!=""){
                 $hospitalIDget=join('-',[$hospitalNHFRVisit->NHFR,$request->hpidVisit]);
                 $idSeriesGet=$request->hpidVisit;
                 $nhfrGet=$hospitalNHFRVisit->NHFR;
-            }
-           
-                $query6 = DB::table('u_hospitalids')->insert([
+                DB::table('u_hospitalids')->insert([
                     'CODE'=>$request->mpi,
                     'NAME'=>$request->nameVisit,
                     'HOSPITALCODE'=>$hospitalNHFRVisit->hospitalCode,
@@ -171,17 +162,37 @@ class CreateVisit extends Component
                     'EDITEDBY'=>Auth::user()->userName,
                     'note'=>"Create Visit",
                 ]);
-                if($query6){
 
-                }
+            }
+            else{
+                DB::table('u_hospitalids')->insert([
+                    'CODE'=>$request->mpi,
+                    'NAME'=>$request->nameVisit,
+                    'HOSPITALCODE'=>$hospitalNHFRVisit->hospitalCode,
+                    'HOSPITALNAME'=>Auth::user()->COMPANY,
+                    
+                    'EDITEDBY'=>Auth::user()->userName,
+                    'note'=>"Create Visit",
+                ]);
+            }
+           
+                
+                
+        }
+        // dd($msg);
+        
+        if(($msg=="Visit Successfully Created")&&$request->hpidVisit!=null){
+            // dd($request->hpidVisit);
+            
 
                 // dd($insertHospitalIDgetVisit);
-            
+            //    
+    
         }
         return response()->json(['success' => true,
             'msg' => $msg,
         ]);
-
+       
         
     }
     public function dischargePatient($visitID, Request $request){
@@ -199,6 +210,13 @@ class CreateVisit extends Component
 
                     ]
                     );
+
+        if($request->mrnUpdate!=""){
+            DB::table('u_hospitalids')->update(
+                ['CODE'=>$request->mpiUpdate, 'HOSPITALCODE'=>Auth::user()->companyCode],
+                []
+            );
+        }
         
         return response()->json(['success' => true,
             'msg' => "Patient Successfully Discharged",
