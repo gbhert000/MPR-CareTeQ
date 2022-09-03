@@ -165,30 +165,31 @@ class CreateVisit extends Component
 
             }
             else{
+                $hospitalIDget=join('-',[$hospitalNHFRVisit->NHFR,$request->hpidVisit]);
+                $idSeriesGet=$request->hpidVisit;
+                $nhfrGet=$hospitalNHFRVisit->NHFR;
                 DB::table('u_hospitalids')->insert([
                     'CODE'=>$request->mpi,
                     'NAME'=>$request->nameVisit,
                     'HOSPITALCODE'=>$hospitalNHFRVisit->hospitalCode,
                     'HOSPITALNAME'=>Auth::user()->COMPANY,
                     
+                    'NHFR'=>$nhfrGet,
+                    
                     'EDITEDBY'=>Auth::user()->userName,
                     'note'=>"Create Visit",
-                ]);
+                ]);    
+                
+                             
+                     
+      
+        
             }
-           
-                
-                
         }
+
         // dd($msg);
         
-        if(($msg=="Visit Successfully Created")&&$request->hpidVisit!=null){
-            // dd($request->hpidVisit);
-            
-
-                // dd($insertHospitalIDgetVisit);
-            //    
-    
-        }
+        
         return response()->json(['success' => true,
             'msg' => $msg,
         ]);
@@ -210,11 +211,17 @@ class CreateVisit extends Component
 
                     ]
                     );
+        $hospitalNHFRVisitView=$this->getHospitalNHFR(Auth::user()->COMPANY);
 
         if($request->mrnUpdate!=""){
-            DB::table('u_hospitalids')->update(
-                ['CODE'=>$request->mpiUpdate, 'HOSPITALCODE'=>Auth::user()->companyCode],
-                []
+            // dd($request->mrnUpdate);
+            DB::table('u_hospitalids')->where(['CODE'=>$request->mpiUpdate, 'HOSPITALCODE'=>Auth::user()->companyCode])->update(
+             
+                [
+                    'idSeries'=>$request->mrnUpdate,
+                    'NHFR'=>$hospitalNHFRVisitView->NHFR,
+                    'HOSPITALID'=>join('-',[$hospitalNHFRVisitView->NHFR,$request->mrnUpdate ])
+                ]
             );
         }
         

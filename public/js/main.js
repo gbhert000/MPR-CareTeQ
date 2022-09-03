@@ -1883,7 +1883,7 @@ function viewRecord($id,$img){
                 // alert(JSON.stringify($currentHPID));
                 if($currentHPID!=null){
 
-                    // alert(JSON.stringify($currentHPID));
+                    alert(JSON.stringify($currentHPID));
                     if($currentHPID.idSeries!=null){
                         // alert($currentHPID.idSerie);
                         $hpidcurr = $("#hpidUpdate").val($currentHPID.idSeries);
@@ -1911,7 +1911,8 @@ function viewRecord($id,$img){
                         '</tr>'
                         );
                     } 
-                }else{
+                }
+                else{
 
                     // IF NO CURREMNT HOSPITAL ID
                 
