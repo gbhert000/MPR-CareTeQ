@@ -71,6 +71,12 @@ Route::get('/brgysSpouse', [App\Http\Livewire\UHispatients::class, 'barangays'])
 Route::get('/postalSpouse', [App\Http\Livewire\UHispatients::class, 'postal']);
 
 
+Route::get('/getCountry', [App\Http\Livewire\UHispatients::class, 'getAllCountries']);
+Route::get('/municipalitiesSpouse', [App\Http\Livewire\UHispatients::class, 'municipalities']);
+Route::get('/brgysSpouse', [App\Http\Livewire\UHispatients::class, 'barangays']);
+Route::get('/postalSpouse', [App\Http\Livewire\UHispatients::class, 'postal']);
+
+
 Route::get('/home/{id}', [App\Http\Livewire\UHispatients::class, 'getBackground']);
 Route::get('/createVisit/{id}', [App\Http\Livewire\CreateVisit::class, 'getPatientInfo']);
 Route::get('/icd10/{id}', [App\Http\Controllers\HomeController::class, 'getICDCODE']);

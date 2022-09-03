@@ -945,7 +945,13 @@ class UHispatients extends Component
         $this->resetInputFields();
     }
     
-
+    public function getAllCountries(){
+        $select = DB::table('countries')
+                ->select('country')
+                ->orderBy('used','desc')
+                ->get();
+                return $select;
+    }
     public function provinces(Request $request){
 
         // return dd($request->all());

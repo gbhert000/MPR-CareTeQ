@@ -21,6 +21,7 @@ var boolCheck= false;
 var icdCode;
 var icdDesc;
 var finDiag;
+var identifier
 
 
 // var fname='';
@@ -108,22 +109,22 @@ $(document).ready(function(){
     });
 
     // $initialCount=0
-    $("#contact1Add, #contact2Add,#contact3Add, #contact4Add, #contact1,#contact2,#contact3,#contact4").on('input paste',function(e){
-        // alert("asd");
-        var key = e.charCode || e.keyCode || 0;
-       $text = $(this); 
-       if (key !== 8 && key !== 9) {
-           if ($text.val().length === 4) {
-               $text.val($text.val() + '-');
-           }
-           if ($text.val().length === 8) {
-               $text.val($text.val() + '-');
-           }
+    // $("#contact1Add, #contact2Add,#contact3Add, #contact4Add, #contact1,#contact2,#contact3,#contact4").on('input paste',function(e){
+    //     // alert("asd");
+    //     var key = e.charCode || e.keyCode || 0;
+    //    $text = $(this); 
+    //    if (key !== 8 && key !== 9) {
+    //        if ($text.val().length === 4) {
+    //            $text.val($text.val() + '-');
+    //        }
+    //        if ($text.val().length === 8) {
+    //            $text.val($text.val() + '-');
+    //        }
 
-       }
+    //    }
 
-       return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
-    });
+    //    return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+    // });
 
     // create visit disable button
     $("#dateArrival").on('change keyup', function(){
@@ -651,7 +652,7 @@ $(document).ready(function(){
             success:function(data){
                 // prompt('',data); return false;
                 // $("#regPostal1").empty();
-                // alert(data[0]['zipCode']);
+                // alert(data[0]['zip_Code']);
                 $("#regPostalUpdate").val(data[0]['zip_Code']);
             }
         });
@@ -732,7 +733,7 @@ $(document).ready(function(){
                 $("#regFathersBarangay").empty();
                 $("#regFathersBarangay").append('<option value="">-Select Barangay-</option>');
                 for (var n=0; n<data.length; n++) {
-                    $("#regFathersBarangay").append("<option>"+data[n]['brgy']+"</option>");
+                    $("#regFathersBarangay").append("<option>"+data[n]['barangay']+"</option>");
                 }
                 $("#regFathersPostal").val('');
             }
@@ -752,7 +753,7 @@ $(document).ready(function(){
             success:function(data){
                 // prompt('',data); return false;
                 // $("#regPostal1").empty();
-                // alert(data[0]['zipCode']);
+                // alert(data[0]['zip_Code']);
                 $("#regFathersPostal").val(data[0]['zip_Code']);
             }
         });
@@ -833,7 +834,7 @@ $(document).ready(function(){
                 $("#regMothersBarangay").empty();
                 $("#regMothersBarangay").append('<option value="">-Select Barangay-</option>');
                 for (var n=0; n<data.length; n++) {
-                    $("#regMothersBarangay").append("<option>"+data[n]['brgy']+"</option>");
+                    $("#regMothersBarangay").append("<option>"+data[n]['barangay']+"</option>");
                 }
                 $("#regmothersPostal").val('');
             }
@@ -853,8 +854,8 @@ $(document).ready(function(){
             success:function(data){
                 // prompt('',data); return false;
                 // $("#regPostal1").empty();
-                // alert(data[0]['zipCode']);
-                $("#regmothersPostal").val(data[0]['zipCode']);
+                // alert(data[0]['zip_Code']);
+                $("#regmothersPostal").val(data[0]['zip_Code']);
             }
         });
     });
@@ -933,7 +934,7 @@ $(document).ready(function(){
                 $("#regSpousesBarangay").empty();
                 $("#regSpousesBarangay").append('<option value="">-Select Barangay-</option>');
                 for (var n=0; n<data.length; n++) {
-                    $("#regSpousesBarangay").append("<option>"+data[n]['brgy']+"</option>");
+                    $("#regSpousesBarangay").append("<option>"+data[n]['barangay']+"</option>");
                 }
                 $("#regSpousesPostal").val('');
             }
@@ -953,8 +954,8 @@ $(document).ready(function(){
             success:function(data){
                 // prompt('',data); return false;
                 // $("#regPostal1").empty();
-                // alert(data[0]['zipCode']);
-                $("#regSpousesPostal").val(data[0]['zipCode']);
+                // alert(data[0]['zip_Code']);
+                $("#regSpousesPostal").val(data[0]['zip_Code']);
             }
         });
     });
@@ -1251,7 +1252,9 @@ $(document).ready(function(){
                 $("#fatherHouseNo").prop('readonly', false);
                 $("#fatherStreet").prop('readonly', false);
                 $("#fatherHouseNo").val(''); 
-                // $("#fatherHouseNo").val( $("#houseNo").val()); 
+
+                
+                $("#fatherHouseNo").val( $("#houseNo").val()); 
                 $("#fatherStreet").val(''); 
                 $("#regFathersCountry").val(''); 
                 $("#regFathersCountry").text(''); 
@@ -1259,6 +1262,9 @@ $(document).ready(function(){
                 $("#regfathersMunicipality").val(''); 
                 $("#regFathersBarangay").val(''); 
                 $("#regFathersPostal").val(''); 
+                identifier = document.getElementById("regFathersCountry");
+                // alert(identifier);
+                getAddress(identifier);
             }
         });
 
@@ -1296,14 +1302,17 @@ $(document).ready(function(){
                 $("#motherHouseNo").prop('readonly', false);
                 $("#motherStreet").prop('readonly', false);
                 $("#motherHouseNo").val(''); 
-                $("#motherHouseNo").val(''); 
-                $("#motherStreet").val('');
+                $("#spouseStreet").val(''); 
                 $("#regMothersCountry").val(''); 
                 $("#regMothersCountry").text(''); 
                 $("#regMothersProvince").val(''); 
                 $("#regMothersMunicipality").val(''); 
                 $("#regMothersBarangay").val(''); 
-                $("#regmothersPostal").val(''); 
+                $("#regMothersPostal").val(''); 
+                identifier = document.getElementById("regMothersCountry");
+                // alert(identifier);
+                getAddress(identifier);
+                // getAddress("regMothersCountry")
             }
         });
 
@@ -1352,6 +1361,9 @@ $(document).ready(function(){
                 $("#regSpousesMunicipality").val(''); 
                 $("#regSpousesBarangay").val(''); 
                 $("#regSpousesPostal").val(''); 
+                identifier = document.getElementById("regSpousesCountry");
+                // alert(identifier);
+                getAddress(identifier);
             }
         });
 
@@ -1784,6 +1796,7 @@ function viewRecord($id,$img){
                   $('#regFathersPostal').val($hispatients.U_FATHERZIP);
                   $('#fatherHouseNo').val($hispatients.U_FATHERHOUSENO);
                   $('#fatherStreet').val($hispatients.U_FATHERSTREET);
+                  $('#fatherContactNo').val($hispatients.U_FATHERTELNO);
                 //   $('#regFathersMunicipality').val($hispatients.U_FATHERMUNICIPALITY);
                 //   $('#regFathersBarangay option:selected').text($hispatients.U_FATHERBARANGAY);
                   $('#regMothersCountry').val($hispatients.U_MOTHERCOUNTRY);
@@ -1883,7 +1896,7 @@ function viewRecord($id,$img){
                 // alert(JSON.stringify($currentHPID));
                 if($currentHPID!=null){
 
-                    alert(JSON.stringify($currentHPID));
+                    // alert(JSON.stringify($currentHPID));
                     if($currentHPID.idSeries!=null){
                         // alert($currentHPID.idSerie);
                         $hpidcurr = $("#hpidUpdate").val($currentHPID.idSeries);
@@ -2108,7 +2121,8 @@ function createVisit($patientInfo,$idsObject,$currentHPID,$img){
                     //     //  $('#addImageModal').modal('hide');
                     // }
                     alert(response.msg);
-                    window.location.replace("/home");
+                    $("#createVisitModal").modal("hide");
+                    viewRecord(mpi, $img);
                     // $("#createVisitModal").modal("hide");
                 }
             });
@@ -2287,6 +2301,28 @@ function checkVisitContent(){
         $("#dischargeButton").attr("disabled", true);
     }
     return;
+}
+
+function getAddress(identifier){
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+   
+    $.ajax({
+        url: `/getCountry`,
+        method: "GET",
+        success: function(data) {
+            $(identifier).empty();
+            $(identifier).append('<option value="">-Select Province-</option>');
+            for (var n=0; n<data.length; n++) {
+                $(identifier).append("<option>"+data[n]['country']+"</option>");
+            }
+        }
+    });
+    return;
+
 }
 
 

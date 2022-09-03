@@ -2530,14 +2530,18 @@ a:hover {
 span#removeaContact ,
 span#addaContact,
 #addaContactUpdate,
-#addaEmail
+#addaEmail,
+#addaEmailUpdate
 {
   display: inline-block !important;
   /* width: 5rem; */
   color: #0b5ed7;
   cursor: pointer;
 }
-#selectICD{
+#selectICD,
+#selectICDUpdate,
+#resetICDViewing,
+#resetICD{
   background-color: #0b5ed7;
   color: white;
   padding: .55rem;

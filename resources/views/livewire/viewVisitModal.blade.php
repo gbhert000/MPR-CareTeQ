@@ -5,7 +5,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="viewVisitModalLabel">View Visit</h5>
           {{-- <button type="button" class="btn-close" id="closeViewVisit"  aria-label="Close"> --}}
-            <button type="button" class="btn-close" id="closeAll4"  aria-label="Close">
+            
             {{-- <span aria-hidden="true">&times;</span> --}}
           </button>
         </div>
@@ -72,15 +72,23 @@
                 <div class="row">
                   <label for="">Final Diagnosis</label>
                 </div>
-                <div class="col-sm-2 p-1">
-                  <label>ICD10 Code</label>
-                  <input type="text" id="icdCodeUpdate" name="icdCode" class="form-control" readonly>
+                <div class="col-sm-3 p-1">
                   
+                  <div class="row">
+                    <label>ICD10 Code</label>
+                    <input type="text" id="icdCodeUpdate" name="icdCode" class="form-control ml-2 w-75" readonly>
+                    <button type="button" class="btn-close pt-3" id=""  aria-label="Close">
+                  </div>
                 </div>
-                <div class="col-sm-2 pt-2-5">
+                
+                <div class="col-sm-3 pt-2-5">
+                  
                   <br>
-                  <span class="" id="selectICDUpdate">
+                  <span class="mr-1" id="selectICDUpdate">
                     <i id="selectIDS">Search</i>
+                  </span>
+                  <span class="ml-1" id="resetICDViewing">
+                    <i id="resetICDsViewing">Reset</i>
                   </span>
                 </div>
                <!--  <div class="col-sm-3">

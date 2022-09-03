@@ -249,52 +249,58 @@
                                         <div class="w-100"></div>
                                         
                                         <div class="w-100"></div>
-                                        <div class="col colsUpdate1 hidden">
-                                            <label for="contactType1">Contact Type<i id="requiredFields">*</i></label>
-                                            <select name="contactType1" id="contactType1" class="form-control" >
-                                            <option value="" selected>Select Type</option> 
-                                            @foreach ($contTypes as $contType)
-                                                <option value="{{$contType->contacttype}}">{{$contType->contacttype}}</option>
-                                            @endforeach
-                                            </select>
-                                            <input type="text" class="hidden" id="hideContact1" name="hideContact1">
-                                        </div>
+                                        <div class="row  colsUpdate1 hidden">
+                                            <div class="col ">
+                                                <label for="contactType1">Contact Type<i id="requiredFields">*</i></label>
+                                                <select name="contactType1" id="contactType1" class="form-control" >
+                                                <option value="" selected>Select Type</option> 
+                                                @foreach ($contTypes as $contType)
+                                                    <option value="{{$contType->contacttype}}">{{$contType->contacttype}}</option>
+                                                @endforeach
+                                                </select>
+                                                <input type="text" class="hidden" id="hideContact1" name="hideContact1">
+                                            </div>
+                                            
                                         
-                                    
-                                        <div class="col colsUpdate1 hidden">
-                                            <label>Contact Number<i id="requiredFields">*</i></label>
-                                            <input type="text"class="form-control" name="contact1" id="contact1" maxlength="13" autocomplete="off">
-                                        </div>
-                                        <div class="col colsUpdate1 hidden">
-                                        <label for="noteContact1">Note:</label>
-                                            <input type="text"class="form-control"  name="noteContact1" id="noteContact1">
+                                            <div class="col">
+                                                <label>Contact Number<i id="requiredFields">*</i></label>
+                                                <input type="text"class="form-control" name="contact1" id="contact1" maxlength="13" autocomplete="off">
+                                            </div>
+                                            <div class="col">
+                                                <label for="noteContact1">Note:</label>
+                                                <input type="text"class="form-control"  name="noteContact1" id="noteContact1">
+                                            </div>
                                         </div>
 
                                         {{-- END FIRST CONTACT --}}
                                         <div class="w-100"></div>      
                                         {{-- START 2ND CONTACT --}}
-                                        <div class="col colsUpdate2 hidden mt-3">
-                                        {{-- <label for="contactType2">Label</label> --}}
-                                        <select name="contactType2" id="contactType2" class="form-control" >
-                                            <option value="" selected>Select Type</option> 
-                                            @foreach ($contTypes as $contType)
-                                                <option value="{{$contType->contacttype}}">{{$contType->contacttype}}</option>
-                                            @endforeach
-                                        </select>
-                                        <input type="text" class="hidden" id="hideContact2" name="hideContact2">
-                                    </div>
-                                    <div class="col colsUpdate2 hidden mt-3">
-                                        {{-- <label>Contact Number</label> --}}
-                                        <input type="text" class="form-control" name="contact2" id="contact2" maxlength="13" autocomplete="off">
-                                    </div>
-                                    <div class="col colsUpdate2 hidden mt-3">
-                                        {{-- <label for="noteContact2">Note:</label> --}}
-                                        <input type="text"class="form-control"  name="noteContact2" id="noteContact2">
-                                    </div>
+                                        <div class="row colsUpdate2 hidden mt-3">
+                                            <div class="col">
+                                            {{-- <label for="contactType2">Label</label> --}}
+                                                <select name="contactType2" id="contactType2" class="form-control" >
+                                                    <option value="" selected>Select Type</option> 
+                                                    @foreach ($contTypes as $contType)
+                                                        <option value="{{$contType->contacttype}}">{{$contType->contacttype}}</option>
+                                                    @endforeach
+                                                </select>
+                                                <input type="text" class="hidden" id="hideContact2" name="hideContact2">
+                                            </div>
+                                            <div class="col">
+                                                {{-- <label>Contact Number</label> --}}
+                                                <input type="text" class="form-control" name="contact2" id="contact2" maxlength="13" autocomplete="off">
+                                            </div>
+                                            <div class="col">
+                                                {{-- <label for="noteContact2">Note:</label> --}}
+                                                <input type="text"class="form-control"  name="noteContact2" id="noteContact2">
+                                            </div>
+                                        </div>
+                                            
                                     <div class="w-100"></div>                                
                                         {{-- END 2ND CONTACT --}}
                                         {{-- START 3RD CONTACT --}}
-                                        <div class="col colsUpdate3 hidden mt-3">
+                                    <div class="row  colsUpdate3 mt-3 hidden ">
+                                        <div class="col">
                                             {{-- <label for="contactType3 ">Label</label> --}}
                                             <select name="contactType3" id="contactType3" class="form-control" >
                                                 <option value="" selected>Select Type</option> 
@@ -304,18 +310,19 @@
                                             </select>
                                             <input type="text" class="hidden" id="hideContact3" name="hideContact3">
                                         </div>
-                                        <div class="col colsUpdate3 hidden mt-3" id=""  >
+                                        <div class="col " id=""  >
                                             {{-- <label>Contact Number</label> --}}
                                             <input type="text" class="form-control" name="contact3" id="contact3" maxlength="13" autocomplete="off">
                                         </div>
-                                        <div class="col colsUpdate3 hidden mt-3">
+                                        <div class="col">
                                         {{-- <label for="noteContact3">Note:</label> --}}
-                                        <input type="text"class="form-control"  name="noteContact3" id="noteContact3">
+                                            <input type="text"class="form-control"  name="noteContact3" id="noteContact3">
+                                        </div>
                                     </div>
                                         <div class="w-100"></div>      
                                         {{-- start 4th contact --}}
-
-                                        <div class="col colsUpdate4 hidden mt-3" id="">
+                                    <div class="row colsUpdate4  mt-3">
+                                        <div class="col  " id="">
                                             {{-- <label for="contactType4">Label</label> --}}
                                             <select name="contactType4" id="contactType4" class="form-control">
                                                 <option value="" selected>Select Type</option> 
@@ -325,14 +332,15 @@
                                             </select>
                                         <input type="text" class="hidden" id="hideContact4" name="hideContact4">
                                     </div>
-                                        <div class="col colsUpdate4 hidden mt-3" id=""  >
+                                        <div class="col  " id=""  >
                                         {{-- <label>Contact Number</label> --}}
                                         <input type="text" class="form-control" name="contact4" id="contact4"maxlength="13" autocomplete="off">
                                     </div>
-                                    <div class="col colsUpdate4 hidden mt-3">
+                                    <div class="col  ">
                                         {{-- <label for="noteContact4">Note:</label> --}}
                                         <input type="text"class="form-control"  name="noteContact4" id="noteContact4">
                                     </div>
+                                </div>
 
                                     <div class="row">
                                         <span class="" id="addaContactUpdate"><i class="cursor-pointer">Add Contact</i></span>
@@ -340,9 +348,8 @@
 
                                     <input type="text" class="hidden" name="hiddenEmailCount" id="hiddenEmailCount">
                                     <!-- START FIRST EMAIL -->
-                                    <div class="row emailsUpdate1 hidden">
-
-                                        <div class="col col-sm-3">
+                                    <div class="row emailsUpdate1 hidden mt-3" >
+                                        <div class="col ">
                                             <label for="emailType1"> Email Type</label>
                                             <select name="emailType1" id="emailType1Update" class="form-control">
                                                 <option value="" selected>Select Type</option>
@@ -364,7 +371,7 @@
                             <!-- END FIRST EMAIL -->
                             <!-- START SECOND EMAIL  -->
                                     <div class="row emailsUpdate2 hidden mt-3">
-                                        <div class="col col-sm-3">
+                                        <div class="col">
                                         <!--  <label for="emailType2"> Email Type</label> -->
                                             <select name="emailType2" id="emailType2Update" class="form-control">
                                                 <option value="" selected>Select Type</option>
@@ -386,7 +393,7 @@
                             <!-- END SECOND EMAIL -->
                             <!-- START THIRD EMAIL -->
                                     <div class="row emailsUpdate3 hidden mt-3">
-                                        <div class="col col-sm-3">
+                                        <div class="col">
                                             <!-- <label for="emailType3"> Email Type</label> -->
                                             <select name="emailType3" id="emailType3Update" class="form-control">
                                                 <option value="" selected>Select Type</option>
@@ -408,7 +415,7 @@
                             <!-- END THIRD EMAIL -->
                             <!-- START FOURTH EMAIL -->
                                     <div class="row emailsUpdate4 hidden mt-3">
-                                        <div class="col col-sm-3">
+                                        <div class="col">
                                             <!-- <label for="emailType4"> Email Type</label> -->
                                             <select name="emailType4" id="emailType4Update" class="form-control">
                                                 <option value="" selected>Select Type</option>
@@ -445,7 +452,7 @@
                                     <h5>Father's Information</h5>
                                 </div>
                                 <div class="col">
-                                    <label for="sameFatherAddress">Same As Patient</label>
+                                    <label for="sameFatherAddress">Same As Patient Address</label>
                                     <input type="checkbox" name="sameFatherAddress" id="sameFatherAddress">
                                 </div>
                                 <div class="w-100"></div>
@@ -470,15 +477,6 @@
                                     <input type="text"class="form-control" name="fatherContactNo" id="fatherContactNo"  placeholder="Contact No.">
                                 </div>
                                 {{-- <div class="w-100"></div> --}}
-                                <div class="col-sm-1">
-                                    <label>House No.</label>
-                                    <input type="text"class="form-control" id="fatherHouseNo" name="fatherHouseNo" placeholder="House No">
-                                </div>
-                                <div class="col-sm-2">
-                                    <label>Street</label>
-                                    <input type="text"class="form-control" id="fatherStreet" name="fatherStreet"  placeholder="Street">
-                                </div>
-                                <div class="w-100"></div>
                                 <div class="col">
                                     <label>Country</label>
                                     <select name="fathersCountry" id="regFathersCountry" class="form-control" placeholder="Search" style="width: 100%;">
@@ -493,6 +491,9 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                
+                                <div class="w-100"></div>
+                               
                                 <div class="col">
                                     <label>Province</label>
                                     <select name="fathersProvince" id="regFathersProvince" class="form-control" placeholder="Search" style="width: 100%;">
@@ -516,6 +517,10 @@
                                                     {{-- <option value="{{$brgy}}" selected></option> --}}
                                                 </select>
                                 </div>
+                                <div class="col">
+                                    <label>Address</label>
+                                    <input type="text"class="form-control" id="fatherStreet" name="fatherStreet"  placeholder="Address">
+                                </div>
                                 <div class="col-sm-2">
                                     <label>Postal Code</label>
                                     <input type="text"class="form-control" name="fathersPostal" id="regFathersPostal" readonly>
@@ -532,7 +537,7 @@
                                     <h5>Mother's Maiden Information</h5>
                                 </div>
                                 <div class="col">
-                                    <label for="sameMotherAddress">Same As Patient</label>
+                                    <label for="sameMotherAddress">Same As Patient Address</label>
                                     <input type="checkbox" name="sameMotherAddress" id="sameMotherAddress">
                                 </div>
                                 <div class="w-100"> </div>
@@ -556,17 +561,6 @@
                                     <label>Contact Number</label>
                                     <input type="text"class="form-control" name="motherContactNo" id="motherContactNo" placeholder="Contact No.">
                                 </div>
-                                {{-- <div class="w-100"></div> --}}
-                                <div class="col-sm-1">
-                                    <label>House No.</label>
-                                    <input type="text"class="form-control" id="motherHouseNo" name="motherHouseNo"  placeholder="House No">
-                                </div>
-                                <div class="col-sm-2">
-                                    <label>Street</label>
-                                    <input type="text"class="form-control" id="motherStreet" name="motherStreet"  placeholder="Street">
-                                </div>
-                                <div class="w-100"></div>
-
                                 <div class="col">
                                     <label>Country</label>
                                     <select name="mothersCountry" id="regMothersCountry" class="form-control" placeholder="Search" style="width: 100%;">
@@ -581,6 +575,11 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                {{-- <div class="w-100"></div> --}}
+                                
+                                <div class="w-100"></div>
+
+                                
                                 <div class="col">
                                     <label>Province</label>
                                     <select name="mothersProvince" id="regMothersProvince" class="form-control" placeholder="Search" style="width: 100%;">
@@ -602,12 +601,17 @@
                                                 </select>
                                 </div>
                                 <div class="col-sm-2">
+                                    <label>Street</label>
+                                    <input type="text"class="form-control" id="motherStreet" name="motherStreet"  placeholder="Street">
+                                </div>
+                                <div class="col-sm-2">
                                     <label>Postal Code</label>
                                     <input type="text"class="form-control" name="mothersPostal" id="regmothersPostal" readonly>
                                     {{-- <select disable name="postal" id="regPostal" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full empty" placeholder="Search" style="width: 100%; height: 100%;">
                                         <option value=""></option>
                                     </select> --}}
                                 </div>
+                                
                                 <div class="w-100"></div>
                             </div>
                             <hr>
@@ -617,7 +621,7 @@
                                     <h5>Spouse's Information</h5>
                                 </div>
                                 <div class="col">
-                                    <label for="sameSpouseAddress">Same As Patient</label>
+                                    <label for="sameSpouseAddress">Same As Patient Address</label>
                                     <input type="checkbox" name="sameSpouseAddress" id="sameSpouseAddress">
                                 </div>
                                 <div class="w-100"> </div>

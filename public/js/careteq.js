@@ -523,7 +523,7 @@ function checkEmail(obj) {
 $(document).ready(function() {
     $("#idType").change(function(){
         var id_type = $(this).val();
-
+        $("#idNumber").val('');
         if(id_type) {
 
               var url = window.location.origin+'/getIDTypes/'+ id_type;
@@ -559,6 +559,7 @@ $(document).ready(function() {
 
         $("#idTypeUpdate").change(function(){
           var id_type = $(this).val();
+          $("#idNumberUpdate").val('');
   
           if(id_type) {
   
