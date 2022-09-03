@@ -2316,14 +2316,17 @@ select {
 .patient-list{
   background-color: white;
 }
-.patient-list-table{
+.patient-list-table,
+.icd10-list{
   padding: 0.25rem;
   
 }
-.patient-list-table th{
+.patient-list-table th,
+.icd10-list th{
   background-color: #387Ac1;
   padding: 0.50rem;
   color: white;
+
   
   _text-align: center;
 }
@@ -2332,22 +2335,29 @@ width: 5rem;
 } */
 
 .table-code{
-  width: 10rem !important;
+  width: 11rem !important;
 }
 .table-number{
   width: 1rem !important;
 }
-.patient-list-table tr{
+.patient-list-table tr,
+.icd10-list tr{
   cursor: pointer;
 }
 .patient-list-table td{
   padding: 0.50rem;
 }
-.patient-list-table tr:nth-child(even){
+.patient-list-table tr:nth-child(even),
+.icd10-list tr:nth-child(even){
   background-color: #F7F7F7;
 }
-.patient-list-table tr:hover{
+.patient-list-table tr:hover,
+.icd10-list tr:hover{
   background-color: #cccccc;
+}
+#icdModal > .modal-body{
+  overflow-y: auto;
+  height: 90vh;
 }
 
 .float-right{
@@ -2401,10 +2411,14 @@ width: 5rem;
   width: 1.5rem;
   /* padding-top: 1.6rem; */
 }
+.iconImage{
+  min-width: 3.5rem !important;
+}
 .iconPrinter{
   max-width: 3rem !important;
 }
-#addingImage{
+#addingImage,
+#addingImageRegister{
   max-width: 2rem!important;
   /* text-align: center; */
   margin: auto;
@@ -2506,19 +2520,56 @@ a:hover {
   border: none!important;
   text-align: center;
 }
+#chiefComplaintUpdate{
+  border: none!important;
+  
+}
 .dis-inline{
   display: inline-block !important;
 }
 span#removeaContact ,
-span#addaContact{
+span#addaContact,
+#addaContactUpdate,
+#addaEmail
+{
   display: inline-block !important;
-  width: 5rem;
+  /* width: 5rem; */
+  color: #0b5ed7;
+  cursor: pointer;
+}
+#selectICD{
+  background-color: #0b5ed7;
+  color: white;
+  padding: .55rem;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.pt-2-5{
+  padding-top: .65rem !important;
+}
+#icdDesc{
+  border: none !important;
+  background-color: white;
+  resize: none;
+}
+#visitID,
+.chiefComplaintUpdate{
+  border: none !important;
+  box-shadow: none;
+}
+.chiefComplaintUpdate{
+  resize: none;
 }
 #addaContact img{
   margin:0px !important;
 }
 #requiredFields{
   color: red;
+}
+
+#addingImageRegister,
+#addingImage{
+  cursor: pointer;
 }
 
 
@@ -2538,4 +2589,41 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+/* wrap text */
+#wrapOption{
+  /* overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
+  -webkit-appearance: none; */
+    /* wrap text in compatible browsers */
+    -moz-white-space: pre-wrap;
+    -o-white-space: pre-wrap;
+    white-space: pre-wrap;
+    /* hide text that can't wrap with an ellipsis */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* add border after every option */
+    border-bottom: 1px solid #DDD;
+}
+.ui-datepicker{
+  width: 17rem!important;
+}
+
+/* #bday11{
+
+} */
+.comp-code{
+  font-size: 14px!important;
+  font-family: 'Verdana' !important;
+  letter-spacing: 2px !important;
+}
+.card-header{
+  font-size: 14px!important;
+  font-family: 'Verdana' !important;
+  letter-spacing: 2px !important;
+}
+#seal{
+  width: 18rem;
 }

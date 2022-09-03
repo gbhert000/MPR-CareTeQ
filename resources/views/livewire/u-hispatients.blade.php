@@ -2,19 +2,22 @@
     @include('livewire.addImageModal')
     @include('livewire.viewPatientModal')
     @include('livewire.addPatientModal')
+    @include('livewire.createVisitModal')
+    @include('livewire.icd10modal')
+    @include('livewire.viewVisitModal')
 
     
    <div class="row patient-list">
     <div class="col-md-8 float-right">
         <label for="search">Search Patients:</label>
         <br>
-        <input type="text" name="search"  id="search" placeholder="Search Patient" class=" searchbar" wire:model="search" />
+        <input type="text" name="search"  id="search" placeholder="Enter Patient Name" class=" searchbar" wire:model="search" autocomplete="off" />
         <button class="btn btn-primary" id="addingPatient"> Add Patient</button> 
         
         {{-- <button  name="Add Picture" class="btn btn-primary" data-toggle="modal" data-target="#addImageModal" >Add Picture</button> --}}
 
     </div>
-
+    {{-- {{$newVisitID}} --}}
     <div class="col-sm-2">
         <label for="itemPerPage">Patients per Page:</label>
         <select name="itemPerPage" id=""wire:model="perPage" class="form-control">
@@ -42,41 +45,41 @@
                 </th>
                 <th class="table-name-fname">
                     <span class="float-left text-sm" wire:click="sortBy('U_FIRSTNAME')"> First Name
-                    <i class="fa fa-arrow-up {{$sortColumnName ==='U_FIRSTNAME' && $sortDirection ==='asc' ?'':'hidden '}} float-right pt-1"></i>
-                    <i class="fa fa-arrow-down {{$sortColumnName ==='U_FIRSTNAME' && $sortDirection ==='desc' ?'':'hidden '}} float-right pt-1"></i>
-                </span>
+                        <i class="fa fa-arrow-up {{$sortColumnName ==='U_FIRSTNAME' && $sortDirection ==='asc' ?'':'hidden '}} float-right pt-1"></i>
+                        <i class="fa fa-arrow-down {{$sortColumnName ==='U_FIRSTNAME' && $sortDirection ==='desc' ?'':'hidden '}} float-right pt-1"></i>
+                    </span>
                 </th>
                 <th  class="table-name-mname">
                     <span class="float-left text-sm" wire:click="sortBy('U_MIDDLENAME')"> Middle Name
-                    <i class="fa fa-arrow-up {{$sortColumnName ==='U_MIDDLENAME' && $sortDirection ==='asc' ?'':'hidden '}} float-right pt-1"></i>
-                    <i class="fa fa-arrow-down {{$sortColumnName ==='U_MIDDLENAME' && $sortDirection ==='desc' ?'':'hidden '}} float-right pt-1"></i>
-                </span>
+                        <i class="fa fa-arrow-up {{$sortColumnName ==='U_MIDDLENAME' && $sortDirection ==='asc' ?'':'hidden '}} float-right pt-1"></i>
+                        <i class="fa fa-arrow-down {{$sortColumnName ==='U_MIDDLENAME' && $sortDirection ==='desc' ?'':'hidden '}} float-right pt-1"></i>
+                    </span>
                 </th>
                 <th>Ext.</th>
                 <th>Birth Date</th>
                 <th>
                     <span class="float-left text-sm table-name" wire:click="sortBy('U_GENDER')"> Sex
-                    <i class="fa fa-arrow-up {{$sortColumnName ==='U_GENDER' && $sortDirection ==='asc' ?'':'hidden '}} float-right pt-1"></i>
-                    <i class="fa fa-arrow-down {{$sortColumnName ==='U_GENDER' && $sortDirection ==='desc' ?'':'hidden '}} float-right pt-1"></i>
-                </span>
-            </th>
+                        <i class="fa fa-arrow-up {{$sortColumnName ==='U_GENDER' && $sortDirection ==='asc' ?'':'hidden '}} float-right pt-1"></i>
+                        <i class="fa fa-arrow-down {{$sortColumnName ==='U_GENDER' && $sortDirection ==='desc' ?'':'hidden '}} float-right pt-1"></i>
+                    </span>
+                </th>
                 <th>No. of Visit</th>
-                <th>Status</th>
+                {{-- <th>Status</th> --}}
 
         </thead>
         <tbody>
             @foreach($patients as $item)
-            <tr wire:key="{{ $item->CODE }}" id="patientUpdate"  ondblclick="viewRecord('{{ $item->CODE }}')">
+            <tr wire:key="{{ $item->CODE }}" id="patientUpdate"  onclick="viewRecord('{{ $item->CODE }}','img/profile.png')">
                 <td >{{ $item->CODE }}</td>
                 <td>{{ $item->U_LASTNAME }}</td>
                 <td>{{ $item->U_FIRSTNAME }}</td>
                 <td>{{ $item->U_MIDDLENAME }}</td>
                 <td>{{ $item->U_EXTNAME }}</td>
-                <td>{{ $item->U_BIRTHDATE }}</td>
+                <td>{{ date('d/m/Y', strtotime($item->U_BIRTHDATE)) }}</td>
                 <td>
                     {{ $item->U_GENDER }}</td>
                 <td>{{ $item->U_VISITCOUNT }}</td>         
-                <td>
+                {{-- <td>
                     @if($item->U_ACTIVE==1)
                         {{ ('Yes') }}
                     
@@ -84,7 +87,7 @@
                         {{('No')}}
                     
                     @endif
-                </td>         
+                </td>          --}}
             </tr>
                     {{-- @empty --}}
             @endforeach

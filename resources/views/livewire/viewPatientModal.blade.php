@@ -1,6 +1,4 @@
 <div>
-
-
     <div class="modal fade" wire:ignore.self id="viewPatientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div role="document" class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -22,7 +20,9 @@
                         <h6 class="text-muted">Hospital Information</h6>
                     </div>
                     <div class="col float-right text-right">
-                        <button type="button" class="btn-close"  aria-label="Close" id="closeReset" onclick="resetInput()"></button>
+                        {{-- <button type="button" class="btn-close"  aria-label="Close" id="closeReset" onclick="resetInput()"></button>
+                         --}}
+                         <button type="button" class="btn-close" id="closeAll2"  aria-label="Close">
                     </div>
                 </div>
                 <!-- END HEADER -->
@@ -36,27 +36,38 @@
                         <fieldset id="tab011" class="show">
                             <div class="row">
                                 <div class="col-sm-2 ">
-                                    <div class="col pb-4">
+                                    <div class="row pb-4">
                                         {{-- {{public_path()}} --}}
                                         {{-- {{storage_path()}} --}}
                                         <input type="hidden" value="{{asset('myFiles/uploads')}}" id="storage">
-                                        <img src="img/profile.png" alt="" id="patientImage" class="profile-pic mx-auto">
+                                        <img src="" alt="" id="patientImage" class="profile-pic mx-auto">
                                         {{-- <img src="{{ storage_path('app/uploads/') }}" alt="" id="patientImage" class="profile-pic mx-auto"> --}}
                                     </div>
                                     <div class="w-100"></div>
-                                    <div class="col">
+                                    <div class="row">
                                         {{-- <i data-toggle="modal" data-target="#addImageModal" >Add Picture</i> --}}
                                         {{-- <i > Add Image</i> --}}
-                                        <img src="icon/webcam.png" alt="" id="addingImage" >
+                                        <img src="icon/webcam.png" alt="" id="addingImage" class="iconImage" >
                                         {{-- <input type="button" class="btn btn-primary formc-control"> --}}
                                     </div>
-                                    <br>
+                                    {{-- <br> --}}
+                                    <input type="hidden" name="hiddenImage" id="hiddenImage">
+                                    
                                     <div class="w-100"></div>
-                                    <div class="w-100"></div>
-                                    <div class="col">
+                                    <div class="row">
                                         <label>Master Patient Index {{'MPI'}}</label>
                                         <input type="text" class="form-control no-bg" name="CODE" id="CODE" readonly>
                                     </div>
+                                    {{-- <br><br> --}}
+                                    
+                                    <div class="row hpidDiv">
+                                        <label for="hpidUpdate">Medical Record Number {{'MRN'}}</label>
+                                        <input type="text" class="form-control" name="hpidUpdate" ID="hpidUpdate" maxlength="11">
+                                   </div>
+                                    
+                                    {{-- <br><br><br> --}}
+                                    <div class="w-100"></div>
+                                    <div class="row text-center mt-3"><a  id='idreport' class="btn btn-danger" >Export PDF</a>    </div>
                                 </div>
                                 <div class="col-md">
                                     @if(Session::has('message'))
@@ -65,18 +76,18 @@
                                     <h3>Personal Information</h3>
                                     <div class="row">
                                         <div class="col pr-1-cust">
-                                            <label>Last Name</label>
+                                            <label>Last Name <i id="requiredFields">*</i></label>
                                             <input type="text"  class="form-control" name="U_LASTNAME" id="U_LASTNAME" readonly required>
                                             {{-- @error('lastName') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                         </div>
                                         <div class="col pr-1-cust">
-                                            <label>First Name</label>
+                                            <label>First Name <i id="requiredFields">*</i></label>
                                             <input type="text" class="form-control" name="U_FIRSTNAME" id="U_FIRSTNAME" readonly  required>
                                             {{-- {{$firstName}} --}}
                                             {{-- @error('U_FIRSTNAME') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                         </div>
                                         <div class="col-sm pr-1-cust">
-                                            <label>Middle Name</label>
+                                            <label>Middle Name<i id="requiredFields">*</i></label>
                                             <input type="text"  class="form-control" name="U_MIDDLENAME" id="U_MIDDLENAME"  >
                                             {{-- @error('middleName') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                         </div>
@@ -88,17 +99,17 @@
                         
                                         <div class="w-100"></div>
                                         <div class="col pr-1-cust">
-                                            <label>Birthdate</label>
-                                            <input type="text" class="form-control datepicker" name="U_BIRTHDATE"id="bday1"  placeholder="mm/dd/yyyy" >
+                                            <label>Birthdate<i id="requiredFields">*</i></label>
+                                            <input type="text" class="form-control" name="U_BIRTHDATE"id="bday1"  placeholder="mm/dd/yyyy" readonly>
                                             {{-- @error('birthDate') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                         </div>
                                         <div class="col-sm-1 pr-1-cust">
-                                            <label>Age</label>
+                                            <label>Age<i id="requiredFields">*</i></label>
                                             <input type="text" class="form-control" id="age" name="age" readonly>
                                             @error('age') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
                                         <div class="pr-1-cust col">
-                                            <label>Sex</label>
+                                            <label>Sex<i id="requiredFields">*</i></label>
                                             <select name="updatesex" id="updatesex" class="form-control">
                                                 {{-- <option value="" selected></option> --}}
 
@@ -111,21 +122,30 @@
                                             {{-- @error('sex') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                         </div>
                                         <div class="pr-1-cust col">
-                                            <label>Civil Status</label>
-                                            <select name="U_CIVILSTATUS"  id="U_CIVILSTATUS" class="form-control" >
-                                                {{-- <option value="" selected></option> --}}
-                                                {{-- <option value="{{$U_CIVILSTATUS}}"selected>{{$U_CIVILSTATUS}}</option> --}}
-                                                <option value="MARRIED">Married</option>
-                                                <option value="SINGLE">Single</option>
-                                                <option value="WIDOWED">Widowed</option>
-                                                <option value="ANNULLED">Annulled</option>
-                                                <option value="DIVORCED">Divorced</option>
-                                                <option value="SEPARATED">Separated</option>
-                                                <option value="CHILD">Child</option>
+                                            <label>Civil Status<i id="requiredFields">*</i></label>
+                                            <select class="form-control"  name="U_CIVILSTATUS" id="U_CIVILSTATUS">
+                                                <option value="" selected></option>
+                                                @foreach ($maritals as $marital)
+                                                    <option value="{{$marital->MaritalStatus}}">{{$marital->MaritalStatus}}</option>
+                                                @endforeach
+                                            </select>
+                                            
+                                        </div>
+                                        <div class="col-sm-2 px-1">
+                                            <label for="idType">ID Type</label>
+                                            {{-- <input type="text" class="form-control"> --}}
+                                            <select name="idType" id="idTypeUpdate" class="form-control">
+                                                <option value="">Select Type</option>
+                                                @foreach ($idTypes as $idType)
+                                                    <option value="{{$idType->name}}">{{$idType->name}}</option>
+                                                @endforeach
                                             </select>
                                         </div>
-                                        
-                                        
+                                        <div class="col px-1 ">
+                                            <label for="idNumber">ID Number</label>
+                                            <input type="text" class="form-control" name="idNumber" id="idNumberUpdate" placeholder="">
+                                        </div>
+                                        <div class="w-100"></div>
                                         <div class="pr-1-cust col">
                                             <label>Place of Birth</label>
                                             <input type="text" class="form-control" name="U_BIRTHPLACE" id="U_BIRTHPLACE">
@@ -144,7 +164,13 @@
                                         {{-- <div class="w-100"></div> --}}
                                         <div class="pr-1-cust col">
                                             <label>Religion</label>
-                                            <input type="text" class="form-control" name="U_RELIGION" id="U_RELIGION">
+                                            <select class="form-control"  name="U_RELIGION" id="U_RELIGION">
+                                                <option value="" selected></option>
+                                                @foreach ($religions as $religion)
+                                                    <option value="{{$religion->ReligionName}}">{{$religion->ReligionName}}</option>
+                                                @endforeach
+                                            </select>
+                                            {{-- <input type="text" class="form-control" name="U_RELIGION" id="U_RELIGION"> --}}
                                             {{-- @error('age') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                         </div>
                                         
@@ -157,41 +183,48 @@
                                     <div class="row">
                                             <h3>Address</h3>
                                                 <div class="w-100"></div>
-                                                <div class="col pr-1">
-                                                    <label>Street</label>
-                                                    <input type="text"class="form-control" id="street" name="street">
-                                                </div>
-                                                <div class="col px-1" >
-                                                    <label>Country</label>
+                                                
+                                                <div class="col" >
+                                                    <label>Country<i id="requiredFields">*</i></label>
                                                     <select  name="country" id="regCountryUpdate"  placeholder="Search"  class="form-control" style="width: 100%;">   
-                                                        <option id="getCountry" selected></option>
-                                                            @foreach ($get_Country as $country)
+                                                        {{-- <option id="getCountry" selected></option> --}}
+                                                            @foreach ($countries as $country)
                                                             <option value="{{$country->country}}">{{$country->country}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col px-1">
-                                                    <label>Province</label>
-                                                    <select name="province" id="regProvinceUpdate" class="form-control" placeholder="Search" style="width: 100%;">
-                                                        <option value="" id="getProvince" selected></option> 
+                                                    <label>Province<i id="requiredFields">*</i></label>
+                                                    <select name="province" id="regProvinceUpdate" class="form-control" placeholder="Search" style="width: 100%;" readonly>
+                                                        {{-- <option value="" id="getProvince" selected></option>  --}}
+                                                        {{-- @foreach ($getProvs as $getProv)
+                                                            <option value="{{$getProv->province}}">{{$getProv->province}}</option>
+                                                        @endforeach --}}
                                                     </select>
                                                 </div>
-                                                <div class="col px-1">
-                                                    <label>Municipality</label>
-                                                                <select name="municipality1" id="regMunicipalityUpdate" class="form-control" placeholder="Search" style="width: 100%;">
-                                                                    <option id="getCity"></option>
+
+                                                
+                                                <div class="col ">
+                                                    <label>Municipality<i id="requiredFields">*</i></label>
+                                                                <select name="municipality1" id="regMunicipalityUpdate" class="form-control" placeholder="Search" style="width: 100%;" readonly>
+                                                                    {{-- <option id="getCity"></option> --}}
                                                                 </select>
                                                 </div>
-                                                <div class="col px-1">
-                                                    <label>Barangay</label>
-                                                                <select name="brgy1" id="regBarangayUpdate"  class="form-control" placeholder="Search" style="width: 100%;">
-                                                                    <option id="getBrgy"></option>
+                                                <div class="w-100"></div>
+                                                <div class="col ">
+                                                    <label>Barangay<i id="requiredFields">*</i></label>
+                                                                <select name="brgy1" id="regBarangayUpdate"  class="form-control" placeholder="Search" style="width: 100%;" readonly>
+                                                                    {{-- <option id="getBrgy"></option> --}}
                                                                 </select>
+                                                </div>
+                                                <div class="col ">
+                                                    <label>Address</label>
+                                                    <input type="text"class="form-control" id="street" name="street">
                                                 </div>
 
-                                                <div class="col-sm-1 px-1">
-                                                    <label>Zip Code</label>
-                                                    <input type="text" class="form-control" name="postal" id="regPostalUpdate" >
+                                                <div class="col-sm-2 ">
+                                                    <label>Zip Code<i id="requiredFields">*</i></label>
+                                                    <input type="text" class="form-control" name="postal" id="regPostalUpdate" readonly >
                                                 </div>                          
                                     
                                     {{-- ADDRESS --}}
@@ -210,102 +243,195 @@
                                         <input type="number" class="hidden" name="countContactUpdate" id="countContactUpdate">
                                         <div class="col">
                                             <h5 class="dis-inline">Contact Information</h5>
-                                            <span class="dis-inline ml-3" id="addaContactUpdate"><img src="icon/plus.png" alt="" class="iconPlus"></span>
-                                            <span class="dis-inline ml-3" id="removeaContactUpdate"><img src="icon/minus.png" alt="" class="iconPlus"></span>
+                                            {{-- <span class="dis-inline ml-3" id="addaContactUpdate"><img src="icon/plus.png" alt="" class="iconPlus"></span>
+                                            <span class="dis-inline ml-3" id="removeaContactUpdate"><img src="icon/minus.png" alt="" class="iconPlus"></span> --}}
                                         </div>
                                         <div class="w-100"></div>
                                         
                                         <div class="w-100"></div>
                                         <div class="col colsUpdate1 hidden">
-                                            <label for="contactType1">Contact Type</label>
+                                            <label for="contactType1">Contact Type<i id="requiredFields">*</i></label>
                                             <select name="contactType1" id="contactType1" class="form-control" >
-                                            <option value="" selected></option> 
-                                                <option value="HOME">Home {{'(Telephone)'}}</option>
-                                                <option value="WORK">Work </option>
-                                                <option value="PERSONAL">Personal {{'(Mobile)'}} </option>
+                                            <option value="" selected>Select Type</option> 
+                                            @foreach ($contTypes as $contType)
+                                                <option value="{{$contType->contacttype}}">{{$contType->contacttype}}</option>
+                                            @endforeach
                                             </select>
                                             <input type="text" class="hidden" id="hideContact1" name="hideContact1">
                                         </div>
                                         
                                     
                                         <div class="col colsUpdate1 hidden">
-                                            <label>Contact Number</label>
-                                            <input type="text"class="form-control" name="contact1" id="contact1" >
+                                            <label>Contact Number<i id="requiredFields">*</i></label>
+                                            <input type="text"class="form-control" name="contact1" id="contact1" maxlength="13" autocomplete="off">
                                         </div>
                                         <div class="col colsUpdate1 hidden">
                                         <label for="noteContact1">Note:</label>
-                                        <input type="text"class="form-control"  name="noteContact1" id="noteContact1">
-                                    </div>
+                                            <input type="text"class="form-control"  name="noteContact1" id="noteContact1">
+                                        </div>
 
                                         {{-- END FIRST CONTACT --}}
                                         <div class="w-100"></div>      
                                         {{-- START 2ND CONTACT --}}
-                                        <div class="col colsUpdate2 hidden">
-                                        <label for="contactType2">Label</label>
+                                        <div class="col colsUpdate2 hidden mt-3">
+                                        {{-- <label for="contactType2">Label</label> --}}
                                         <select name="contactType2" id="contactType2" class="form-control" >
-                                            <option value="" selected></option> 
-                                            <option value="HOME">Home {{'(Telephone)'}}</option>
-                                                <option value="WORK">Work </option>
-                                                <option value="PERSONAL">Personal {{'(Mobile)'}} </option>
+                                            <option value="" selected>Select Type</option> 
+                                            @foreach ($contTypes as $contType)
+                                                <option value="{{$contType->contacttype}}">{{$contType->contacttype}}</option>
+                                            @endforeach
                                         </select>
                                         <input type="text" class="hidden" id="hideContact2" name="hideContact2">
                                     </div>
-                                    <div class="col colsUpdate2 hidden">
-                                        <label>Contact Number</label>
-                                        <input type="text" class="form-control" name="contact2" id="contact2">
+                                    <div class="col colsUpdate2 hidden mt-3">
+                                        {{-- <label>Contact Number</label> --}}
+                                        <input type="text" class="form-control" name="contact2" id="contact2" maxlength="13" autocomplete="off">
                                     </div>
-                                    <div class="col colsUpdate2 hidden">
-                                        <label for="noteContact2">Note:</label>
+                                    <div class="col colsUpdate2 hidden mt-3">
+                                        {{-- <label for="noteContact2">Note:</label> --}}
                                         <input type="text"class="form-control"  name="noteContact2" id="noteContact2">
                                     </div>
                                     <div class="w-100"></div>                                
                                         {{-- END 2ND CONTACT --}}
                                         {{-- START 3RD CONTACT --}}
-                                        <div class="col colsUpdate3 hidden">
-                                            <label for="contactType3 ">Label</label>
+                                        <div class="col colsUpdate3 hidden mt-3">
+                                            {{-- <label for="contactType3 ">Label</label> --}}
                                             <select name="contactType3" id="contactType3" class="form-control" >
-                                            <option value="" selected></option> 
-                                                <option value="HOME">Home {{'(Telephone)'}}</option>
-                                                <option value="WORK">Work </option>
-                                                <option value="PERSONAL">Personal {{'(Mobile)'}} </option>
+                                                <option value="" selected>Select Type</option> 
+                                                @foreach ($contTypes as $contType)
+                                                    <option value="{{$contType->contacttype}}">{{$contType->contacttype}}</option>
+                                                @endforeach
                                             </select>
                                             <input type="text" class="hidden" id="hideContact3" name="hideContact3">
                                         </div>
-                                        <div class="col colsUpdate3 hidden" id=""  >
-                                            <label>Contact Number</label>
-                                            <input type="text" class="form-control" name="contact3" id="contact3">
+                                        <div class="col colsUpdate3 hidden mt-3" id=""  >
+                                            {{-- <label>Contact Number</label> --}}
+                                            <input type="text" class="form-control" name="contact3" id="contact3" maxlength="13" autocomplete="off">
                                         </div>
-                                        <div class="col colsUpdate3 hidden">
-                                        <label for="noteContact3">Note:</label>
+                                        <div class="col colsUpdate3 hidden mt-3">
+                                        {{-- <label for="noteContact3">Note:</label> --}}
                                         <input type="text"class="form-control"  name="noteContact3" id="noteContact3">
                                     </div>
                                         <div class="w-100"></div>      
                                         {{-- start 4th contact --}}
 
-                                        <div class="col colsUpdate4 hidden" id="">
-                                            <label for="contactType4">Label</label>
+                                        <div class="col colsUpdate4 hidden mt-3" id="">
+                                            {{-- <label for="contactType4">Label</label> --}}
                                             <select name="contactType4" id="contactType4" class="form-control">
-                                                <option value="" selected></option> 
-                                                <option value="HOME">Home {{'(Telephone)'}}</option>
-                                                    <option value="WORK">Work </option>
-                                                    <option value="PERSONAL">Personal {{'(Mobile)'}} </option>
+                                                <option value="" selected>Select Type</option> 
+                                            @foreach ($contTypes as $contType)
+                                                <option value="{{$contType->contacttype}}">{{$contType->contacttype}}</option>
+                                            @endforeach
                                             </select>
                                         <input type="text" class="hidden" id="hideContact4" name="hideContact4">
                                     </div>
-                                        <div class="col colsUpdate4 hidden" id=""  >
-                                        <label>Contact Number</label>
-                                        <input type="text" class="form-control" name="contact4" id="contact4" >
+                                        <div class="col colsUpdate4 hidden mt-3" id=""  >
+                                        {{-- <label>Contact Number</label> --}}
+                                        <input type="text" class="form-control" name="contact4" id="contact4"maxlength="13" autocomplete="off">
                                     </div>
-                                    <div class="col colsUpdate4 hidden">
-                                        <label for="noteContact4">Note:</label>
+                                    <div class="col colsUpdate4 hidden mt-3">
+                                        {{-- <label for="noteContact4">Note:</label> --}}
                                         <input type="text"class="form-control"  name="noteContact4" id="noteContact4">
                                     </div>
-                                    <div class="w-100"></div>
-                                        <div class="col-md">
-                                        <label>Email Address</label>
-                                        <input type="text"class="form-control w-50" name="email">
-                                        {{-- @error('age') <span class="text-danger">{{ $message }}</span> @enderror --}}
+
+                                    <div class="row">
+                                        <span class="" id="addaContactUpdate"><i class="cursor-pointer">Add Contact</i></span>
                                     </div>
+
+                                    <input type="text" class="hidden" name="hiddenEmailCount" id="hiddenEmailCount">
+                                    <!-- START FIRST EMAIL -->
+                                    <div class="row emailsUpdate1 hidden">
+
+                                        <div class="col col-sm-3">
+                                            <label for="emailType1"> Email Type</label>
+                                            <select name="emailType1" id="emailType1Update" class="form-control">
+                                                <option value="" selected>Select Type</option>
+                                                @foreach ($emailTypes as $emailType)
+                                                    <option value="{{$emailType->emailtype}}">{{$emailType->emailtype}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col" >
+                                            <label for="email1">Email</label>
+                                            <input type="email" name="email1" id="email1Update" class="form-control">
+                                        </div>
+                                        <div class="col">
+                                            <label for="noteEmail1">Note</label>
+                                            <input type="text" name="noteEmail1" id="noteEmail1Update" class="form-control">
+                                            <input type="text" class="hidden" name="hiddenEmmailId1" id="hiddenEmailId1">
+                                        </div>
+                                    </div>
+                            <!-- END FIRST EMAIL -->
+                            <!-- START SECOND EMAIL  -->
+                                    <div class="row emailsUpdate2 hidden mt-3">
+                                        <div class="col col-sm-3">
+                                        <!--  <label for="emailType2"> Email Type</label> -->
+                                            <select name="emailType2" id="emailType2Update" class="form-control">
+                                                <option value="" selected>Select Type</option>
+                                                @foreach ($emailTypes as $emailType)
+                                                    <option value="{{$emailType->emailtype}}">{{$emailType->emailtype}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col" >
+                                            <!-- <label for="email2">Email</label> -->
+                                            <input type="email" name="email2" id="email2Update" class="form-control">
+                                        </div>
+                                        <div class="col">
+                                            <!-- <label for="noteEmail2">Note</label> -->
+                                            <input type="text" name="noteEmail2" id="noteEmail2Update" class="form-control">
+                                            <input type="text" class="hidden" name="hiddenEmmailId2" id="hiddenEmailId2">
+                                        </div>
+                                    </div>
+                            <!-- END SECOND EMAIL -->
+                            <!-- START THIRD EMAIL -->
+                                    <div class="row emailsUpdate3 hidden mt-3">
+                                        <div class="col col-sm-3">
+                                            <!-- <label for="emailType3"> Email Type</label> -->
+                                            <select name="emailType3" id="emailType3Update" class="form-control">
+                                                <option value="" selected>Select Type</option>
+                                                @foreach ($emailTypes as $emailType)
+                                                    <option value="{{$emailType->emailtype}}">{{$emailType->emailtype}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col" >
+                                            <!-- <label for="email3">Email</label> -->
+                                            <input type="email" name="email3" id="email3Update" class="form-control">
+                                        </div>
+                                        <div class="col">
+                                            <!-- <label for="noteEmail3">Note</label> -->
+                                            <input type="text" name="noteEmail3" id="noteEmail3Update" class="form-control">
+                                            <input type="text" class="hidden" name="hiddenEmmailId3" id="hiddenEmailId3">
+                                        </div>
+                                    </div>
+                            <!-- END THIRD EMAIL -->
+                            <!-- START FOURTH EMAIL -->
+                                    <div class="row emailsUpdate4 hidden mt-3">
+                                        <div class="col col-sm-3">
+                                            <!-- <label for="emailType4"> Email Type</label> -->
+                                            <select name="emailType4" id="emailType4Update" class="form-control">
+                                                <option value="" selected>Select Type</option>
+                                                @foreach ($emailTypes as $emailType)
+                                                    <option value="{{$emailType->emailtype}}">{{$emailType->emailtype}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col" >
+                                            <!-- <label for="email4">Email</label> -->
+                                            <input type="email" name="email4" id="email4Update" class="form-control">
+                                        </div>
+                                        <div class="col">
+                                            <!-- <label for="noteEmail4">Note</label> -->
+                                            <input type="text" name="noteEmail4" id="noteEmail4Update" class="form-control">
+                                            <input type="text" class="hidden" name="hiddenEmmailId4" id="hiddenEmailId4">
+                                        </div>
+                                    </div>
+                            <!-- END FOURTH EMAIL -->
+                                    <div class="row">
+                                        <span class="" id="addaEmailUpdate"><i class="cursor-pointer">Add Email</i></span> 
+                                    </div>
+                            </div>
                                 </div>
                             </div>
                         </fieldset>
@@ -392,7 +518,7 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <label>Postal Code</label>
-                                    <input type="text"class="form-control" name="fathersPostal" id="regFathersPostal">
+                                    <input type="text"class="form-control" name="fathersPostal" id="regFathersPostal" readonly>
                                     {{-- <select disable name="postal" id="regPostal" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full empty" placeholder="Search" style="width: 100%; height: 100%;">
                                         <option value=""></option>
                                     </select> --}}
@@ -477,7 +603,7 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <label>Postal Code</label>
-                                    <input type="text"class="form-control" name="mothersPostal" id="regmothersPostal">
+                                    <input type="text"class="form-control" name="mothersPostal" id="regmothersPostal" readonly>
                                     {{-- <select disable name="postal" id="regPostal" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full empty" placeholder="Search" style="width: 100%; height: 100%;">
                                         <option value=""></option>
                                     </select> --}}
@@ -566,7 +692,7 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <label>Postal Code</label>
-                                    <input type="text"class="form-control" name="spousesPostal" id="regSpousesPostal">
+                                    <input type="text"class="form-control" name="spousesPostal" id="regSpousesPostal" readonly>
                                     {{-- <select disable name="postal" id="regPostal" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full empty" placeholder="Search" style="width: 100%; height: 100%;">
                                         <option value=""></option>
                                     </select> --}}
@@ -832,33 +958,49 @@
                         <!-- END MEDICAL INFORMATION -->
 
                         <fieldset id="tab051">
-                            <table class="patient-list-table">
+                            
+                           
+                            <hr class="my-3">
+                            <table class="patient-list-table mx-auto w-100">
                                 <thead>
                                     <th>MPI</th>
+                                    <!-- <th>Hospital Code</th> -->
                                     <th>Hospital Registered</th>
-                                    <th>Date Registered</th>
-                                    <th>Registered By</th>
-                                    <th>Complaint</th>
+                                    <th>Medical Record Number {{'(MRN)'}}</th>
+                                    <th>Date Recorded</th>
+                                    {{-- <th>Transaction</th> --}}
                                 </thead>
-                                <tbody>
+                                <tbody id="hospitalIdtable">
                                     {{-- <TD>{{ $CODE }}</TD> --}}
-                                    <td id="code"></td>
-                                    <td>{{ Auth::user()->COMPANY }}</td>
+                                    {{-- <td id="code"></td>
+                                    <td id="hospitalCode"></td>
+                                    <td id="hpid"></td>
                                     <td id="dateUpdated"></td>
+                                    <td id="editedBy"></td>
                                     <td>{{ Auth::user()->userName }}</td>
+                                    <td id="transactionNote"></td> --}}
                                 </tbody>
                             </table>
                         </fieldset>
-
+                        <input type="text" id="createdBy" class="hidden" name="createdBy">
+                        <input type="text" id="createdDate" class="hidden" name="createdDate">
                     </div>
                 <!-- END MODAL BODY -->
 
                 <!-- START MODAL FOOTER -->
-                    <div class="modal-footer">
-                        <button type="button"  class="btn btn-secondary"  id="closeReset"  onclick="resetInput()">Close</button>
-                        <input type="text" class="hidden" id="hiddenInput" name="hiddenCode">
-                        <!-- {{-- <button type="button" class="btn btn-primary" wire:click="update('{{$CODE}}')" id="updateBtn" data-bs-dismiss="modal">Save Changes</button> --}} -->
-                        <button type="submit" class="btn btn-primary"  id="submitButt">Save changes</button>
+                    <div class="modal-footer justify-content-between">
+                        <div class="col">
+                            <button type="button"  class="btn btn-secondary text-left"  id="viewVisit" >View Visit</button>
+                            <button type="button"  class="btn btn-success text-left"  id="addVisit"  onclick="">Create Visit</button>
+                        </div>
+                        <div class="col text-right">
+                             {{-- <button type="button"  class="btn btn-secondary"  id="closeReset"  onclick="resetInput()">Close</button> --}}
+                            <input type="text" class="hidden" id="hiddenInput" name="hiddenCode">
+                            <!-- {{-- <button type="button" class="btn btn-primary" wire:click="update('{{$CODE}}')" id="updateBtn" data-bs-dismiss="modal">Save Changes</button> --}} -->
+                            <button type="submit" class="btn btn-primary"  id="submitButt">Save changes</button>
+                        </div>
+
+                       
                     </div>
                 <!-- END MODAL FOOTER -->
                 </form>

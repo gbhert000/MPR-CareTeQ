@@ -1,16 +1,168 @@
+
+
 var get_ID="";
 var patient = new Object();
 $code =''
 
+var resultb64="";
+var imagebase64="";
+var stream;
+$imageTemp="";
+$hpidTemp='';
+var geticdCode ="";
+var constraint=0;
+var modalIdentifier = "";
+var cityUpdate="";
+$patientInfo="";
+$idsObject="";
+$currentHPID="";
+var dateDis;
+var boolCheck= false;
+var icdCode;
+var icdDesc;
+var finDiag;
+
+
 // var fname='';
 // var lname='';
 
+setInterval(displayHello, 1000);
+
+function displayHello() {
+    $('#noofpatients').html($('#red').val());
+}
 
 $(document).ready(function(){
     var getAdd=1;
+    var getAddEmail=1;
+    var getAddEmailUpdate=0;
     // var updateAdd=0;
     $getCount =0;
+
+    $("#closeICD").click(function(){
+        $("#icd10modal").modal("hide");
+
+        if(modalIdentifier=="createVisit"){
+            createVisit($patientInfo,$idsObject,$currentHPID);
+        }else if(modalIdentifier=="viewVisit"){
+            viewVisit();
+        }
+        
+    });
+    $("input").attr("Autocomplete","off");
+
+    $("#closeAll1").click(function(){
+        window.location.replace("/home");
+    });
+    $("#closeAll2").click(function(){
+        window.location.replace("/home");
+    });
+    // $("#closeAll3").click(function(){
+    //     window.location.replace("/home");
+    // });
+    $("#closeAll4").click(function(){
+        window.location.replace("/home");
+    });
+    $("#closeAll5").click(function(){
+        window.location.replace("/home");
+    });
+
+    $("#icd10Select").on("click", function(){
+        // alert("asd");
+       
+    });
+    
+    $("#selectIDS").click(function(){
+
+        $("#createVisitModal").modal("hide");
+        modalIdentifier="createVisit";
+        $("#icd10modal").modal("show");
+
+
+    
+    });
+
+    $("#selectICDUpdate").click(function(){
+
+        $("#viewVisitModal").modal("hide");
+        // disDate = $("#dateDischargedUpdate").val();
+        // alert(disDate)
+        modalIdentifier="viewVisit";
+        $("#icd10modal").modal("show");
+        // viewVisit();
+
+    
+    });
+
+
+    $("#closeVisit").click(function(){
+        $("#createVisitModal").modal("hide");
+        $("#createVisitModal").find("select").val('');
+        $("#createVisitModal").find("input").val('');
+        $("#createVisitModal").find("textarea").val('');
+        viewRecord($code,"img/profile.png");
+    });
+    $("#closeViewVisit").click(function(){
+        $("#viewVisitModal").modal("hide");
+        viewRecord($code,"img/profile.png");
+    });
+
     // $initialCount=0
+    $("#contact1Add, #contact2Add,#contact3Add, #contact4Add, #contact1,#contact2,#contact3,#contact4").on('input paste',function(e){
+        // alert("asd");
+        var key = e.charCode || e.keyCode || 0;
+       $text = $(this); 
+       if (key !== 8 && key !== 9) {
+           if ($text.val().length === 4) {
+               $text.val($text.val() + '-');
+           }
+           if ($text.val().length === 8) {
+               $text.val($text.val() + '-');
+           }
+
+       }
+
+       return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+    });
+
+    // create visit disable button
+    $("#dateArrival").on('change keyup', function(){
+        // if($("#dateArrival").val()!=null){
+        //    constraint=constraint+1;
+        // }
+        checkContent();
+    });
+    $("#chiefComplaint").on('input', function(){
+        checkContent();
+    });
+    $("#dateDischarged").on('change keyup', function(){
+        checkContent();
+    });
+
+
+    // view visit discharge button
+    $("#dateDischargedUpdate").on('change keyup', function(){
+        // disDate=$("#dateDischargedUpdate").val();
+        // alert(disDate);
+        checkVisitContent();
+    });
+    $("#icdCodeUpdate").on('change keyup', function(){
+        checkVisitContent();
+    });
+    $("#icdDescUpdate").on('change keyup', function(){
+        checkVisitContent();
+    });
+    $("#FinalDiagnosisUpdate").on('change keyup', function(){
+        checkVisitContent();
+    });
+
+    
+
+    $("#idreport").click(function(){
+        $ids=$("#hiddenInput").val();
+        window.location.href = "/myPDF/"+$ids;
+    });
+       
 
     $(".viewReportModal").click(function(){
         $('#reportModal').modal('show');
@@ -38,10 +190,12 @@ $(document).ready(function(){
         }
         else if(getAdd=4){
             getAdd=getAdd;
+            $("#addaContact").addClass("hidden");
         }
         // $("#countContact").val(getAdd+1);
         $("#countContact").val(getAdd);
         $('.cols'+getAdd).removeClass("hidden");
+
         
         
     });
@@ -49,8 +203,7 @@ $(document).ready(function(){
     $("#removeaContact").click(function(){
         $('.cols'+getAdd).addClass("hidden");
         if(!(getAdd<=1)){
-            getAdd--;
-            
+            getAdd--;    
         }
         
         $getCount=$("#countContact").val(getAdd);
@@ -61,8 +214,40 @@ $(document).ready(function(){
         // }
     });
     // END ADD REMOVE CONTACT REGISTRATION
+    //  ADD EMAIL REGISTRATION
+    $("#addaEmail").click(function(){
+        
+        if(!(getAddEmail>=4)){
+            getAddEmail++;
+        }
+        else if(getAddEmail=4){
+            getAddEmail=getAddEmail;
+        }
+        // $("#countContact").val(getAdd+1);
+        // $("#countContact").val(getAddEmail);
+        $('.emails'+getAddEmail).removeClass("hidden");
+        $("#hiddenEmailCount").val(getAddEmail);
+        
+        
+    });
 
-
+    // END EMAIL REGISTRATION
+    // START EMAIL UPDATE 
+    $("#addaEmailUpdate").click(function(){
+        
+        if(!(getAddEmailUpdate>=4)){
+            getAddEmailUpdate++;
+        }
+        else if(getAddEmail=4){
+            getAddEmailUpdate=getAddEmailUpdate;
+        }
+        // $("#countContact").val(getAdd+1);
+        // $("#countContact").val(getAddEmail);
+        $("#hiddenEmailCountUpdate").val(getAddEmailUpdate);
+        $('.emailsUpdate'+getAddEmailUpdate).removeClass("hidden");
+        
+        
+    });
     // START ADD REMOVE CONTACT UPDATE
     $("#addaContactUpdate").click(function(){
         
@@ -75,6 +260,8 @@ $(document).ready(function(){
         }
         else if(updateAdd=4){
             updateAdd=updateAdd;
+            // alert("asd");
+            
         }
         // $("#countContact").val(getAdd+1);
         // $("#countContactupdate").val(updateAdd);
@@ -162,7 +349,7 @@ $(document).ready(function(){
     //     fname=document.getElementById('U_FIRSTNAME').value;
     // });
     
-    $("#bday11").focusout(function(){
+    $("#bday11").on('change',function(){
         var bday = document.getElementById('bday11').value;
         var fname=document.getElementById('addFirstName').value;
         var lname=document.getElementById('addLastName').value;
@@ -193,7 +380,7 @@ $(document).ready(function(){
                 $obj2=JSON.stringify(response.getRecord);
                 $hispatients1 = JSON.parse($obj2);
                 
-                viewRecord($hispatients1.CODE);
+                viewRecord($hispatients1.CODE,"img/profile.png");
 
                 }
                 else{
@@ -305,7 +492,7 @@ $(document).ready(function(){
                 $("#regBarangay").empty();
                 $("#regBarangay").append('<option value="">-Select Barangay-</option>');
                 for (var n=0; n<data.length; n++) {
-                    $("#regBarangay").append("<option>"+data[n]['brgy']+"</option>");
+                    $("#regBarangay").append("<option>"+data[n]['barangay']+"</option>");
                 }
                 $("#regPostal").val('');
             }
@@ -325,7 +512,7 @@ $(document).ready(function(){
             success:function(data){
                 // prompt('',data); return false;
                 $("#regPostal").empty();
-                $("#regPostal").val(data[0]['zipCode']);
+                $("#regPostal").val(data[0]['zip_Code']);
             }
         });
     });
@@ -333,28 +520,28 @@ $(document).ready(function(){
     // END SELECT2 ADD PATIENT
 
     //START  SELECT2 UPDATE PATIENT
-    // $("#regCountryUpdate").select2({
-    //     dropdownParent: $('#viewPatientModal'),
-    //     // width: 'resolve',
-    //     // height: 'resolve'
-    // });
+    $("#regCountryUpdate").select2({
+        dropdownParent: $('#viewPatientModal'),
+        // width: 'resolve',
+        // height: 'resolve'
+    });
 
-    // $("#regProvinceUpdate").select2({
-    //     dropdownParent: $('#viewPatientModal'),
-    //     // width: 'resolve',
-    //     // height: 'resolve'
-    // });
+    $("#regProvinceUpdate").select2({
+        dropdownParent: $('#viewPatientModal'),
+        // width: 'resolve',
+        // height: 'resolve'
+    });
 
-    // $("#regMunicipalityUpdate").select2({
-    //     dropdownParent: $('#viewPatientModal'),
-    //     // width: 'resolve',
-    //     // height: 'resolve'
-    // });
-    // $("#regBarangayUpdate").select2({
-    //     dropdownParent: $('#viewPatientModal'),
-    //     // width: 'resolve',
-    //     // height: 'resolve'
-    // });
+    $("#regMunicipalityUpdate").select2({
+        dropdownParent: $('#viewPatientModal'),
+        // width: 'resolve',
+        // height: 'resolve'
+    });
+    $("#regBarangayUpdate").select2({
+        dropdownParent: $('#viewPatientModal'),
+        // width: 'resolve',
+        // height: 'resolve'
+    });
 
 
     $("#regCountryUpdate").on('change',function(){
@@ -372,13 +559,18 @@ $(document).ready(function(){
                 // prompt('',data); return false;
                 // alert('as');
                 // alert(data.length);
-                $("#regProvinceUpdate").empty();
-                // $("#regProvince1Update").append('<option value="">-Select Province-</option>');
+                
+                // $("#regProvinceUpdate").append('<option value="">-Select Province-</option>');
+                $("#regProvinceUpdate").attr("disabled", false);
+                if($("#regCountryUpdate").val()!="PHILIPPINES"){
+                    $("#regProvinceUpdate").empty();
+                }
                 // $("#regProvinceUpdate").empty();
                 for (var i=0; i<data.length; i++) {
                     
                     $("#regProvinceUpdate").append("<option>"+data[i]['province']+"</option>");
                 }
+                $("#regProvinceUpdate").prop("readonly", false);
                 $("#regMunicipalityUpdate").empty();
                 // $("#regMunicipalityUpdate").append('<option value="">-Select Town/City-</option>');
                 $("#regBarangayUpdate").empty();
@@ -402,11 +594,14 @@ $(document).ready(function(){
             data: {'province': $(this).val()},
             success:function(data){
                 // prompt('',data); return false;
+
                 $("#regMunicipalityUpdate").empty();
-                // $("#regMunicipalityUpdate").append('<option value="">-Select Town/City-</option>');
+                $("#regMunicipalityUpdate").attr("disabled", false);
+                $("#regMunicipalityUpdate").append('<option value="">-Select Town/City-</option>');
                 for (var n=0; n<data.length; n++) {
                     $("#regMunicipalityUpdate").append("<option>"+data[n]['municipality']+"</option>");
                 }
+                $("#regMunicipalityUpdate").prop("readonly", false);
                 $("#regBarangayUpdate").empty();
                 $("#regBarangayUpdate").append('<option value="">-Select Barangay-</option>');
                 $("#regPostalUpdate").val('');
@@ -428,16 +623,20 @@ $(document).ready(function(){
             success:function(data){
                 // prompt('',data); return false;
                 $("#regBarangayUpdate").empty();
+                $("#regBarangayUpdate").attr("disabled", false);
                 // $("#regBarangayUpdate").append('<option value="">-Select Barangay-</option>');
                 for (var n=0; n<data.length; n++) {
-                    $("#regBarangayUpdate").append("<option>"+data[n]['brgy']+"</option>");
+                    $("#regBarangayUpdate").append("<option>"+data[n]['barangay']+"</option>");
                 }
+                $("#regBarangayUpdate").prop("readonly", false);
                 $("#regPostalUpdate").val('');
             }
         });
     });
     $("#regBarangayUpdate").on('change' ,function(){
         // alert('asd');
+        cityUpdate=$("#regMunicipalityUpdate").val();
+        // ealert(cityUpdate);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -446,12 +645,14 @@ $(document).ready(function(){
         $.ajax({
             url: '/postalUpdate',
             method: 'get',
-            data: {'brgy': $(this).val()},
+            data: {'brgy': $(this).val(),
+                    'cityUpdate':cityUpdate        
+            },
             success:function(data){
                 // prompt('',data); return false;
                 // $("#regPostal1").empty();
                 // alert(data[0]['zipCode']);
-                $("#regPostalUpdate").val(data[0]['zipCode']);
+                $("#regPostalUpdate").val(data[0]['zip_Code']);
             }
         });
     });
@@ -552,7 +753,7 @@ $(document).ready(function(){
                 // prompt('',data); return false;
                 // $("#regPostal1").empty();
                 // alert(data[0]['zipCode']);
-                $("#regFathersPostal").val(data[0]['zipCode']);
+                $("#regFathersPostal").val(data[0]['zip_Code']);
             }
         });
     });
@@ -807,12 +1008,26 @@ $(document).ready(function(){
 
 
    
-
+    $("#bday11").on('input',function(){
+        this.type = 'text';
+        var input = this.value;
+        if (/\D\/$/.test(input)) input = input.substr(0, input.length - 3);
+        var values = input.split('-').map(function(v) {
+            return v.replace(/\D/g, '')
+        });
+        if (values[0]) values[0] = checkValue(values[0], 12);
+        if (values[1]) values[1] = checkValue(values[1], 31);
+        var output = values.map(function(v, i) {
+            return v.length == 2 && i < 2 ? v + '-' : v;
+        });
+        this.value = output.join('').substr(0, 14);
+    });
    
     //age calculation thru birthday
     $('#bday11').change(function () {
         var now = new Date();   //Current Date
         var past = new Date($('#bday11').val());  //Date of Birth
+        // alert(past);
         if (past > now) {
             alert('Entered Date is Greater than Current Date');
             return false;
@@ -821,12 +1036,12 @@ $(document).ready(function(){
         var pastYear = past.getFullYear();//Get Date of Birth year
         var age = nowYear - pastYear;  //calculate the difference
         $('#age1').val(age);
-        $('#age1').text(age+"years old");
+        // $('#age1').text(age+"years old");
     });
     
 
         $('.datepicker1').datepicker({
-            dateFormat: 'yy-mm-dd',
+            dateFormat: 'mm-dd-yy',
             changeMonth: true,
             changeYear: true,
             autoclose: true,
@@ -837,6 +1052,7 @@ $(document).ready(function(){
         $('#bday1').change(function() {
             var now = new Date();   //Current Date
             var past = new Date($('#bday1').val());  //Date of Birth
+            // alert(now+past)
             if (past > now) {
                 alert('Entered Date is Greater than Current Date');
                 return false;
@@ -946,7 +1162,9 @@ $(document).ready(function(){
             $("#memberFname").val( $("#U_FIRSTNAME").val());
             $("#memberMname").val( $("#U_MIDDLENAME").val());
             $("#memberEname").val( $("#extensionName").val());
-            $("#memberSex").val( $("#regSex").val());
+            $("#memberSex").val( $("#updatesex").val());
+            // alert($("#updatesex").val());
+            $("#memberSex").text( $("#updatesex").val());
             $("#memberBDay").val( $("#bday1").val());
         }
       });
@@ -969,7 +1187,7 @@ $(document).ready(function(){
             // $("#memberSex").val( $("#updatesex option:selected").val());
             $("#memberSex").append('<option value="'+$("#updatesex option:selected").text()+'">'+$("#updatesex option:selected").text()+'</option>');
             $("#memberBDay").val( $("#bday1").val());
-            alert( $("#memberLname").val());
+            // alert( $("#memberLname").val());
         }
         else if($(this).val() == "Dependent") {
             // $("#memberLname").prop('disabled', false); //disable
@@ -1189,7 +1407,65 @@ $(document).ready(function(){
     });
 
 
+    // show view visit modal
+    $("#viewVisit").click(function(){
+        $("#viewPatientModal").modal("hide");
+        viewVisit();
+
+    });
+
+    $("#dischargeButton").click(function(){
+        var mpiUpdate = $("#mpiUpdate").val();
+        var namePatient = $("#nameVisitUpdate").val();
+        var mrnUpdate=$("#hpidVisitUpdate").val();
+        var visitIDUpdate=$("#visitIDUpdate").val();
+        var selectVisitUpdate = $("#selectVisitUpdate").val();
+        var hospitalNameInputUpdate= $("#hospitalNameInputUpdate").val();
+        var clerkUpdate=$("#clerkUpdate").val();
+        var dateArrivalUpdate= $("#dateArrivalUpdate").val();
+        var dateDischargedUpdate=$("#dateDischargedUpdate").val();
+        var chiefComplaintUpdate=$("#chiefComplaintUpdate").val();
+        var icdCodeUpdate=$("#icdCodeUpdate").val();
+        var icdDescUpdate = $("#icdDescUpdate").val();
+        var FinalDiagnosisUpdate=$("#FinalDiagnosisUpdate").val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+          
+        $.ajax({
+            type: "POST",
+            url: "/dischargePatient/"+visitIDUpdate,
+           
+            data:{
+                hospitalNameInputUpdate,
+                selectVisitUpdate,
+                visitIDUpdate,
+                mrnUpdate,
+                mpiUpdate,
+                clerkUpdate,
+                dateArrivalUpdate,
+                dateDischargedUpdate,
+                chiefComplaintUpdate,
+                icdCodeUpdate,
+                icdDescUpdate,
+                FinalDiagnosisUpdate,
+                // hospCode
+
+            },
+            success: function(response) {
+                alert(response.msg);
+                window.location.replace("/home");
+            }
+        });
+    }); 
+
 });
+
+
+// END DOCUMENT READY
 function resetInput(){
     $('#viewPatientModal').modal('hide');
 
@@ -1204,16 +1480,18 @@ function resetInput(){
     $("#tab01").children("h6").removeClass("text-muted");
     $("#tab01").children("h6").addClass("font-weight-bold");
     
+    $("#hospitalIdtable").empty();
 
-
-    // $("input, select").val("");
+    $("input").val("");
+    $("#addaContactUpdate").removeClass("hidden");
     // $("#colsUpdate1").removeClass("hidden");
     // $("#colsUpdate2").removeClass("hidden");
     // $("#colsUpdate3").removeClass("hidden");
     // $("#closeReset").find("input, select").attr('value', '');
     for(var x=1; x<=4;x++){
         $("#contact"+x).val('');
-        $("#contactType"+x).val('');
+        $("#contactType"+x+" option:selected").val('');
+        $("#contactType"+x+" option:selected").text('');
         $("#noteContact"+x).val('');
     }
 
@@ -1230,6 +1508,21 @@ function resetInput(){
 
 function resetInputAdd(){
     $('#studentModal').modal('hide');
+    $("#patientImageRegister").attr("src", "img/profile.png");
+    // $(".cols1").addClass("hidden");
+    $(".cols2").addClass("hidden");
+    $(".cols3").addClass("hidden");
+    $(".cols4").addClass("hidden");
+
+    var elements = document.getElementsByTagName("input");
+    var elementsSelect = document.getElementsByTagName("select");
+    for (var ii=0; ii < elements.length; ii++) {
+    if (elements[ii].type == "text") {
+        elements[ii].value = "";
+        // $("select").empty();
+        // elementsSelect[ii].text="";
+    }
+    }
 }
 function closem(){
     // alert('as');
@@ -1253,7 +1546,7 @@ function closeModal(){
 
     
 }
-function viewRecord($id){
+function viewRecord($id,$img){
         $('#viewPatientModal').modal('show');
         // $("#countContactUpdate").val(updateAdd);
 
@@ -1285,6 +1578,15 @@ function viewRecord($id){
 
                 $obj3=JSON.stringify(response.img);
                 $imageObject = JSON.parse($obj3);
+
+                $obj4=JSON.stringify(response.hospitalIDs);
+                // alert($obj4.HOSPITALID);
+                $idsObject = JSON.parse($obj4);
+
+                $obj6=JSON.stringify(response.hpidCurrent);
+                $currentHPID=JSON.parse($obj6);
+                // alert($currentHPID)
+                // alert($idsObject[0].HOSPITALID);
                 // ale
                 // alert($hmoObjects[0]['memberFname']);
                 // alert($hispatients.countContacts);
@@ -1294,6 +1596,30 @@ function viewRecord($id){
                 // $patientCode=response.U_FIRSTNAME;
                 // alert($patientCode);
                 // alert($hmoObjects[0]['hmoName']);
+
+                $obj5=JSON.stringify(response.hospitalProfiles);
+                $profilesObject = JSON.parse($obj5);
+
+
+                if(response.checkVisits!=null){
+                    if(response.checkVisits.DOCSTATUS=="Active"){
+                       $("#addVisit").prop("disabled", true);
+                   }
+                   else{
+                       // $("#addVisit").prop("disabled", true);
+                       $("#viewVisit").prop("disabled", true);
+                       
+                   }
+               }else{
+                // alert("asdr");
+                $("#addVisit").prop("disabled", false);
+                $("#viewVisit").prop("disabled", true);
+            }
+
+
+
+                // $obj7=JSON.stringify(response.icd10codes);
+                // $icd10s=JSON.parse($obj7);
 
                 
                 if(response) {
@@ -1338,10 +1664,33 @@ function viewRecord($id){
                             $(".colsUpdate2").removeClass("hidden");
                             $(".colsUpdate3").removeClass("hidden");
                             $(".colsUpdate4").removeClass("hidden");
+                            // alert("asd");
+                            $("#addaContactUpdate i").prop("hidden", true);
                             break;
                         default:
-                            alert($hispatients.countContacts);
+                            // alert($hispatients.countContacts);
     
+                    }
+                    switch($hispatients.countContacts){
+                        case 1:
+                            $("#emailsUpdate1").removeClass("hidden");
+                            break;
+                        case 2:
+                            $("#emailsUpdate1").removeClass("hidden");
+                            $("#emailsUpdate2").removeClass("hidden");
+                            break;
+                        case 3:
+                            $("#emailsUpdate1").removeClass("hidden");
+                            $("#emailsUpdate2").removeClass("hidden");
+                            $("#emailsUpdate3").removeClass("hidden");
+                            break;
+                        case 4:
+                            $("#emailsUpdate1").removeClass("hidden");
+                            $("#emailsUpdate2").removeClass("hidden");
+                            $("#emailsUpdate3").removeClass("hidden");
+                            $("#emailsUpdate4").removeClass("hidden");
+                            break;
+
                     }
                     
                     $patientIndex=$hispatients.CODE;
@@ -1356,6 +1705,8 @@ function viewRecord($id){
                         $("#U_MIDDLENAME").val($hispatients.U_MIDDLENAME);
                         $("#U_LASTNAME").val($hispatients.U_LASTNAME);
                         $("#extensionName").val($hispatients.U_EXTNAME);
+
+                        var getDate = new Date($hispatients.U_BIRTHDATE);
                         $("#bday1").val($hispatients.U_BIRTHDATE);
                         $("#age").val($hispatients.U_AGE);
                         
@@ -1369,17 +1720,34 @@ function viewRecord($id){
                         $('#U_NATIONALITY option:selected').val($hispatients.U_NATIONALITY);
                         $("#U_RELIGION").val($hispatients.U_RELIGION);
                         $("#U_OCCUPATION").val($hispatients.U_OCCUPATION);
-                    
-                        $('#regCountryUpdate option:selected').val($hispatients.U_COUNTRY);
-                        $('#regCountryUpdate option:selected').text($hispatients.U_COUNTRY);
-                        // alert($hispatients.U_COUNTRY);
+
+                        $("#createdBy").val($hispatients.CREATEDBY);
+                        $("#createdDate").val($hispatients.DATECREATED);
+
+                        $("#idNumberUpdate").val($hispatients.idNumber);
+                        $("#idTypeUpdate").val($hispatients.idType);
+
+
+                
+                        $("#regCountryUpdate").append("<option selected value='"+$hispatients.U_COUNTRY+"'>"+$hispatients.U_COUNTRY+"</option>");
+
+                        //   $('#regCountryUpdate').trigger('change');
+                        //   $('#regCountryUpdate').find(':selected').text($hispatients.U_COUNTRY);
                         
-                        $("#getProvince").text($hispatients.U_PROVINCE);
-                        $("#getProvince").val($hispatients.U_PROVINCE);
-                        $("#getCity").text($hispatients.U_CITY);
-                        $("#getCity").val($hispatients.U_CITY);
-                        $("#getBrgy").text($hispatients.U_BARANGAY);
-                        $("#getBrgy").val($hispatients.U_BARANGAY);
+                        // $("#getProvince").text($hispatients.U_PROVINCE);
+                        // alert($hispatients.U_PROVINCE);
+                        // $('#regProvinceUpdate').trigger('change');
+                        $("#regProvinceUpdate").append("<option selected value='"+$hispatients.U_PROVINCE+"'>"+$hispatients.U_PROVINCE+"</option>");
+                        
+                        // $("#getCity").text($hispatients.U_CITY);
+                        $("#regMunicipalityUpdate").append("<option selected value='"+$hispatients.U_CITY+"'>"+$hispatients.U_CITY+"</option>");
+                        $("#regBarangayUpdate").append("<option selected value='"+$hispatients.U_BARANGAY+"'>"+$hispatients.U_BARANGAY+"</option>");
+
+                        // $("#getCity").val($hispatients.U_CITY);
+                        // $('#getCity').trigger('change');
+                        // // $("#getBrgy").text($hispatients.U_BARANGAY);
+                        // $("#getBrgy").val($hispatients.U_BARANGAY);
+                        // $('#getBrgy').trigger('change')
                        
                         $("#houseNo").val($hispatients.U_HOUSENO);
                         $("#street").val($hispatients.U_STREET);
@@ -1445,23 +1813,43 @@ function viewRecord($id){
                   $('#spouseHouseNo').val($hispatients.U_SPOUSEHOUSENO);
                   $('#spouseStreet').val($hispatients.U_SPOUSESTREET);
 
+
+                //   viewing of contact
                   if($cont!=""){
                     if($hispatients.countContacts>=1){
                         for(var x=1;x<=$hispatients.countContacts;x++){
                             $("#contact"+x).val($cont[x-1]['contactNumber']);
-                            $("#contactType"+x).val($cont[x-1]['contactType']);
+                            $("#contactType"+x+" option:selected").val($cont[x-1]['contactType']);
+                            $("#contactType"+x+" option:selected").text($cont[x-1]['contactType']);
                             $("#hideContact"+x).val($cont[x-1]['contactID']);
                             // $("#noteContact"+x).val($cont[x-1]['contactID']);
                             
                         }
                     }
                   }
-                //   alert( $("#hideContact1").val());
-                //   HMOS
-                //   alert($("#providerName option:selected").val());
+                //   end viewing of contacts
                 
-                // alert($hmoObjects);
+                // alert(response.emails);
+                // start viewing of emails
+                  if(response.emails!=""){
+                    if($hispatients.countEmail>=1){
+                        for(var qq=1;qq<=$hispatients.countEmail;qq++){
+                            $(".emailsUpdate"+qq).removeClass("hidden");
+                            $("#email"+qq+"Update").val(response.emails[qq-1]['emailAddress']);
+                            $("#noteEmail"+qq+"Update").val(response.emails[qq-1]['emailNote']);
+                            $("#emailType"+qq+"Update option:selected").val(response.emails[qq-1]['emailType']);
+                            $("#emailType"+qq+"Update option:selected").text(response.emails[qq-1]['emailType']);
+                            $("#hiddenEmailId"+qq).val(response.emails[qq-1]['emailID']);
+                            // $("#noteContact"+x).val($cont[x-1]['contactID']);
+                            
+                        }
+                    }
+                  }
+
+                // start viewing of emails
+                // alert(JSON.stringify($hmoObjects));
                 if($hmoObjects!=""){
+                    // alert($hmoObjects);
                     $("#providerName").val($hmoObjects[0]['hmoName']);
                     $("#memberID").val($hmoObjects[0]['hmoAccountID']);
                     $("#relationMem").val($hmoObjects[0]['clientType']);
@@ -1477,17 +1865,93 @@ function viewRecord($id){
 
                 $imageUrl = $("#storage").val();
 
-                $("#dateUpdated").text($hispatients.DATECREATED);
-                $("#code").text($hispatients.CODE);
+
+                $arrayLen=$idsObject.length;
+                $arrayLength=$profilesObject.length;
+                // alert($arrayLength);
+                // alert(JSON.stringify(response.medInfo.U_HEIGHT_CM));
+                // if
+                // alert($currentHPID);
+                if(response.medInfo!=null){
+                    // alert(response.medInfo.U_HEIGHT_CM);
+                    $("#centimeter").val(response.medInfo.U_HEIGHT_CM);
+                    $("#inch").val(response.medInfo.U_HEIGHT_IN);
+                    $("#kg").val(response.medInfo.U_WEIGHT_KG);
+                    $("#lb").val(response.medInfo.U_WEIGHT_LB);
+                    $("#bmi").val(response.medInfo.U_BMI);
+                }
+                // alert(JSON.stringify($currentHPID));
+                if($currentHPID!=null){
+
+                    // alert(JSON.stringify($currentHPID));
+                    if($currentHPID.idSeries!=null){
+                        // alert($currentHPID.idSerie);
+                        $hpidcurr = $("#hpidUpdate").val($currentHPID.idSeries);
+                        $("#hpidUpdate").prop("readonly", true);
+                    }
+                    else{
+                        $("#hpidUpdate").prop("readonly", false );
+                    }
+                }
+                
+                // $hosID=
+
+                $("#hospitalIdtable").empty();//prevent adding new row when closing create visit
+                if($arrayLen!=0){
+                    // alert(arrayLength);
+                    for($l=0; $l<$arrayLen;$l++){
+
+                    $("#hospitalIdtable").append(
+                        '<tr>'+
+                        '<td>'+$hispatients.CODE+'</td>'+
+                        '<td>'+$idsObject[$l].HOSPITALNAME+'</td>'+
+                        '<td>'+$idsObject[$l].HOSPITALID+'</td>'+
+                        '<td>'+$idsObject[$l].dateCreated+'</td>'+
+                        // '<td>'+$idsObject[$l].note+'</td>'+
+                        '</tr>'
+                        );
+                    } 
+                }else{
+
+                    // IF NO CURREMNT HOSPITAL ID
+                
+                    for($l=0; $l<$arrayLength;$l++){
+                        $("#hospitalIdtable").append(
+                            '<tr>'+
+                            '<td>'+$hispatients.CODE+'</td>'+
+                            '<td>'+$profilesObject[$l].HOSPITALNAME+'</td>'+
+                            '<td>'+$profilesObject[$l].HOSPITALID+'</td>'+
+                            '<td>'+$profilesObject[$l].dateCreated+'</td>'+
+                            // '<td>'+$profilesObject[$l].EDITEDBY+'</td>'+
+
+                            // '<td>'+$profilesObject[$l].note+'</td>'+
+                            '</tr>'
+                            );
+                        }
+                }
+                
                 // storage_path('app/uploads/');
                 //  alert($imageObject.imageName);
 
-                if($imageObject!=null){
+                if($imageObject!=null&&$img=="img/profile.png"){
                     if($imageObject.imageName!=""){
                     // alert($imageObject.imageName);
-                    $("#patientImage").attr("src",$imageUrl+'/'+$imageObject.imageName);
-                  }
+
+                    $.get($("#storage").val()+'/'+$imageObject.imageName, function(textData, status) {
+                        // var aLines = textData.split("\n")
+                    
+                        // alert(textData + '\nStatus = ' + status);   // this works, all lines
+                        // alert(textData);
+                        $("#patientImage").attr("src",textData);
+                     }, 'text');
+                    //  $imageTemp=
+                  }//dito
+                }else{
+                    $("#patientImage").attr("src",$img);
+                    $("#hiddenImage").val($img);
+                    $imageTemp=$img;
                 }
+                $("#patientImage").attr("src",$img);
 
                 
                 // else{
@@ -1495,100 +1959,29 @@ function viewRecord($id){
                 // }
 
                 }
+
+                // if(response.checkVisits.)
+                // $checksV=JSON.stringify(response.checkVisits);
+                // alert(response.checkVisits.DOCSTATUS);
+                // alert(response.checkVisits);
+                
+               
+                $code = $hispatients.CODE;
+                //   ADD VISIT
+                  $("#addVisit").click($code, function(){
+                    // alert($code);
+                    // $("#createVisitModal").modal("show");
+                    modalIdentifier="createVisit";
+                    createVisit($hispatients, $idsObject,$currentHPID,$img);
+                });
             }  
           });
           $("#addingImage").on('click', function(){
             addImage($patientIndex);
-
-            // $.ajax({
-            //     url: `home/`+$id,
-            //     method: "GET",
-            //     success: function(response) {
-
-            //     }
-            // });
-
-
-          });
+          });   
           
-          
-          
-}
-function addImage($patientIndex){
-
-    $code=$patientIndex;
-    // alert(fname+lname);
+       
     
-  Webcam.set({
-      width: 490,
-    //   width: 350,
-      height: 350,
-      image_format: 'jpeg',
-      jpeg_quality: 90
-  });
-  
-  Webcam.attach( '#my_camera' );
-  
-    $('#viewPatientModal').modal('hide');
-    // alert("asd");
-    $('#addImageModal').modal('show');
-
-//   alert($patientIndex);
-
-    $("#saveImage").click($code,function(){
-
-        Webcam.reset( '#my_camera' )
-        var image=document.getElementById('imageID').value;
-
-        var fnameImage=document.getElementById('U_FIRSTNAME').value;
-        var lnameImage=document.getElementById('U_LASTNAME').value;
-        var mnameImage=document.getElementById('U_MIDDLENAME').value;
-        var enameImage=document.getElementById('extensionName').value;
-        // var lname=document.getElementById('addLastName').value;
-        // $image1=JSON.stringify($code);
-        var patientCode =$code;
-        // alert($code);
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        // alert($id);
-        $('#titleError').text('');
-        $('#descriptionError').text('');
-        // $('#viewPatientModal').modal('show');
-        $.ajax({
-            type: "POST",
-            url: "/home/image/"+$code,
-            data:{
-                image,
-                patientCode,
-                lnameImage,
-                fnameImage,
-                mnameImage,
-                enameImage,
-
-            },
-            success: function(response) {
-
-                if(response.msg=="Uploaded Successfully"){
-                     $('#addImageModal').modal('hide');
-                viewRecord($code);
-                }
-               
-            }
-        });
-        
-    });
-
-
-}
-function take_snapshot() {
-    Webcam.snap( function(data_uri) {
-        $(".image-tag").val(data_uri);
-        document.getElementById('results').innerHTML = '<img src="'+data_uri+'"/>';
-    } );
 }
 
 function getreport($patients){
@@ -1596,78 +1989,301 @@ function getreport($patients){
 }
 
 
-function print(){
-    pdf();
     
-    $('#reportModal').modal('hide');
-
-
-  }
-    function pdf(){
-       var HTML_Width = $(".html-content").width();
-               var HTML_Height = $(".html-content").height();
-               var top_left_margin = 15;
-               var PDF_Width = HTML_Width + (top_left_margin * 2);
-               var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
-               var canvas_image_width = HTML_Width;
-               var canvas_image_height = HTML_Height;
-
-               var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
-
-               html2canvas($(".html-content")[0]).then(function (canvas) {
-                   var imgData = canvas.toDataURL("image/jpeg", 1.0);
-                   var pdf = new jsPDF('p','pt', [PDF_Width, PDF_Height]);
-                   pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
-                   for (var i = 1; i <= totalPDFPages; i++) {
-                       pdf.addPage(PDF_Width, PDF_Height);
-                       pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
-                   }
-                   pdf.save("MASTERPATIENTLIST.pdf");
-                   //window.location = "/home"
-                   $(".html-content").hide();
-               });
-    }
 function getRecord($temp_array){
     // alert($temp_array);
 }
 
 function resetWebcam(){
 
-    Webcam.reset( '#my_camera' );
+    Webcam.reset("#my_camera");
     $('#addImageModal').modal('hide');
     $('#viewPatientModal').modal('show');
 }
-function print2(){
-    pdf();
 
-    $('#reportModal').modal('hide');
+function createVisit($patientInfo,$idsObject,$currentHPID,$img){
+
+    var hospCode;
+    var visitType = "";
+    $("#viewPatientModal").modal("hide");
+
+    $("#createVisitModal").modal("show");
+        // $("#countContactUpdate").val(updateAdd);
+        // alert($idsObject[0].HOSPITALID);
+        $("#mpi").val($patientInfo.CODE);
+        $("#nameVisit").val($patientInfo.NAME);
+        
+        if($currentHPID!=null){
+            if($currentHPID.idSeries!=null){
+            $("#hpidVisit").val($currentHPID.HOSPITALID);
+            }
+            else{
+                $("#hpidVisit").attr("readonly", false);
+            }
+        }
+        
+        $("#icdCode").change(function(){
+            $id=$("#icdCode").val();
+            // alert($id);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+              
+            $.ajax({
+                url: `icd10/`+$id,
+                method: "GET",
+                success: function(response) {
+
+                    $("#icdDesc").val(response.icdGet['DESCRIPTION']);
+                }
+            });
+        });
+        $("#selectVisit").change(function(){
+            
+            visitType = $("#selectVisit").val();
+            if($("#selectVisit").val()=="inpatient"){
+                $("#dateDischarged").prop("readonly", false);
+                visitType = "inpatient";
+                
+            }else{
+                $("#dateDischarged").prop("readonly", true);
+                $("#dateDischarged").val($("#dateArrival").val());
+                visitType = "outpatient";
+            }
+
+            checkContent();
+        });
+        $("#dateArrival").on('keyup change ',function(){
+            // alert($("#dateArrival").val());
+            if($("#selectVisit").val()=="outpatient"){
+                $("#dateDischarged").val($("#dateArrival").val());
+            }
+            
+        });
+        // if(visitType!=""){
+        //     $("#createVisit").attr("disabled", false);
+        // }
+       
+        $("#createVisit").click(function(){
+            var mpi = $("#mpi").val();
+            var nameVisit = $("#nameVisit").val();
+            var hpidVisit = $("#hpidVisit").val();
+            var hpidVisit = $("#hpidVisit").val();
+            var dateDischarged = $("#dateDischarged").val();
+            var visitID = $("#visitID").val();
+            var selectVisit = $("#selectVisit").val();
+            var chiefComplaint =$("#chiefComplaint").val();
+
+            var dateArrival=$("#dateArrival").val();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+              
+            $.ajax({
+                type: "POST",
+                url: "/createVisit",
+               
+                data:{
+                    mpi,
+                    nameVisit,
+                    hpidVisit,
+                    visitID,
+                    selectVisit,
+                    dateArrival,
+                    chiefComplaint,
+                    dateDischarged,
+                    // hospCode
+
+                },
+                success: function(response) {
+
+                    // if(response.msg=="Visit Already Exist."){
+                    //     alert(response.msg);
+                    //     //  $('#addImageModal').modal('hide');
+                    // }
+                    alert(response.msg);
+                    window.location.replace("/home");
+                    // $("#createVisitModal").modal("hide");
+                }
+            });
+});
+
+        
+}
 
 
-  }
-    function pdf(){
-       var HTML_Width = $(".html-content").width();
-               var HTML_Height = $(".html-content").height();
-               var top_left_margin = 15;
-               var PDF_Width = HTML_Width + (top_left_margin * 4);
-               var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
-               var canvas_image_width = HTML_Width;
-               var canvas_image_height = HTML_Height;
 
-               var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+function checkValue(str, max) {
+  if (str.charAt(0) !== '0' || str == '00') {
+    var num = parseInt(str);
+    if (isNaN(num) || num <= 0 || num > max) num = 1;
+    str = num > parseInt(max.toString().charAt(0)) && num.toString().length == 1 ? '0' + num : num.toString();
+  };
+  return str;
+};
 
-               html2canvas($(".html-content")[0]).then(function (canvas) {
-                   var imgData = canvas.toDataURL("image/jpeg", 1.0);
-                   var pdf = new jsPDF('p','pt', [PDF_Width, PDF_Height]);
-                   pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
-                   for (var i = 1; i <= totalPDFPages; i++) {
-                       pdf.addPage(PDF_Width, PDF_Height);
-                       pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
-                   }
-                   pdf.save("MASTERPATIENTLIST.pdf");
-                   //window.location = "/home"
-                   $(".html-content").hide();
-               });
+function getICDS($code){
+    // geticdCode = $(this).find(">:first-child").text();
+    // var geticdDesc = $(this).children("td").eq(1).text();
+    //    // alert(geticdDesc);
+    // $("#viewPatientModal").modal("hide");
+    // $("#viewPatientModal").modal("hide");
+    // var dateDis = $("#dateDischargeUpdate").val();
+    
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $("#icd10modal").modal("hide");
+    if(modalIdentifier=="createVisit"){
+
+        $("#createVisitModal").modal("show");
+
+        $.ajax({
+            url: `icd10/`+$code,
+            method: "GET",
+            success: function(response) {
+                $("#icdCode").val(response.icdGet['icd10Code']);
+                $("#icdDesc").val(response.icdGet['DESCRIPTION']);
+                $("#dateDischarged").val(disDate);
+            }
+        });
+    }else{
+        
+        // alert(dateDis);
+        // var visType = 
+        // $("#dateDischargedUpdate").val(disDate);
+        // alert($("#dateDischargedUpdate").val());
+        viewVisit();   
+                checkVisitContent();
+        $.ajax({
+            url: `icd10/`+$code,
+            method: "GET",
+            success: function(response) {
+                $("#dateDischargedUpdate").val(disDate);
+                $("#icdCodeUpdate").val(response.icdGet['icd10Code']);
+                $("#icdDescUpdate").val(response.icdGet['DESCRIPTION']);
+                
+                
+                
+                // alert(boolCheck);
+            }
+        });
+    }   
+    //    $("#icdCode").val(geticdCode);
+    //    $("#icdDesc").val(geticdDesc);
+
+    // $("#btn").attr("")
+       
+      
+   
+}
+function checkContent(){
+    $getVisit=$("#selectVisit").val();
+    $getStart=$("#dateArrival").val();
+    $getEnd=$("#dateDischarged").val();
+    $getChiefComplaint=$("#chiefComplaint").val();
+
+    // alert($getVisit);
+    // alert($getStart);
+    // alert($getEnd);
+    var bools=false;
+    if($getVisit=="outpatient"){
+        if(($getStart&&$getChiefComplaint)!=""){
+            bools=true;
+        }
+    }else if($getVisit=="inpatient"){
+        if(($getVisit&&$getStart&&$getChiefComplaint)!=""){
+            bools = true;
+        }
+    }else{
+        bools=false;
     }
+
+    if(bools){
+        $("#createVisit").attr("disabled", false);
+
+    }else{
+        $("#createVisit").attr("disabled", true);
+    }
+    
+}
+
+function viewVisit(){
+    $("#viewVisitModal").modal("show");
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        // alert($code);
+       
+        // $('#viewPatientModal').modal('show');
+        $.ajax({
+            url: `/viewVisit/`+$code,
+            method: "GET",
+            success: function(response) {
+                // alert('asd');
+                // alert(response.visits.DOCNO);
+                $visitsObj=response.visits;
+                // alert($visitsObj.DOCNO);
+                // alert($visitsObj.U_ICDCODE);
+                $("#mpiUpdate").val($visitsObj.U_PATIENTID);
+                $("#nameVisitUpdate").val($visitsObj.U_PATIENTNAME);
+                $("#hpidVisitUpdate").val($visitsObj.U_PATIENTID);
+                $("#visitIDUpdate").val($visitsObj.DOCNO);
+                $("#selectVisitUpdate").val($visitsObj.VISITTYPE);
+                $("#hospitalNameInputUpdate").val($visitsObj.COMPANY);
+                $("#clerkUpdate").val($visitsObj.U_ASSISTEDBY);
+                $("#dateArrivalUpdate").val($visitsObj.U_STARTDATE);
+                $("#dateDischargedUpdate").val($visitsObj.U_ENDDATE);
+                $("#chiefComplaintUpdate").val($visitsObj.CHIEFCOMPLAINT);
+                $("#icdCodeUpdate").val($visitsObj.U_ICDCODE);
+                $("#icdDescUpdate").val($visitsObj.U_ICDDESC);
+                $("#FinalDiagnosisUpdate").val($visitsObj.NOTES);
+
+
+            }
+        });
+}
+
+function checkVisitContent(){
+    disDate=$("#dateDischargedUpdate").val();
+    icdCode =$("#icdCodeUpdate").val();
+    icdDesc =$("#icdDescUpdate").val();
+    finDiag = $("#FinalDiagnosisUpdate").val();
+    // alert($("#dateDischargedUpdate").val());
+    
+    
+
+    //alert(dateDis);
+    if((disDate&&(icdCode&&icdDesc))!=""){
+        boolCheck=true;
+    }else if((disDate&&finDiag)!=""){
+        boolCheck=true;
+    }else if((disDate&&finDiag&&(icdCode&&icdDesc))!=""){
+        boolCheck =true;
+    }else{
+        boolCheck=false;
+    }
+
+
+    if(boolCheck){
+        $("#dischargeButton").attr("disabled", false);
+
+    }else{
+        $("#dischargeButton").attr("disabled", true);
+    }
+    return;
+}
+
 
 
 

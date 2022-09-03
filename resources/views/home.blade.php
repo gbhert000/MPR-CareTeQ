@@ -12,8 +12,14 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    {{-- @livewire('u-hispatients') --}}
-                    <livewire:u-hispatients/>
+                    @livewire('u-hispatients')
+                    {{-- @if (Auth::user()->user_role ==0)
+
+                    
+                    @else
+                        <livewire:u-hispatients/>
+                    
+                    @endif --}}
                 </div>
             </div>
         </div>

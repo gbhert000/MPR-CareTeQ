@@ -55,7 +55,7 @@
         <br>
         {{-- {{$HPI}} --}}
         <input type="text" name="search"  id="search" placeholder="Search Patient" class=" searchbarReport" wire:model="search" />
-        <button class="btn btn-primary" id="addingPatient"> Add Patient</button>
+        {{-- <button class="btn btn-primary" id="addingPatient"> Add Patient</button> --}}
         {{-- <button  name="Add Picture" class="btn btn-primary" data-toggle="modal" data-target="#addImageModal" >Add Picture</button> --}}
 
     </div>
@@ -172,7 +172,7 @@
         <tbody>
             @php $i=1 @endphp
             @foreach($patients as $item)
-            <tr wire:key="{{ $item->CODE }}" id="patientUpdate"  ondblclick="viewRecord('{{ $item->CODE }}')">
+            <tr wire:key="{{ $item->CODE }}" id="patientUpdate"  ondblclick="viewRecord('{{ $item->CODE }}','img/profile.png')">
                 <td >{{ $i }}</td>
                 <td >{{ $item->CODE }}</td>
 
