@@ -206,10 +206,20 @@ class Reports extends Component
 
         $getPatientSex = DB::table('u_hispatients')->select('U_GENDER')->groupBy('U_GENDER')->get();
         // $gender = DB::table('u_hissexes')->get();
-        $nationalities = DB::table('nationalities')->select('Nationality')->get();
+        $nationalities = DB::table('u_nationalities')->select('Nationality')->orderBy('used','desc')->get();
         $get_Country=$get_Country->groupBy('country')->get();
         $get_genderList=DB::table('u_hissexes')->select('sex','sexCode')->get();
         $countries = DB::table('countries')->select('country')->groupBy('country')->get();
+        $idTypes=DB::table('id_types')->get();
+        $contTypes=DB::table('contacttypes')->get();
+        $emailTypes=DB::table('emailcontacttypes')->get();
+        $getComps=DB::table('u_hishospitals')->get();
+
+
+        $pow = DB::table('u_hispatients')->count();
+
+        // GET OLDEST DATE ON TABLE
+        $oldest = DB::table('u_hispatients')->select('DATECREATED')->orderBy('DATECREATED')->first();
 
         // $getNumberofContacts=DB::table('nationalities')->select('Nationality')->get();
         
@@ -221,6 +231,8 @@ class Reports extends Component
         ->orderBy($this->sortColumnName, $this->sortDirection)->take($this->perPage)->get();
 
         $hospitals=DB::table('u_hishospitals')->get();
+        $religions=DB::table('u_religions')->select('ReligionName')->get();
+        $marital=DB::table('u_maritalstatus')->select('MaritalStatus')->get();
 
         
         // $patientArray=$countries;
@@ -229,9 +241,10 @@ class Reports extends Component
         //    var_dump($search);
         if(($this->startDate=="")&&($this->endDate=="")){
             return view('livewire.reports',[ 'patients'=>u_hispatient::Where('NAME', 'like','%'.$search.'%')
+                         ->orWhere('COMPANY','like','%'.$byHospitals.'%')
                             ->WhereRaw("CONCAT(U_FIRSTNAME, ' ', U_LASTNAME) LIKE?", '%'.$search.'%')
                             ->WhereRaw("CONCAT(U_FIRSTNAME, ' ',U_MIDDLENAME,' ', U_LASTNAME) LIKE?", '%'.$search.'%')
-                            ->Where('COMPANY','like','%'.$byHospitals.'%')
+                           
                             ->orderBy($this->sortColumnName, $this->sortDirection)
                             ->paginate($this->perPage),
                     'get_Country'=>$get_Country,
@@ -242,6 +255,14 @@ class Reports extends Component
                     'memType'=>$getMemType,
                     'get_genderList'=>$get_genderList,
                     'countries'=>$countries,
+                    'religions'=>$religions,
+                    'maritals'=>$marital,
+                    'pow'=>$pow,
+                    'oldest'=>$oldest,
+                    'idTypes'=>$idTypes,
+                    'contTypes'=>$contTypes,
+                    'emailTypes'=>$emailTypes,
+                    'getComps'=>$getComps,
                     ]);
         }
         else if(($this->byHospitals!="")){
@@ -262,6 +283,15 @@ class Reports extends Component
                     'memType'=>$getMemType,
                     'get_genderList'=>$get_genderList,
                     'countries'=>$countries,
+                    'religions'=>$religions,
+                    'maritals'=>$marital,
+                    'pow'=>$pow,
+                    'oldest'=>$oldest,
+                    'idTypes'=>$idTypes,
+                    'contTypes'=>$contTypes,
+                    'emailTypes'=>$emailTypes,
+                    'getComps'=>$getComps,
+                    
                     ]);
         }
         else{
@@ -284,6 +314,14 @@ class Reports extends Component
                     'memType'=>$getMemType,
                     'get_genderList'=>$get_genderList,
                     'countries'=>$countries,
+                    'religions'=>$religions,
+                    'maritals'=>$marital,
+                    'pow'=>$pow,
+                    'oldest'=>$oldest,
+                    'idTypes'=>$idTypes,
+                    'contTypes'=>$contTypes,
+                    'emailTypes'=>$emailTypes,
+                    'getComps'=>$getComps,
                     ]);
         }
 
