@@ -18,11 +18,11 @@ class CustomAuthController extends Controller
     public function customLogin(Request $request)
     {
         $request->validate([
-            'email' => 'required',
+            'userName' => 'required',
             'password' => 'required',
         ]);
    
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('userName', 'password');
         if (Auth::attempt($credentials)) {
             return redirect()->intended('dashboard')
                         ->withSuccess('Signed in');
@@ -36,11 +36,28 @@ class CustomAuthController extends Controller
         $hospitals=DB::table('u_hishospitals')->get();
         return view('auth.registration', ['hospitals'=>$hospitals]);
     }
+
+    public function validateuseremail(Request $request)
+   {
+    $user = User::where('email', $request->email)->first('email');
+       if($user){
+         $return =  false;
+
+        }
+        else{
+         $return= true;
+        }
+        echo json_encode($return);
+        exit;
+   }
       
     public function customRegistration(Request $request)
     {  
+        $getCode=DB::table('u_hishospitals')->select('COMPANY')->where('hospitalCode',$request->hospitalName)->first();
         $request->validate([
-            'name' => 'required',
+            'firstname' => 'required',
+            // 'middlename' => 'required',
+            'lastname' => 'required',
             'userName' => 'required',
             'hospitalName' => 'required',
             // 'name' => 'required',
@@ -48,12 +65,13 @@ class CustomAuthController extends Controller
             'password' => 'required|min:6',
         ]);
         $data=[
-            'name'=>$request->name,
+            'name'=>$request->lastname.', '.$request->fistname.' '.$request->middlename.' '.$request->suffix,
             'userName'=>$request->userName,
-            'COMPANY'=>$request->hospitalName,
+            'COMPANY'=>$getCode,
+            'companyCode'=>$request->hospitalName,
             'email'=>$request->email,
             'password'=>$request->password,
-        
+
         ];
         // dd($data);
         // $data = $request->all();
