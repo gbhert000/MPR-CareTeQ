@@ -2539,9 +2539,7 @@ span#addaContact,
   cursor: pointer;
 }
 #selectICD,
-#selectICDUpdate,
-#resetICDViewing,
-#resetICD{
+#selectICDUpdate{
   background-color: #0b5ed7;
   color: white;
   padding: .55rem;
@@ -2551,7 +2549,8 @@ span#addaContact,
 .pt-2-5{
   padding-top: .65rem !important;
 }
-#icdDesc{
+#icdDesc,
+#icdDescUpdate{
   border: none !important;
   background-color: white;
   resize: none;
@@ -2631,3 +2630,7 @@ input[type=number] {
 #seal{
   width: 18rem;
 }
+
+/* .modal-dialog{
+  overflow-y: initial !important
+} */

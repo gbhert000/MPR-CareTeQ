@@ -68,7 +68,7 @@
                                 
                                 <div class="col-sm px-1">
                                     <label>Middle Name <i id="requiredFields">*</i></label>
-                                    <input type="text"  class="form-control" name="U_MIDDLENAME" id="U_MIDDLENAME"  autocomplete="off">
+                                    <input type="text"  class="form-control" name="U_MIDDLENAME" id="U_MIDDLENAME"  autocomplete="off" required>
                                     {{-- @error('middleName') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                 </div>
                                 <div class="col-sm-2  px-1">
@@ -79,7 +79,7 @@
                                 <div class="w-100"></div>
                                 <div class="col-sm-2 px-1 mt-3">
                                     <label>Birthdate <i id="requiredFields">*</i> </label>
-                                <input type="text" class="form-control px-3 datepicker" name="U_BIRTHDATE" id="bday11" placeholder="mm-dd-yyyy" autocomplete="off" required>
+                                <input type="text" class="form-control px-3 datepicker1" name="U_BIRTHDATE" id="bday11" placeholder="mm-dd-yyyy" autocomplete="off" required>
                                     {{-- @error('birthDate') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                 </div>
                                 <div class="col-sm-1 px-1 mt-3">
@@ -175,22 +175,17 @@
 
                                 <div class="col px-1 ">
                                     <label>Country <i id="requiredFields">*</i></label>
-                                    <select name="country" id="regCountry" class="form-control" placeholder="Search" style="width: 100%;">
-                                        <OPtion></OPtion>
+                                    <select name="country" id="regCountry" class="form-control" placeholder="Search" style="width: 100%;" required>
+                                        <option value=""></option>
                                         @foreach ($countries as $country)
-                                            {{-- @if($country->country!=null)
-                                                <option selected value=""></option>
-                                            @else --}}
                                                 <option value="{{$country->country}}">{{$country->country}}</option>
-                                            {{-- @endif --}}
-                                            
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="col px-1">
                                     <label>Province <i id="requiredFields">*</i></label>
-                                    <select name="province" id="regProvince"class="form-control" placeholder="Search" style="width: 100%;" disabled>
+                                    <select name="province" id="regProvince"class="form-control" placeholder="Search" style="width: 100%;" required disabled>
                                         <option value=""></option>
                                         
                                     </select>
@@ -199,14 +194,14 @@
                                 
                                 <div class="col px-1">
                                     <label>Municipality <i id="requiredFields">*</i></label>
-                                    <select name="municipality"  id="regMunicipality" class="form-control" placeholder="Search" style="width: 100%;" disabled>
+                                    <select name="municipality"  id="regMunicipality" class="form-control" placeholder="Search" style="width: 100%;"  required disabled>
                                         <option value=""></option>
                                     </select>
                                 </div>
                                 <div class="w-100"></div>
                                 <div class="col px-1">
                                     <label>Barangay <i id="requiredFields">*</i></label>
-                                    <select name="brgy" id="regBarangay" class="form-control" placeholder="Search" style="width: 100%;" disabled>
+                                    <select name="brgy" id="regBarangay" class="form-control" placeholder="Search" style="width: 100%;" required disabled>
                                         <option value=""></option>
                                     </select>
                                 </div>

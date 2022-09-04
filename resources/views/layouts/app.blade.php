@@ -73,6 +73,11 @@
     <script src="{{asset('js/pdf.js')}}"></script>
     <script src="{{asset('js/format.js')}}"></script>
     <script src="{{ asset('js/careteq.js') }}"></script>
+    <script src="bower_components\jquery\dist\jquery.min.js"></script>
+    <script src="bower_components\jquery-table2excel\dist\jquery.table2excel.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+    <script src="{{ asset('js/print.js') }}"></script>
 </head>
 <body>
 

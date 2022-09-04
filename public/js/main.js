@@ -50,6 +50,30 @@ $(document).ready(function(){
         }
         
     });
+
+    $('#Printthetable2').click(function() {
+        $('#noofpatients1').html($('#red2').val());
+        if($( "#byHospitals" ).val()!=""){
+            $('#hospitalfil').html($( "#byHospitals" ).val());
+        }
+        else{
+            $('#hospitalfil').html('All Hospitals');
+        }
+    });
+    $("#idreport").click(function(){
+        $id=$("#hiddenInput").val();
+        // alert($id);
+
+        $.ajax({
+            url: '/masterpatientrecord/'+$id,
+            method: 'get',
+            data: {'mpi':$id},
+            success:function(data){
+
+            }
+        });
+
+    });
     $("input").attr("Autocomplete","off");
 
     $("#closeAll1").click(function(){
@@ -396,33 +420,33 @@ $(document).ready(function(){
     });
 
     // START SELECT2 ADD PATIENT
-    $("#regCountry").select2({
-        dropdownParent: $('#studentModal'),
-        // width: 'resolve',
-        // height: 'resolve'
-    });
+    // $("#regCountry").select2({
+    //     dropdownParent: $('#studentModal'),
+    //     // width: 'resolve',
+    //     // height: 'resolve'
+    // });
 
-    $("#regProvince").select2({
-        dropdownParent: $('#studentModal'),
-        // width: 'resolve',
-        // height: 'resolve'
-    });
+    // $("#regProvince").select2({
+    //     dropdownParent: $('#studentModal'),
+    //     // width: 'resolve',
+    //     // height: 'resolve'
+    // });
 
-    $("#regMunicipality").select2({
-        dropdownParent: $('#studentModal'),
-        // width: 'resolve',
-        // height: 'resolve'
-    });
-    $("#regBarangay").select2({
-        dropdownParent: $('#studentModal'),
-        // width: 'resolve',
-        // height: 'resolve'
-    });
+    // $("#regMunicipality").select2({
+    //     dropdownParent: $('#studentModal'),
+    //     // width: 'resolve',
+    //     // height: 'resolve'
+    // });
+    // $("#regBarangay").select2({
+    //     dropdownParent: $('#studentModal'),
+    //     // width: 'resolve',
+    //     // height: 'resolve'
+    // });
 
   
     $("#regCountry").on('change',function(){
         
-        $("#regProvince").attr("disabled", false);
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -433,18 +457,29 @@ $(document).ready(function(){
             method: 'get',
             data: {'country': $(this).val()},
             success:function(data){
+
+
+                if(data){
+                    //alert (data); return false;
                 // alert(data);
                 // prompt('',data); return false;
-                $("#regProvince").empty();
-                $("#regProvince").append('<option value="">-Select Province-</option>');
-                for (var n=0; n<data.length; n++) {
-                    $("#regProvince").append("<option>"+data[n]['province']+"</option>");
+                // alert(data.length);
+                    $("#regProvince").empty();
+                    $("#regMunicipality").empty();
+                    $("#regBarangay").empty();
+                    if (data.length == 0){
+                        $("#regProvince").append('<option value=" ">--</option>');
+                        $("#regMunicipality").prepend('<option value=" ">--</option>');
+                        $("#regBarangay").prepend('<option value=" ">--</option>');
+                    }
+                    else{
+                        $("#province").append('<option value=" ">Select Province</option>');
+                        $("#regProvince").attr("disabled", false);
+                    }
+                    for (var n=0; n<data.length; n++) {
+                        $("#regProvince").append("<option>"+data[n]['province']+"</option>");
+                    }
                 }
-                $("#regMunicipality").empty();
-                $("#regMunicipality").append('<option value="">-Select Town/City-</option>');
-                $("#regBarangay").empty();
-                $("#regBarangay").append('<option value="">-Select Barangay-</option>');
-                $("#regPostal").val('');
 
             }
         });
@@ -557,26 +592,29 @@ $(document).ready(function(){
             method: 'get',
             data: {'country': $(this).val()},
             success:function(data){
+
+
+                if(data){
+                    //alert (data); return false;
+                // alert(data);
                 // prompt('',data); return false;
-                // alert('as');
                 // alert(data.length);
-                
-                // $("#regProvinceUpdate").append('<option value="">-Select Province-</option>');
-                $("#regProvinceUpdate").attr("disabled", false);
-                if($("#regCountryUpdate").val()!="PHILIPPINES"){
                     $("#regProvinceUpdate").empty();
+                    $("#regMunicipalityUpdate").empty();
+                    $("#regBarangayUpdate").empty();
+                    if (data.length == 0){
+                        $("#regProvinceUpdate").append('<option value=" ">--</option>');
+                        $("#regMunicipalityUpdate").prepend('<option value=" ">--</option>');
+                        $("#regBarangayUpdate").prepend('<option value=" ">--</option>');
+                    }
+                    else{
+                        $("#provinceUpdate").append('<option value=" ">Select Province</option>');
+                        $("#regProvinceUpdate").attr("disabled", false);
+                    }
+                    for (var n=0; n<data.length; n++) {
+                        $("#regProvinceUpdate").append("<option>"+data[n]['province']+"</option>");
+                    }
                 }
-                // $("#regProvinceUpdate").empty();
-                for (var i=0; i<data.length; i++) {
-                    
-                    $("#regProvinceUpdate").append("<option>"+data[i]['province']+"</option>");
-                }
-                $("#regProvinceUpdate").prop("readonly", false);
-                $("#regMunicipalityUpdate").empty();
-                // $("#regMunicipalityUpdate").append('<option value="">-Select Town/City-</option>');
-                $("#regBarangayUpdate").empty();
-                // $("#regBarangayUpdate").append('<option value="">-Select Barangay-</option>');
-                $("#regPostalUpdate").val('');
 
             }
         });
@@ -675,18 +713,27 @@ $(document).ready(function(){
                 // prompt('',data); return false;
                 // alert('as');
                 // alert(data.length);
-                $("#regFathersProvince").empty();
-                $("#regFathersProvince").append('<option value="">-Select Province-</option>');
-                // $("#regProvinceUpdate").empty();
-                for (var i=0; i<data.length; i++) {
-                    
-                    $("#regFathersProvince").append("<option>"+data[i]['province']+"</option>");
+                if(data){
+                    //alert (data); return false;
+                // alert(data);
+                // prompt('',data); return false;
+                // alert(data.length);
+                    $("#regFathersProvince").empty();
+                    $("#regfathersMunicipality").empty();
+                    $("#regFathersBarangay").empty();
+                    if (data.length == 0){
+                        $("#regFathersProvince").append('<option value=" ">--</option>');
+                        $("#regfathersMunicipality").prepend('<option value=" ">--</option>');
+                        $("#regFathersBarangay").prepend('<option value=" ">--</option>');
+                    }
+                    else{
+                        $("#regFathersProvince").append('<option value=" ">Select Province</option>');
+                        $("#regFathersProvince").attr("disabled", false);
+                    }
+                    for (var n=0; n<data.length; n++) {
+                        $("#regFathersProvince").append("<option>"+data[n]['province']+"</option>");
+                    }
                 }
-                $("#regfathersMunicipality").empty();
-                // $("#regMunicipalityUpdate").append('<option value="">-Select Town/City-</option>');
-                $("#regFathersBarangay").empty();
-                // $("#regBarangayUpdate").append('<option value="">-Select Barangay-</option>');
-                $("#regFathersPostal").val('');
 
             }
         });
@@ -776,18 +823,27 @@ $(document).ready(function(){
                 // prompt('',data); return false;
                 // alert('as');
                 // alert(data.length);
-                $("#regMothersProvince").empty();
-                $("#regMothersProvince").append('<option value="">-Select Province-</option>');
-                // $("#regProvinceUpdate").empty();
-                for (var i=0; i<data.length; i++) {
-                    
-                    $("#regMothersProvince").append("<option>"+data[i]['province']+"</option>");
+                if(data){
+                    //alert (data); return false;
+                // alert(data);
+                // prompt('',data); return false;
+                // alert(data.length);
+                    $("#regMothersProvince").empty();
+                    $("#regMothersMunicipality").empty();
+                    $("#regMothersBarangay").empty();
+                    if (data.length == 0){
+                        $("#regMothersProvince").append('<option value=" ">--</option>');
+                        $("#regMothersMunicipality").prepend('<option value=" ">--</option>');
+                        $("#regMothersBarangay").prepend('<option value=" ">--</option>');
+                    }
+                    else{
+                        $("#regMothersProvince").append('<option value=" ">Select Province</option>');
+                        $("#regMothersProvince").attr("disabled", false);
+                    }
+                    for (var n=0; n<data.length; n++) {
+                        $("#regMothersProvince").append("<option>"+data[n]['province']+"</option>");
+                    }
                 }
-                $("#regMothersMunicipality").empty();
-                // $("#regMunicipalityUpdate").append('<option value="">-Select Town/City-</option>');
-                $("#regMothersBarangay").empty();
-                // $("#regBarangayUpdate").append('<option value="">-Select Barangay-</option>');
-                $("#regmothersPostal").val('');
 
             }
         });
@@ -876,18 +932,27 @@ $(document).ready(function(){
                 // prompt('',data); return false;
                 // alert('as');
                 // alert(data.length);
-                $("#regSpousesProvince").empty();
-                $("#regSpousesProvince").append('<option value="">-Select Province-</option>');
-                // $("#regProvinceUpdate").empty();
-                for (var i=0; i<data.length; i++) {
-                    
-                    $("#regSpousesProvince").append("<option>"+data[i]['province']+"</option>");
+                if(data){
+                    //alert (data); return false;
+                // alert(data);
+                // prompt('',data); return false;
+                // alert(data.length);
+                    $("#regSpousesProvince").empty();
+                    $("#regSpousesMunicipality").empty();
+                    $("#regSpousesBarangay").empty();
+                    if (data.length == 0){
+                        $("#regSpousesProvince").append('<option value=" ">--</option>');
+                        $("#regSpousesMunicipality").prepend('<option value=" ">--</option>');
+                        $("#regSpousesBarangay").prepend('<option value=" ">--</option>');
+                    }
+                    else{
+                        $("#regSpousesProvince").append('<option value=" ">Select Province</option>');
+                        $("#regSpousesProvince").attr("disabled", false);
+                    }
+                    for (var n=0; n<data.length; n++) {
+                        $("#regSpousesProvince").append("<option>"+data[n]['province']+"</option>");
+                    }
                 }
-                $("#regSpousesMunicipality").empty();
-                // $("#regMunicipalityUpdate").append('<option value="">-Select Town/City-</option>');
-                $("#regSpousesBarangay").empty();
-                // $("#regBarangayUpdate").append('<option value="">-Select Barangay-</option>');
-                $("#regSpousesPostal").val('');
 
             }
         });
@@ -973,26 +1038,26 @@ $(document).ready(function(){
     // });
     
 
-    $("#addContact").on("click", function() {
-        // alert("as");
-        $('#addingContact').addClass("hidden");
-        $('#addingContact1').removeClass("hidden");
-        $('#anotherContact').removeClass("hidden");
-        $('#anotherContactType').removeClass("hidden");
-        $('#addingContact1').removeClass("hidden");
-    });
+    // $("#addContact").on("click", function() {
+    //     // alert("as");
+    //     $('#addingContact').addClass("hidden");
+    //     $('#addingContact1').removeClass("hidden");
+    //     $('#anotherContact').removeClass("hidden");
+    //     $('#anotherContactType').removeClass("hidden");
+    //     $('#addingContact1').removeClass("hidden");
+    // });
 
-    $('#addContact1').on("click",function(){
-        $('#addingContact1').addClass("hidden");
-        $('#anotherContactType1').removeClass("hidden");
-        $('#anotherContact1').removeClass("hidden");
-        $('#addingContact2').removeClass("hidden");
-    });
-    $('#addContact2').on("click",function(){
-        $('#addingContact2').addClass("hidden");
-        $('#anotherContactType3').removeClass("hidden");
-        $('#anotherContact3').removeClass("hidden");
-    });
+    // $('#addContact1').on("click",function(){
+    //     $('#addingContact1').addClass("hidden");
+    //     $('#anotherContactType1').removeClass("hidden");
+    //     $('#anotherContact1').removeClass("hidden");
+    //     $('#addingContact2').removeClass("hidden");
+    // });
+    // $('#addContact2').on("click",function(){
+    //     $('#addingContact2').addClass("hidden");
+    //     $('#anotherContactType3').removeClass("hidden");
+    //     $('#anotherContact3').removeClass("hidden");
+    // });
 
     $('#closeAdd').on("click", function(){
         // alert('as');
@@ -1386,38 +1451,6 @@ $(document).ready(function(){
         // alert('as');
     });
 
-    $("#regCountryaa").on('change',function(){
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: '/provincesUpdate',
-            method: 'get',
-            data: {'country': $(this).val()},
-            success:function(data){
-                // prompt('',data); return false;
-                // alert('as');
-                // alert(data.length);
-                $("#regProvince1").empty();
-                $("#regProvince1").append('<option value="">-Select Province-</option>');
-                for (var i=0; i<data.length; i++) {
-                    // alert('asd');
-                    // alert(data[i]['province']);
-                    $("#regProvince1").append("<option>"+data[i]['province']+"</option>");
-                }
-                $("#regMunicipality1").empty();
-                $("#regMunicipality1").append('<option value="">-Select Town/City-</option>');
-                $("#regBarangay1").empty();
-                $("#regBarangay1").append('<option value="">-Select Barangay-</option>');
-                // $("#regPostal1").val('');
-
-            }
-        });
-    });
-
 
     // show view visit modal
     $("#viewVisit").click(function(){
@@ -1473,6 +1506,12 @@ $(document).ready(function(){
             }
         });
     }); 
+
+    $("#resetICDViewing").click(function(){
+        $("#icdCodeUpdate").val('');
+        $("#icdDescUpdate").val('');
+        checkVisitContent()
+    });
 
 });
 
@@ -1645,65 +1684,28 @@ function viewRecord($id,$img){
                     }else{
                         $patientGender="NON-BINARY";
                     }
-                    switch($hispatients.countContacts){
 
-                        case 0:
-                            // alert($cont.length);
-                            // $(".colsUpdate0").addClass("hidden");
-                            break;
-                        case 1:
-                            if($cont==""){
-                                // break;
-                            }else{
-                                $(".colsUpdate1").removeClass("hidden");
-                            }
-                            
-                            break;
-                        case 2:
-                            // alert($cont.length);
-                            // $(".colsUpdate2").removeClass("hidden");
-                            $(".colsUpdate1").removeClass("hidden");
-                            $(".colsUpdate2").removeClass("hidden");
-                            break;
+                    // switch($hispatients.countContacts){
+                    //     case 1:
+                    //         $("#emailsUpdate1").removeClass("hidden");
+                    //         break;
+                    //     case 2:
+                    //         $("#emailsUpdate1").removeClass("hidden");
+                    //         $("#emailsUpdate2").removeClass("hidden");
+                    //         break;
+                    //     case 3:
+                    //         $("#emailsUpdate1").removeClass("hidden");
+                    //         $("#emailsUpdate2").removeClass("hidden");
+                    //         $("#emailsUpdate3").removeClass("hidden");
+                    //         break;
+                    //     case 4:
+                    //         $("#emailsUpdate1").removeClass("hidden");
+                    //         $("#emailsUpdate2").removeClass("hidden");
+                    //         $("#emailsUpdate3").removeClass("hidden");
+                    //         $("#emailsUpdate4").removeClass("hidden");
+                    //         break;
 
-                        case 3:
-                            $(".colsUpdate1").removeClass("hidden");
-                            $(".colsUpdate2").removeClass("hidden");
-                            $(".colsUpdate3").removeClass("hidden");
-                            break;
-                        case 4:
-                            $(".colsUpdate1").removeClass("hidden");
-                            $(".colsUpdate2").removeClass("hidden");
-                            $(".colsUpdate3").removeClass("hidden");
-                            $(".colsUpdate4").removeClass("hidden");
-                            // alert("asd");
-                            $("#addaContactUpdate i").prop("hidden", true);
-                            break;
-                        default:
-                            // alert($hispatients.countContacts);
-    
-                    }
-                    switch($hispatients.countContacts){
-                        case 1:
-                            $("#emailsUpdate1").removeClass("hidden");
-                            break;
-                        case 2:
-                            $("#emailsUpdate1").removeClass("hidden");
-                            $("#emailsUpdate2").removeClass("hidden");
-                            break;
-                        case 3:
-                            $("#emailsUpdate1").removeClass("hidden");
-                            $("#emailsUpdate2").removeClass("hidden");
-                            $("#emailsUpdate3").removeClass("hidden");
-                            break;
-                        case 4:
-                            $("#emailsUpdate1").removeClass("hidden");
-                            $("#emailsUpdate2").removeClass("hidden");
-                            $("#emailsUpdate3").removeClass("hidden");
-                            $("#emailsUpdate4").removeClass("hidden");
-                            break;
-
-                    }
+                    // }
                     
                     $patientIndex=$hispatients.CODE;
                     // personal information
@@ -1741,7 +1743,7 @@ function viewRecord($id,$img){
 
 
                 
-                        $("#regCountryUpdate").append("<option selected value='"+$hispatients.U_COUNTRY+"'>"+$hispatients.U_COUNTRY+"</option>");
+                        $("#regCountryUpdate").prepend("<option selected value='"+$hispatients.U_COUNTRY+"'>"+$hispatients.U_COUNTRY+"</option>");
 
                         //   $('#regCountryUpdate').trigger('change');
                         //   $('#regCountryUpdate').find(':selected').text($hispatients.U_COUNTRY);
@@ -1831,7 +1833,9 @@ function viewRecord($id,$img){
                   if($cont!=""){
                     if($hispatients.countContacts>=1){
                         for(var x=1;x<=$hispatients.countContacts;x++){
+                            $(".colsUpdate"+x).removeClass("hidden");
                             $("#contact"+x).val($cont[x-1]['contactNumber']);
+                            $("#noteContact"+x).val($cont[x-1]['contactNote']);
                             $("#contactType"+x+" option:selected").val($cont[x-1]['contactType']);
                             $("#contactType"+x+" option:selected").text($cont[x-1]['contactType']);
                             $("#hideContact"+x).val($cont[x-1]['contactID']);

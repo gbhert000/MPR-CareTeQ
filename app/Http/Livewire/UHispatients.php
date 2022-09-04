@@ -293,6 +293,7 @@ class UHispatients extends Component
                         'U_EXTNAME' =>strtoupper($request->extensionName),
                         'HOSPITALCODE'=>$hospitalNHFR->hospitalCode,
                         'HOSPITALID'=>join('-',[$hospitalNHFR->NHFR,$newID]),
+                        'HOSPITALNAME'=>Auth::user()->COMPANY,
                         'NHFR'=>$hospitalNHFR->NHFR,
                         'idSeries'=>$newID,
                         'EDITEDBY'=>Auth::user()->userName,

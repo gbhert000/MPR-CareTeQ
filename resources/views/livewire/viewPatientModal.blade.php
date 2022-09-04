@@ -321,7 +321,7 @@
                                     </div>
                                         <div class="w-100"></div>      
                                         {{-- start 4th contact --}}
-                                    <div class="row colsUpdate4  mt-3">
+                                    <div class="row colsUpdate4 hidden mt-3">
                                         <div class="col  " id="">
                                             {{-- <label for="contactType4">Label</label> --}}
                                             <select name="contactType4" id="contactType4" class="form-control">
@@ -343,7 +343,7 @@
                                 </div>
 
                                     <div class="row">
-                                        <span class="" id="addaContactUpdate"><i class="cursor-pointer">Add Contact</i></span>
+                                        <span class=""><i class="cursor-pointer"  id="addaContactUpdate">Add Contact</i></span>
                                     </div>
 
                                     <input type="text" class="hidden" name="hiddenEmailCount" id="hiddenEmailCount">
@@ -436,7 +436,7 @@
                                     </div>
                             <!-- END FOURTH EMAIL -->
                                     <div class="row">
-                                        <span class="" id="addaEmailUpdate"><i class="cursor-pointer">Add Email</i></span> 
+                                        <span class="" ><i class="cursor-pointer" id="addaEmailUpdate">Add Email</i></span> 
                                     </div>
                             </div>
                                 </div>
