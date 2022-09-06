@@ -542,6 +542,10 @@ $(document).ready(function() {
                 // alert(data); return false;
                 {
                     //alert(data); return false;
+
+                    if (data == "Others"){
+                      $("#idNumber").attr('type', text);
+                    }
                     if(data){
                         //alert (data[0]['idno_format']); return false;
                         var inputmask = new Inputmask(data[0]['id_typeformat']);
@@ -571,25 +575,45 @@ $(document).ready(function() {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
                 });
-                $.ajax({
-                  url: url,
-                  method: 'get',
-                  data: { 'idtypes': id_type }, // prefer use serialize method
-                  success:function(data)
-                  // alert(data); return false;
-                  {
-                      //alert(data); return false;
-                      if(data){
-                          //alert (data[0]['idno_format']); return false;
+                // alert($("#idTypeUpdate").val());
+                
+               
+                  $.ajax({
+                    url: url,
+                    method: 'get',
+                    data: { 'idtypes': id_type }, // prefer use serialize method
+                    success:function(data)
+                    // alert(data); return false;
+                    {
+                        //alert(data); return false;
+                        
+                        // $('#idNumberUpdate').empty();
+                        
+                            //alert (data[0]['idno_format']); return false;
+                          
+                            
+                         if (data){
                           var inputmask = new Inputmask(data[0]['id_typeformat']);
                           inputmask.mask($('[id*=idNumberUpdate]'));
-                       }
-                         else
-                         {
-                          $("#idNumberUpdate").attr('placeholder', data['idno_format']);
-                         }
-                      }
-                })
+                          
+                          // $("#idNumberUpdate").attr('type', text);\
+                          
+                          
+                        }
+                        if($("#idTypeUpdate").val()=="Others"){
+                          $("#idNumberUpdate").empty();
+                          inputmask.remove(document.getElementById("idNumberUpdate"));
+                          // alert("asd");
+                        }
+                           else
+                           {
+                            
+                            $("#idNumberUpdate").attr('placeholder', data['idno_format']);
+                           }
+                        }
+                  });
+                
+               
               }
           });
     });
@@ -1053,6 +1077,80 @@ $(document).ready(function() {
      //maximum and minimum input of the height in centimeter with round off
    
 
-// $(document).ready(function(){
-//   $()
-// });
+$(document).ready(function(){
+  $('#kg').on('change', function (){
+    // alert($('#age').val()); return false;
+    // alert($('#age').val() === '0 years old'); return false;
+    // alert($('#gender').val() == 'Female'); return false;
+    if($('#updatesex').val() == "Female"){
+        // $(this).val(Math.min('92.5', Math.max('28.5', $(this).val()).toFixed(2)));
+        if($('#age').val() == '0 years old'){
+            $(this).val(Math.min('3.4', Math.max('1.5', $(this).val()).toFixed(2)));
+        }
+        if($('#age').val >= '1 years old' && $('#age').val() <= "12 years old"){
+            $(this).val(Math.min('40', Math.max('10', $(this).val()).toFixed(2)));
+        }
+        if ($('#age').val() >= '13 years old' && $('#age').val() <= '20 years old'){
+            $(this).val(Math.min('58', Math.max('43', $(this).val()).toFixed(2)));
+        }
+        else {
+            $(this).val(Math.min('92.5', Math.max('28.5', $(this).val()).toFixed(2)));
+        }
+    }
+
+    if($('#updatesex').val() == "Male"){
+        if($('#age').val() == "0 years old"){
+            $(this).val(Math.min('3.4', Math.max('1.5', $(this).val()).toFixed(2)));
+        }
+        if ($('#age').val >= '1 years old' && $('#age').val() <= "12 years old"){
+            $(this).val(Math.min('40', Math.max('10', $(this).val()).toFixed(2)));
+        }
+        if ($('#age').val() >= "13 years old" && $('#age').val() <= "20 years old"){
+            $(this).val(Math.min('72', Math.max('38', $(this).val()).toFixed(2)));
+        }
+        else{
+            $(this).val(Math.min('103.8', Math.max('28.5', $(this).val()).toFixed(2)));
+        }
+    }
+
+  })
+
+  $('#lb').on('change', function (){
+    // alert($('#age').val()); return false;
+    // alert($('#age').val() === '0 years old'); return false;
+    // alert($('#gender').val() == 'Female'); return false;
+    if($('#updatesex').val() == "Female"){
+        // $(this).val(Math.min('92.5', Math.max('28.5', $(this).val()).toFixed(2)));
+        if($('#age').val() == '0 years old'){
+            $(this).val(Math.min('7.6', Math.max('3.3', $(this).val()).toFixed(2)));
+        }
+        if($('#age').val >= '1 years old' && $('#age').val() <= "12 years old"){
+            $(this).val(Math.min('88', Math.max('22', $(this).val()).toFixed(2)));
+        }
+        if ($('#age').val() >= '13 years old' && $('#age').val() <= '20 years old'){
+            $(this).val(Math.min('130', Math.max('95', $(this).val()).toFixed(2)));
+        }
+        else {
+            $(this).val(Math.min('204', Math.max('77', $(this).val()).toFixed(2)));
+        }
+    }
+
+    if($('#updatesex').val() == "Male"){
+        if($('#age').val() == "0 years old"){
+            $(this).val(Math.min('3.4', Math.max('1.5', $(this).val()).toFixed(2)));
+        }
+        if ($('#age').val >= '1 years old' && $('#age').val() <= "12 years old"){
+            $(this).val(Math.min('88', Math.max('22', $(this).val()).toFixed(2)));
+        }
+        if ($('#age').val() >= "13 years old" && $('#age').val() <= "20 years old"){
+            $(this).val(Math.min('160', Math.max('85', $(this).val()).toFixed(2)));
+        }
+        else{
+            $(this).val(Math.min('229', Math.max('77', $(this).val()).toFixed(2)));
+        }
+    }
+
+  })
+
+
+});

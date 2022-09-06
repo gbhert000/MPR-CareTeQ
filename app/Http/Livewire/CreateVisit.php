@@ -57,25 +57,19 @@ class CreateVisit extends Component
         $hospitalNHFRVisit=$this->getHospitalNHFR(Auth::user()->COMPANY);
         $finalDiagnosis=$request->icdCode;
             $finalNotes=$request->FinalDiagnosis;
+           
         if(is_null($finalDiagnosis)||is_null($finalNotes)){
             $visitStatus="Active";
         }else{
             $visitStatus="Discharged";
         }
-
-       
-        
         if($checkVisit){
            
             $msg = 'Pending Visit Exists.';
        
         }else{
 
-            if(is_null($request->dateDischarged)){
-                $createVisitRecord=DB::table('u_hisvisits')->updateOrInsert(
-                    ['U_PATIENTID'=>$request->mpi,'DOCSTATUS'=>"Active"],
-                    
-                    [
+            $visitArray=[
                         'COMPANY'=>Auth::user()->COMPANY,
                         'DOCNO'=>join('-',[Carbon::now()->year,$newVCode]),
                         'U_PATIENTID'=>$request->mpi,
@@ -90,17 +84,37 @@ class CreateVisit extends Component
                         'CREATEDBY'=>Auth::user()->name,
                         'yearVisit'=>Carbon::now()->year,
                         'visitID'=>$newVCode,
-        
-                        // 'yearVisit'=>Carbon::parse($request->dateArrival)->format("Y-m-d"),
-                    // 'U'        hpidVisit,
-                            // visitID,
-                    ]);
+                        'DOCSTATUS'=>$visitStatus,
+                        
+            ];
+            if(is_null($request->dateDischarged)){
+                
+                $createVisitRecord=DB::table('u_hisvisits')->updateOrInsert(
+                    ['U_PATIENTID'=>$request->mpi,'DOCSTATUS'=>"Active"],
+                    $visitArray
+                    );
+            }
+            else{
+                $dischargeArray=[
+                    'U_ENDDATE'=>Carbon::parse($request->dateDischarged)->format("Y-m-d"),
+                    'U_DISCHARGEDBY'=>Auth::user()->userName,
+                    'U_ICDCODE'=>$request->icdCode,
+                    'U_ICDDESC'=>$request->icdDesc,
+                    'NOTES'=>$request->FinalDiagnosis,
+                    // 'DOCSTATUS'=>"Discharged"
+
+                ];
+                // dd($dischargeArray);
+                $createVisitRecord=DB::table('u_hisvisits')->updateOrInsert(
+                    ['U_PATIENTID'=>$request->mpi,'DOCSTATUS'=>"Active"],
+                    $visitArray+
+                    $dischargeArray
+                  
+
+                    );
             }
             // dd($request->chiefComplaint);
             
-            
-
-           
             $createVisitRecord1=DB::table('u_hisops')->updateOrInsert(
                 ['U_PATIENTID'=>$request->mpi,'DOCSTATUS'=>"Active"],
                 
@@ -144,6 +158,10 @@ class CreateVisit extends Component
 
         }
         if($createVisitRecord){
+            $visitCount=DB::table('u_hispatients')->select('U_VISITCOUNT')->where('CODE',$request->mpi)->first();
+
+            $newCount=(int)($visitCount->U_VISITCOUNT) + 1;
+            DB::table('u_hispatients')->where(['CODE'=>$request->mpi])->update(['U_VISITCOUNT'=>$newCount]);
             $getCodeHospcode=DB::table('u_hospitalids')->where(['CODE'=>$request->mpi, 'HOSPITALCODE'=>Auth::user()->companyCode])->first();
             // dd($hospitalNHFRVisit);
             // dd($getCodeHospcode->HOSPITALID);
@@ -180,10 +198,7 @@ class CreateVisit extends Component
                     'note'=>"Create Visit",
                 ]);    
                 
-                             
-                     
-      
-        
+                        
             }
         }
 
@@ -207,8 +222,6 @@ class CreateVisit extends Component
                         'U_DISCHARGEDBY'=>Auth::user()->userName,
                         'NOTES'=>$request->FinalDiagnosisUpdate,
                         'DOCSTATUS'=>'Discharged',
-                        
-
                     ]
                     );
         $hospitalNHFRVisitView=$this->getHospitalNHFR(Auth::user()->COMPANY);

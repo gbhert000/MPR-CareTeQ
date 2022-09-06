@@ -77,8 +77,12 @@
                 <label for="">Final Diagnosis</label>
               </div>
               <div class="col-sm-2 p-1">
-                <label>ICD10 Code</label>
-                <input type="text" id="icdCode" name="icdCode" class="form-control" readonly>
+                <div class="row">
+                  <label>ICD10 Code</label>
+                  <input type="text" id="icdCode" name="icdCode" class="form-control ml-2 w-75" readonly>
+                  <button type="button" class="btn-close pt-3" id="resetICDCreate" aria-label="Close">
+                </div>
+                
                 
               </div>
               <div class="col-sm-2 pt-2-5">
@@ -87,14 +91,7 @@
                   <i id="selectIDS">Search</i>
                 </span>
               </div>
-             <!--  <div class="col-sm-3">
-                <label for="icdCode">ICD10</label>
-                <select name="icdCode" id="icdCode" class="form-control">
-                  @foreach ($icd10gets as $icd10get)
-                      <option   value="{{$icd10get->icd10Code}}">{{$icd10get->icd10Code}}</option>
-                  @endforeach
-                </select>
-              </div> -->
+           
                 <div class="col">
                   <label for="icdDesc">ICD10 Description</label>
                   <textarea name="icdDesc" id="icdDesc" cols="30" rows="3" class="form-control shadow-none"  readonly></textarea>

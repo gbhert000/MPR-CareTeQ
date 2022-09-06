@@ -75,13 +75,17 @@ class ReportController extends Controller
    
     public function generatePDF($CODE)
     {
-       // $users = User::get();
-
-       $PatientContact = DB::table('u_hiscontacts')
+      
+      $patient_info = DB::table('u_hispatients')->where('CODE','=',$CODE)->get();
+       //$users = User::get();
+      $last_visit = DB::table('u_hisvisits')->where('U_PATIENTID','=',$CODE)->orderBy('DOCNO','DESC')->first();
+      $start_visit = DB::table('u_hisvisits')->where('U_PATIENTID','=',$CODE)->orderBy('U_STARTDATE','ASC')->first();
+      // dd($last_visit);
+      $PatientContact = DB::table('u_hiscontacts')
        ->where ('CODE', $CODE)
        ->get();
-    //   dd( $PatientContact);
-       $PatientInfos = DB::table('v_mprform')
+      //dd( $PatientContact);
+      $PatientInfos = DB::table('v_mprform')
       
        ->where('MPI', $CODE)
        ->get();
@@ -92,27 +96,114 @@ class ReportController extends Controller
        ->selectRaw('imageName')
        ->pluck('imageName');
       
-    //    dd($PatientInfos2[0]);
-       $result = str_replace(array('[', ']','"'), '', htmlspecialchars(json_encode($PatientInfos2), ENT_NOQUOTES));
+      //    dd($PatientInfos2[0]);
+      // $result = str_replace(array('[', ']','"'), '', htmlspecialchars(json_encode($PatientInfos2), ENT_NOQUOTES));
   
-     $path = public_path().'/myfiles/uploads/'.$result;
-    $imageF=File::get(public_path('/myfiles/uploads/'.$PatientInfos2[0]));
+      // $path = public_path().'/myfiles/uploads/'.$result;
+      $imageF=File::get(public_path('/myfiles/uploads/'.$PatientInfos2[0]));
         // dd($imageF);
-     //   $pathimage ='C:\Users\ADMIN\Documents\Laravel\CareTeQ (2)\CareTeQ\storage\app\public\images\6305b6a9dbedb.png';
-      $image = base64_encode(file_get_contents(   $path));
+      //   $pathimage ='C:\Users\ADMIN\Documents\Laravel\CareTeQ (2)\CareTeQ\storage\app\public\images\6305b6a9dbedb.png';
+      // $image = base64_encode(file_get_contents(   $path));
           //$imageName = $this->getFile($PatientInfos);
+
+          $LogoF = public_path().'/myfiles/uploads/logo.jpg';
+          $imageLogo = base64_encode(file_get_contents( $LogoF));
         
-       // dd( $path);
+      foreach($patient_info as $datas){
+          $value = $datas;
+      }
       
-        $data = [
+        if(!$last_visit){
+          
+          $data = [
             
-            'PatientInfossss' => $PatientInfos,
-            'Image'=>$image,
+            'PatientInfos' => $PatientInfos,
+            // 'Image'=>$image,
             'PatientContact' =>$PatientContact,
             'imageF'=>$imageF,
-
-          ]; 
+            'imageLogo'=>$imageLogo,
+            'last_visit_info'=>$last_visit,
+            'U_STARTDATE'=>null,
+            'U_ENDDATE'=>null,
+            'HOSPITALID'=>NULL,
+            'COMPANY'=>null,
+            'VISITTYPE'=>null,
+            'CHIEFCOMPLAINT'=>null,
+            'U_ICDCODE'=>null,
+            'U_ICDDESC'=>null,
+            'NOTES'=>null,
+            'patient_info'=>$patient_info,
+            'U_RESPONSIBLENAME'=>strtoupper($value->U_RESPONSIBLENAME),
+            'U_RESPONSIBLEADDRESS'=>strtoupper($value->U_RESPONSIBLEADDRESS),
+            'U_RESPONSIBLEEMPLOYER'=>strtoupper($value->U_RESPONSIBLEEMPLOYER),
+            'U_RESPONSIBLETELNO'=>strtoupper($value->U_RESPONSIBLETELNO),
+            'U_RESPONSIBLERELATIONSHIP'=>strtoupper($value->U_RESPONSIBLERELATIONSHIP),
+            'U_RESPONSIBLESTREET'=>strtoupper($value->U_RESPONSIBLESTREET),
+            'U_RESPONSIBLEBARANGAY'=>strtoupper($value->U_RESPONSIBLEBARANGAY),
+            'U_RESPONSIBLECITY'=>strtoupper($value->U_RESPONSIBLECITY),
+            'U_RESPONSIBLEZIP'=>$value->U_RESPONSIBLEZIP,
+            'U_RESPONSIBLEPROVINCE'=>$value->U_RESPONSIBLEPROVINCE,
+            'U_RESPONSIBLECOUNTRY'=>$value->U_RESPONSIBLECOUNTRY,
+            'U_MOBILENO'=>$value->U_MOBILENO,
+            'U_CONTACTNAME'=>$value->U_CONTACTNAME,
+            'U_CONTACTADDRESS'=>$value->U_CONTACTADDRESS,
+            'U_CONTACTTELNO'=>$value->U_CONTACTTELNO,
+            'U_CONTACTRELATIONSHIP'=>$value->U_CONTACTRELATIONSHIP,
             
+            
+          ]; 
+        }else{
+          if($last_visit->MRN==null){
+            $mrn="";
+          }
+          else{
+            $mrn=$last_visit->MRN;
+          }
+          $data = [
+            
+            'PatientInfos' => $PatientInfos,
+            // 'Image'=>$image,
+            'PatientContact' =>$PatientContact,
+            'imageF'=>$imageF,
+            'imageLogo'=>$imageLogo,
+            'last_visit_info'=>$last_visit,
+            'U_STARTDATE'=>$last_visit->U_STARTDATE,
+            'U_ENDDATE'=>$last_visit->U_ENDDATE,
+            'COMPANY'=>strtoupper($last_visit->COMPANY),
+            'HOSPITALID'=>strtoupper($mrn),
+            'VISITTYPE'=>strtoupper($last_visit->VISITTYPE),
+            'CHIEFCOMPLAINT'=>strtoupper($last_visit->CHIEFCOMPLAINT),
+            'U_ICDCODE'=>strtoupper($last_visit->U_ICDCODE),
+            'U_ICDDESC'=>strtoupper($last_visit->U_ICDDESC),
+            'NOTES'=>strtoupper($last_visit->NOTES),
+            'patient_info'=>$patient_info,
+            'U_RESPONSIBLENAME'=>strtoupper($value->U_RESPONSIBLENAME),
+            'U_RESPONSIBLEADDRESS'=>strtoupper($value->U_RESPONSIBLEADDRESS),
+            'U_RESPONSIBLEEMPLOYER'=>strtoupper($value->U_RESPONSIBLEEMPLOYER),
+            'U_RESPONSIBLETELNO'=>strtoupper($value->U_RESPONSIBLETELNO),
+            'U_RESPONSIBLERELATIONSHIP'=>strtoupper($value->U_RESPONSIBLERELATIONSHIP),
+            'U_RESPONSIBLESTREET'=>strtoupper($value->U_RESPONSIBLESTREET),
+            'U_RESPONSIBLEBARANGAY'=>strtoupper($value->U_RESPONSIBLEBARANGAY),
+            'U_RESPONSIBLECITY'=>strtoupper($value->U_RESPONSIBLECITY),
+            'U_RESPONSIBLEZIP'=>$value->U_RESPONSIBLEZIP,
+            'U_RESPONSIBLEPROVINCE'=>$value->U_RESPONSIBLEPROVINCE,
+            'U_RESPONSIBLECOUNTRY'=>$value->U_RESPONSIBLECOUNTRY,
+            'U_MOBILENO'=>$value->U_MOBILENO,
+            'U_SPOUSENAME'=>strtoupper($value->U_SPOUSENAME),
+            'U_SPOUSEFIRSTNAME'=>strtoupper($value->U_SPOUSEFIRSTNAME),
+            'U_SPOUSELASTNAME'=>strtoupper($value->U_SPOUSELASTNAME),
+            'U_SPOUSEMIDDLENAME'=>strtoupper($value->U_SPOUSEMIDDLENAME),
+            'U_SPOUSEEXTNAME'=>strtoupper($value->U_SPOUSEEXTNAME),
+            'U_SPOUSEADDRESS'=>strtoupper($value->U_SPOUSEADDRESS),
+            'U_SPOUSETELNO'=>strtoupper($value->U_SPOUSETELNO),
+            'U_CONTACTNAME'=>$value->U_CONTACTNAME,
+            'U_CONTACTADDRESS'=>$value->U_CONTACTADDRESS,
+            'U_CONTACTTELNO'=>$value->U_CONTACTTELNO,
+            'U_CONTACTRELATIONSHIP'=>$value->U_CONTACTRELATIONSHIP,
+          ]; 
+        }
+       
+          // dd($data);
         // $pdf = PDF::loadView('myPDF', $data);
         // $pdf->setPaper('Letter', 'portrait'); 
         

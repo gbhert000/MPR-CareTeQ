@@ -22,16 +22,17 @@ var icdCode;
 var icdDesc;
 var finDiag;
 var identifier
+$tempHospID=[];
 
 
 // var fname='';
 // var lname='';
 
-setInterval(displayHello, 1000);
 
-function displayHello() {
-    $('#noofpatients').html($('#red').val());
-}
+
+// function displayHello() {
+//     $('#noofpatients').html($('#red').val());
+// }
 
 $(document).ready(function(){
     var getAdd=1;
@@ -52,6 +53,15 @@ $(document).ready(function(){
     });
 
     $('#Printthetable2').click(function() {
+        $('#noofpatients1').html($('#red2').val());
+        if($( "#byHospitals" ).val()!=""){
+            $('#hospitalfil').html($( "#byHospitals" ).val());
+        }
+        else{
+            $('#hospitalfil').html('All Hospitals');
+        }
+    });
+    $('#viewrecords').click(function() {
         $('#noofpatients1').html($('#red2').val());
         if($( "#byHospitals" ).val()!=""){
             $('#hospitalfil').html($( "#byHospitals" ).val());
@@ -106,6 +116,158 @@ $(document).ready(function(){
 
     
     });
+
+    // SET AS EMERGENCY CONTACT
+    //FATHER
+    $("#setEmergencyFather").change(function(){
+        if(this.checked){
+            // alert("asd");
+            // alert($("#regFathersProvince").val());
+            
+            $("#setEmergencyMother").prop("disabled", true);
+            $("#setEmergencySpouse").prop("disabled", true);
+
+            // $("#regEmergencyCountry").empty();
+            // $("#regEmergencyProvince").empty();
+            // $("#regEmergencyMunicipality").empty();
+            // $("#regEmergencyBarangay").empty();
+            // $("#emergencyStreet").empty();
+            // $("#emergencyPostal").empty();
+
+            $("#relationToPatient").val("Father");
+
+            $("#emergencyLastName").val($("#fatherLastName").val());
+            $("#emergencyFirstName").val($("#fatherFirstName").val());
+            $("#emergencyMiddleName").val($("#fatherMiddleName").val());
+            $("#emergencyExtName").val($("#fatherExtName").val());
+            $("#emergencyContactNo").val($("#fatherContactNo").val());
+            $("#regEmergencyCountry").val($("#regFathersCountry").val());
+            $("#regEmergencyProvince option:selected").val($("#regFathersProvince").val());
+            $("#regEmergencyProvince option:selected").text($("#regFathersProvince").val());
+            $("#regEmergencyMunicipality option:selected").val($("#regfathersMunicipality").val());
+            $("#regEmergencyMunicipality option:selected").text($("#regfathersMunicipality").val());
+            $("#regEmergencyBarangay option:selected").val($("#regFathersBarangay").val());
+            $("#regEmergencyBarangay option:selected").text($("#regFathersBarangay").val());
+            $("#emergencyStreet").val($("#fatherStreet").val());
+            $("#regEmergencyPostal").val($("#regFathersPostal").val());
+            // $("#emergencyLastName").val($("#regFathersProvince").val());
+        }
+        else{
+            $("#relationToPatient").val("");
+            $("#setEmergencyMother").prop("disabled", false);
+            $("#setEmergencySpouse").prop("disabled", false);
+
+            $("#emergencyLastName").val('');
+            $("#emergencyFirstName").val('');
+            $("#emergencyMiddleName").val('');
+            $("#emergencyExtName").val('');
+            $("#emergencyContactNo").val('');
+            $("#regEmergencyCountry").val('');
+            $("#regEmergencyProvince option:selected").val('');
+            $("#regEmergencyProvince option:selected").text('');
+            $("#regEmergencyMunicipality option:selected").val('');
+            $("#regEmergencyMunicipality option:selected").text('');
+            $("#regEmergencyBarangay option:selected").val('');
+            $("#regEmergencyBarangay option:selected").text('');
+            $("#emergencyStreet").val('');
+            $("#regEmergencyPostal").val('');
+        }
+    });
+
+    // MOTHER
+    $("#setEmergencyMother").change(function(){
+        if(this.checked){
+            // alert("asd");
+            // alert($("#regFathersProvince").val());
+            $("#relationToPatient").val("Mother");
+            $("#setEmergencyFather").prop("disabled", true);
+            $("#setEmergencySpouse").prop("disabled", true);
+            $("#emergencyLastName").val($("#motherLastName").val());
+            $("#emergencyFirstName").val($("#motherFirstName").val());
+            $("#emergencyMiddleName").val($("#motherMiddleName").val());
+            $("#emergencyExtName").val($("#motherExtName").val());
+            $("#emergencyContactNo").val($("#motherContactNo").val());
+            $("#regEmergencyCountry").val($("#regMothersCountry").val());
+            $("#regEmergencyProvince option:selected").val($("#regMothersProvince").val());
+            $("#regEmergencyProvince option:selected").text($("#regMothersProvince").val());
+            $("#regEmergencyMunicipality option:selected").val($("#regMothersMunicipality").val());
+            $("#regEmergencyMunicipality option:selected").text($("#regMothersMunicipality").val());
+            $("#regEmergencyBarangay option:selected").val($("#regMothersBarangay").val());
+            $("#regEmergencyBarangay option:selected").text($("#regMothersBarangay").val());
+            $("#emergencyStreet").val($("#motherStreet").val());
+            $("#regEmergencyPostal").val($("#regmothersPostal").val());
+            // $("#emergencyLastName").val($("#regFathersProvince").val());
+        }
+        else{
+            $("#relationToPatient").val("");
+            $("#setEmergencyFather").prop("disabled", false);
+            $("#setEmergencySpouse").prop("disabled", false);
+
+            $("#emergencyLastName").val('');
+            $("#emergencyFirstName").val('');
+            $("#emergencyMiddleName").val('');
+            $("#emergencyExtName").val('');
+            $("#emergencyContactNo").val('');
+            $("#regEmergencyCountry").val('');
+            $("#regEmergencyProvince option:selected").val('');
+            $("#regEmergencyProvince option:selected").text('');
+            $("#regEmergencyMunicipality option:selected").val('');
+            $("#regEmergencyMunicipality option:selected").text('');
+            $("#regEmergencyBarangay option:selected").val('');
+            $("#regEmergencyBarangay option:selected").text('');
+            $("#emergencyStreet").val('');
+            $("#regEmergencyPostal").val('');
+        }
+    });
+
+    // SPOUSE
+    $("#setEmergencySpouse").change(function(){
+        if(this.checked){
+            $("#relationToPatient").val("Spouse");
+            // alert("asd");
+            // alert($("#regFathersProvince").val());
+            $("#setEmergencyFather").prop("disabled", true);
+            $("#setEmergencyMother").prop("disabled", true);
+            $("#emergencyLastName").val($("#spouseLastName").val());
+            $("#emergencyFirstName").val($("#spouseFirstName").val());
+            $("#emergencyMiddleName").val($("#spouseMiddleName").val());
+            $("#emergencyExtName").val($("#spouseExtName").val());
+            $("#emergencyContactNo").val($("#spouseContactNo").val());
+            $("#regEmergencyCountry").val($("#regSpousesCountry").val());
+            $("#regEmergencyProvince option:selected").val($("#regSpousesProvince").val());
+            $("#regEmergencyProvince option:selected").text($("#regSpousesProvince").val());
+            $("#regEmergencyMunicipality option:selected").val($("#regSpousesMunicipality").val());
+            $("#regEmergencyMunicipality option:selected").text($("#regSpousesMunicipality").val());
+            $("#regEmergencyBarangay option:selected").val($("#regSpousesBarangay").val());
+            $("#regEmergencyBarangay option:selected").text($("#regSpousesBarangay").val());
+            $("#emergencyStreet").val($("#spouseStreet").val());
+            $("#regEmergencyPostal").val($("#regSpousesPostal").val());
+            // $("#emergencyLastName").val($("#regFathersProvince").val());
+        }
+        else{
+            $("#relationToPatient").val("");
+            $("#setEmergencyFather").prop("disabled", false);
+            $("#setEmergencyMother").prop("disabled", false);
+
+            $("#emergencyLastName").val('');
+            $("#emergencyFirstName").val('');
+            $("#emergencyMiddleName").val('');
+            $("#emergencyExtName").val('');
+            $("#emergencyContactNo").val('');
+            $("#regEmergencyCountry").val('');
+            $("#regEmergencyProvince option:selected").val('');
+            $("#regEmergencyProvince option:selected").text('');
+            $("#regEmergencyMunicipality option:selected").val('');
+            $("#regEmergencyMunicipality option:selected").text('');
+            $("#regEmergencyBarangay option:selected").val('');
+            $("#regEmergencyBarangay option:selected").text('');
+            $("#emergencyStreet").val('');
+            $("#regEmergencyPostal").val('');
+        }
+    });
+
+    // END SET AS EMERGENCY CONTACT
+
 
     $("#selectICDUpdate").click(function(){
 
@@ -443,6 +605,12 @@ $(document).ready(function(){
     //     // height: 'resolve'
     // });
 
+    //    $("#regReligion").select2({
+    //     dropdownParent: $('#studentModal'),
+    //     // width: 'resolve',
+    //     // height: 'resolve'
+    // });
+
   
     $("#regCountry").on('change',function(){
         
@@ -536,6 +704,7 @@ $(document).ready(function(){
     });
     $("#regBarangay").on('change',function(){
         // alert('asd');
+        var city=$("#regMunicipality").val()
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -544,7 +713,9 @@ $(document).ready(function(){
         $.ajax({
             url: '/postal',
             method: 'get',
-            data: {'brgy': $(this).val()},
+            data: {'brgy': $(this).val(),
+            'city':city},
+            
             success:function(data){
                 // prompt('',data); return false;
                 $("#regPostal").empty();
@@ -1025,6 +1196,116 @@ $(document).ready(function(){
         });
     });
 
+    // EMERGENCY CONTACT AJAX
+    $("#regEmergencyCountry").on('change',function(){
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: '/provincesEmergency',
+            method: 'get',
+            data: {'country': $(this).val()},
+            success:function(data){
+                // prompt('',data); return false;
+                // alert('as');
+                // alert(data.length);
+                if(data){
+                    //alert (data); return false;
+                // alert(data);
+                // prompt('',data); return false;
+                // alert(data.length);
+                    $("#regEmergencyProvince").empty();
+                    $("#regEmergencyMunicipality").empty();
+                    $("#regEmergencyBarangay").empty();
+                    if (data.length == 0){
+                        $("#regEmergencyProvince").append('<option value=" ">--</option>');
+                        $("#regEmergencyMunicipality").prepend('<option value=" ">--</option>');
+                        $("#regEmergencyBarangay").prepend('<option value=" ">--</option>');
+                    }
+                    else{
+                        $("#regEmergencyProvince").append('<option value=" ">Select Province</option>');
+                        $("#regEmergencyProvince").attr("disabled", false);
+                    }
+                    for (var n=0; n<data.length; n++) {
+                        $("#regEmergencyProvince").append("<option>"+data[n]['province']+"</option>");
+                    }
+                }
+
+            }
+        });
+    });
+
+    $("#regEmergencyProvince").on('change',function(){
+        // alert('asd');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: '/municipalitiesEmergency',
+            method: 'get',
+            data: {'province': $(this).val()},
+            success:function(data){
+                // prompt('',data); return false;
+                $("#regEmergencyMunicipality").empty();
+                $("#regEmergencyMunicipality").append('<option value="">-Select Town/City-</option>');
+                for (var n=0; n<data.length; n++) {
+                    $("#regEmergencyMunicipality").append("<option>"+data[n]['municipality']+"</option>");
+                }
+                $("#regEmergencyBarangay").empty();
+                $("#regEmergencyBarangay").append('<option value="">-Select Barangay-</option>');
+                $("#regEmergencyPostal").val('');
+            }
+        });
+    });
+
+    $("#regEmergencyMunicipality").on('change',function(){
+        // alert('asd');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: '/brgysEmergency',
+            method: 'get',
+            data: {'municipality': $(this).val()},
+            success:function(data){
+                // prompt('',data); return false;
+                $("#regEmergencyBarangay").empty();
+                $("#regEmergencyBarangay").append('<option value="">-Select Barangay-</option>');
+                for (var n=0; n<data.length; n++) {
+                    $("#regEmergencyBarangay").append("<option>"+data[n]['barangay']+"</option>");
+                }
+                $("#emergencyPostal").val('');
+            }
+        });
+    });
+
+    $("#regEmergencyBarangay").on('change' ,function(){
+        // alert('asd');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: '/postalEmergency',
+            method: 'get',
+            data: {'brgy': $(this).val()},
+            success:function(data){
+                // prompt('',data); return false;
+                // $("#regPostal1").empty();
+                // alert(data[0]['zip_Code']);
+                $("#emergencyPostal").val(data[0]['zip_Code']);
+            }
+        });
+    });
+
 
     
 
@@ -1069,7 +1350,8 @@ $(document).ready(function(){
 
     // ADD PROVIDER
     $("#addAnotherProvider").click(function(){
-        $("#anotherProvider").removeClass("hidden");
+        $("#anotherProvider1").removeClass("hidden");
+        $("#addAnotherProvider").addClass("hidden");
     });
 
 
@@ -1131,14 +1413,14 @@ $(document).ready(function(){
         });
         
     
-        //     $('.datepicker').datepicker({
-        //         dateFormat: 'mm/dd/yy',
-        //         changeMonth: true,
-        //         changeYear: true,
-        //         autoclose: true,
-        //         yearRange: "1800:2080"
+            // $('.datepicker').datepicker({
+            //     dateFormat: 'mm/dd/yy',
+            //     changeMonth: true,
+            //     changeYear: true,
+            //     autoclose: true,
+            //     yearRange: "1800:2080"
     
-        //     });
+            // });
 
         $('#viewPatientModal').modal({
             show: false
@@ -1190,88 +1472,136 @@ $(document).ready(function(){
           return false;
         }
       });
+    //   $("#relationMem").on('change',function(){
+    //     var client_type = $('#relationMem').find(":selected").text();
+    //    if(client_type == "Dependent"){
+    //         $('#dependentProvider').removeClass('hidden');
+           
+    //    }
+    //   });
 
-      $("#providerName").on('change',function() {
-        // alert($(this).val());
-        // alert($("#bday1").val());
-        // alert($("#providerName").val());
+      $("#providerName1").on('change',function() {
+        
+        if($("#providerName1").val()!=""){
+            $("#memberLname1").val( $("#U_LASTNAME").val());
+            $("#memberLname1").val( $("#U_LASTNAME").val());
+            $("#memberFname1").val( $("#U_FIRSTNAME").val());
+            $("#memberMname1").val( $("#U_MIDDLENAME").val());
+            $("#memberEname1").val( $("#extensionName").val());
+            
+            $("#memberSex1").val( $("#updatesex").val());
+            $("#memberSex1").css("pointer-events","none");;
+            $("#memberBDay1").val( $("#bday1").val()); 
+        }else{
+            $("#memberLname1").val('');
+            $("#memberLname1").val('');
+            $("#memberFname1").val('');
+            $("#memberMname1").val('');
+            $("#memberEname1").val('');
+            
+            $("#memberSex1").val('');
+            $("#memberSex1").css("pointer-events","auto");;
+            $("#memberBDay1").val(''); 
+        }
+        
         $("#relationMem").prop('readonly', false); //disable 
         $("#insMemTypeID").prop('readonly', false); //disable
         // alert($("#U_LASTNAME").val());
 
-        if ($("#providerName").val() == "Philhealth Care, lnc") {
-            $("#memberLname").val('');
-            $("#memberFname").val('');
-            $("#memberMname").val('');
-            $("#memberEname").val('');
-            $("#memberSex").val('');
-            $("#memberBDay").val('');
-        }else if($("#providerName").val()=="Others:Please Specify"){
-            $('#otherHmo').prop('readonly', false);
+        if($("#providerName1").val()=="Others:Please Specify"){
+            $('#otherHmo1').prop('readonly', false);
             // alert('s');
         }else {
             $("#relationMem").val('');
             $("#insMemTypeID").val('');
             // $("#insMemTypeID").text('');
-            $("#relationMem").prop('readonly', true); //disable 
-            $("#insMemTypeID").prop('readonly', true); //disable
-            $("#memberLname").prop('readonly', true); //disable 
-            $("#memberFname").prop('readonly', true); //disable 
-            $("#memberMname").prop('readonly', true); //disable 
-            $("#memberEname").prop('readonly', true); //disable 
-            $("#memberBDay").prop('readonly', true); //disable
-            $("#memberSex").prop('readonly', true); //disable
 
-            
-            $("#memberLname").val( $("#U_LASTNAME").val());
-            $("#memberLname").val( $("#U_LASTNAME").val());
-            $("#memberFname").val( $("#U_FIRSTNAME").val());
-            $("#memberMname").val( $("#U_MIDDLENAME").val());
-            $("#memberEname").val( $("#extensionName").val());
-            $("#memberSex").val( $("#updatesex").val());
-            // alert($("#updatesex").val());
-            $("#memberSex").text( $("#updatesex").val());
-            $("#memberBDay").val( $("#bday1").val());
         }
       });
 
-      $("#relationMem").on('change',function() {
+      $("#relationMem1").on('change',function() {
         // alert(("#U_BIRTHDATE").val());
         if ($(this).val() == "Member") {
-            // $("#relationMem").prop('disabled', false); //disable 
-            // $("#insMemTypeID").prop('disabled', true); //disable
-            $("#memberLname").prop('readonly', true); //disable 
-            $("#memberFname").prop('readonly', true); //disable 
-            $("#memberMname").prop('readonly', true); //disable 
-            $("#memberEname").prop('readonly', true); //disable 
-            $("#memberBDay").prop('readonly', true); //disable 
-            // alert($("#U_LASTNAME").val());
-            $("#memberLname").val( $("#U_LASTNAME").val());
-            $("#memberFname").val( $("#U_FIRSTNAME").val());
-            $("#memberMname").val( $("#U_MIDDLENAME").val());
-            $("#memberEname").val( $("#extensionName").val());
-            // $("#memberSex").val( $("#updatesex option:selected").val());
-            $("#memberSex").append('<option value="'+$("#updatesex option:selected").text()+'">'+$("#updatesex option:selected").text()+'</option>');
-            $("#memberBDay").val( $("#bday1").val());
-            // alert( $("#memberLname").val());
+            $("#insMemTypeID1").attr("readonly", false);
         }
         else if($(this).val() == "Dependent") {
-            // $("#memberLname").prop('disabled', false); //disable
-            // $("#relationMem").prop('disabled', false); //disable 
-            // $("#insMemTypeID").prop('disabled', true); //disable
-            $("#memberLname").prop('readonly', false); //disable 
-            $("#memberFname").prop('readonly', false); //disable 
-            $("#memberMname").prop('readonly', false); //disable 
-            $("#memberEname").prop('readonly', false); //disable 
-            $("#memberBDay").prop('readonly', false); //disable 
-            $("#memberLname").val('');
-            $("#memberFname").val('');
-            $("#memberMname").val('');
-            $("#memberEname").val('');
-            $("#memberBDay").val('');
+
+            $("#insMemTypeID1").attr("readonly", true);
+            $("#insMemTypeID1").val("Sponsored");
+            $("#insMemTypeID1").css("pointer-events","none");
+            $('#dependentProvider').removeClass('hidden');
+            $("#providerName3").val($("#providerName1").val());
+            $("#otherHmo3").val($("#otherHmo1").val());
+            $("#providerName3").css("pointer-events","none");
+            $("#relationMem3").val("Member");
+            $("#relationMem3").css("pointer-events","none");
+
           }
          else {
-            $("#memberLname").prop('readonly', true); //disable 
+            // $("#memberLname").prop('readonly', true); //disable 
+        }
+      });
+
+      $("#relationMem2").on('change',function() {
+        // alert(("#U_BIRTHDATE").val());
+        if ($(this).val() == "Member") {
+            $("#insMemTypeID2").attr("readonly", false);
+        }
+        else if($(this).val() == "Dependent") {
+
+            $("#insMemTypeID2").attr("readonly", true);
+            $("#insMemTypeID2").val("Sponsored");
+            $("#insMemTypeID2").css("pointer-events","none");
+            $('#dependentProvider1').removeClass('hidden');
+            $("#otherHmo4").val($("#otherHmo2").val());
+            $("#providerName4").val($("#providerName2").val());
+            $("#providerName4").css("pointer-events","none");
+            $("#relationMem4").val("Member");
+            $("#relationMem4").css("pointer-events","none");
+
+          }
+         else {
+            
+        }
+      });
+
+
+      $("#providerName2").on('change',function() {
+        
+        if($("#providerName2").val()!=""){
+            $("#memberLname2").val( $("#U_LASTNAME").val());
+            $("#memberLname2").val( $("#U_LASTNAME").val());
+            $("#memberFname2").val( $("#U_FIRSTNAME").val());
+            $("#memberMname2").val( $("#U_MIDDLENAME").val());
+            $("#memberEname2").val( $("#extensionName").val());
+            
+            $("#memberSex2").val( $("#updatesex").val());
+            $("#memberSex2").css("pointer-events","none");;
+            $("#memberBDay2").val( $("#bday1").val()); 
+        }else{
+            $("#memberLname2").val('');
+            $("#memberLname2").val('');
+            $("#memberFname2").val('');
+            $("#memberMname2").val('');
+            $("#memberEname2").val('');
+            
+            $("#memberSex2").val('');
+            $("#memberSex2").css("pointer-events","auto");;
+            $("#memberBDay2").val(''); 
+        }
+        
+        $("#relationMem").prop('readonly', false); //disable 
+        $("#insMemTypeID").prop('readonly', false); //disable
+        // alert($("#U_LASTNAME").val());
+
+        if($("#providerName2").val()=="Others:Please Specify"){
+            $('#otherHmo2').prop('readonly', false);
+            // alert('s');
+        }else {
+            $("#relationMem").val('');
+            $("#insMemTypeID").val('');
+            // $("#insMemTypeID").text('');
+
         }
       });
 
@@ -1282,7 +1612,7 @@ $(document).ready(function(){
         // SAME FATHER'S ADDRESS WITH PATIENT
         $("#sameFatherAddress").change(function() {
             if(this.checked) {
-                // alert($("#regPostal1").val());
+                // alert($("#regPostal2").val());
                 $("#fatherHouseNo").val( $("#houseNo").val()); 
                 // $("#fatherHouseNo").val( $("#houseNo").val()); 
                 $("#fatherStreet").val( $("#street").val()); 
@@ -1431,6 +1761,75 @@ $(document).ready(function(){
                 getAddress(identifier);
             }
         });
+        // SAME EMERGENCY'S ADDRESS WITH PATIENT
+        $("#sameEmergencyAddress").change(function() {
+            if(this.checked) {
+                // alert($("#regPostal1").val());
+                $("#fatherHouseNo").val( $("#houseNo").val()); 
+                // $("#fatherHouseNo").val( $("#houseNo").val()); 
+                $("#emergencyStreet").val( $("#street").val()); 
+                $("#regEmergencyCountry").empty();
+                $("#regEmergencyProvince").empty();
+                $("#regEmergencyMunicipality").empty();
+                $("#regEmergencyBarangay").empty();
+                $("#regEmergencyPostal").empty();
+                $("#regEmergencyCountry").prop('readonly', true);
+                $("#regEmergencyProvince").prop('readonly', true);
+                $("#regEmergencyMunicipality").prop('readonly', true);
+                $("#regEmergencyBarangay").prop('readonly', true);
+                $("#regEmergencyPostal").prop('readonly', true);
+                // $("#fatherHouseNo").prop('readonly', true);
+                $("#emergencyStreet").prop('readonly', true);
+                // $("#regFathersCountry").text('<option value="'+$("#regCountry1").val()+'">'+ $("#regCountryUpdate").val()+'</option>');// '<option value="">-Select Barangay-</option>'
+
+                // $("#regEmergencyCountry").append('<option value="'+$("#regCountryUpdate").val()+'">'+ $("#regCountryUpdate").val()+'</option>');// '<option value="">-Select Barangay-</option>'
+                // $("#regEmergencyProvince").append('<option value="'+$("#regProvinceUpdate").val()+'">'+ $("#regProvinceUpdate").val()+'</option>');
+                // $("#regEmergencyMunicipality").append('<option value="'+$("#regMunicipalityUpdate").val()+'">'+ $("#regMunicipalityUpdate").val()+'</option>');
+                // $("#regEmergencyBarangay").append('<option value="'+$("#regBarangayUpdate").val()+'">'+ $("#regBarangayUpdate").val()+'</option>');
+
+                // $("#regEmergencyCountry").text();
+                // // $("#regEmergencyCountry option:selected").text($("#regCountryUpdate").val());
+                // $("#regEmergencyProvince option:selected").val($("#regProvinceUpdate").val());
+                // $("#regEmergencyProvince option:selected").text($("#regProvinceUpdate").val());
+                // $("#regEmergencyMunicipality option:selected").val($("#regMunicipalityUpdate").val());
+                // $("#regEmergencyMunicipality option:selected").text($("#regMunicipalityUpdate").val());
+                // $("#regEmergencyBarangay").val($("#regBarangayUpdate").val());
+
+
+                $("#regEmergencyCountry").val($("#regCountryUpdate").val());
+                $("#regEmergencyProvince option:selected").val($("#regFathersProvince").val());
+                $("#regEmergencyProvince option:selected").text($("#regFathersProvince").val());
+                $("#regEmergencyMunicipality option:selected").val($("#regfathersMunicipality").val());
+                $("#regEmergencyMunicipality option:selected").text($("#regfathersMunicipality").val());
+
+                $("#emergencyPostal").val( $("#regPostalUpdate").val()); 
+                // alert($("#regCountry1").val());
+                
+            }
+            else{
+                $("#regEmergencyCountry").prop('readonly', false);
+                $("#regEmergencyProvince").prop('readonly', false);
+                $("#regEmergencyMunicipality").prop('readonly', false);
+                $("#regEmergencyBarangay").prop('readonly', false);
+                $("#emergencyPostal").prop('readonly', false);
+                $("#emergencyHouseNo").prop('readonly', false);
+                $("#emergencyStreet").prop('readonly', false);
+                $("#emergencyHouseNo").val(''); 
+
+                
+                $("#emergencyHouseNo").val( $("#houseNo").val()); 
+                $("#emergencyStreet").val(''); 
+                $("#regEmergencyCountry").val(''); 
+                $("#regEmergencyCountry").text(''); 
+                $("#regEmergencyProvince").val(''); 
+                $("#regEmergencyMunicipality").val(''); 
+                $("#regEmergencyBarangay").val(''); 
+                $("#emergencyPostal").val(''); 
+                identifier = document.getElementById("regEmergencyCountry");
+                // alert(identifier);
+                getAddress(identifier);
+            }
+        });
 
     //     $("#patientUpdate").click(function(){
     //     var getID=$("#hiddenInput").val();
@@ -1448,6 +1847,19 @@ $(document).ready(function(){
     $("#addAnotherAllergy1").on('click',function(){
         $('#allegyField5').removeClass('hidden');
         $('#addAnotherAllergy1').addClass('hidden');
+        $('#addAnotherAllergy2').removeClass('hidden');
+        // alert('as');
+    });
+    $("#addAnotherAllergy2").on('click',function(){
+        $('#allegyField6').removeClass('hidden');
+        $('#addAnotherAllergy2').addClass('hidden');
+        $('#addAnotherAllergy3').removeClass('hidden');
+        // alert('as');
+    });
+    $("#addAnotherAllergy3").on('click',function(){
+        $('#allegyField7').removeClass('hidden');
+        $('#addAnotherAllergy3').addClass('hidden');
+        
         // alert('as');
     });
 
@@ -1512,6 +1924,55 @@ $(document).ready(function(){
         $("#icdDescUpdate").val('');
         checkVisitContent()
     });
+
+    $("#resetICDCreate").click(function(){
+        $("#icdCode").val('');
+        $("#icdDesc").val('');
+        // checkVisitContent()
+    });
+
+    // required fields
+    $("#addFirstName").on("keyup", function(){
+        checkField();
+    });
+    $("#addLastName").on("keyup", function(){
+        checkField();
+    });
+    $("#addMiddleName").on("keyup", function(){
+        checkField();
+    });
+    $("#bday11").on("keyup change", function(){
+        checkField();
+    });
+    $("#regCivilStatus").on("change", function(){
+        checkField();
+    });
+    $("#regSex").on("change", function(){
+        checkField();
+    });
+    $("#regCountry").on("change", function(){
+        checkField();
+    });
+    $("#regProvince").on("change", function(){
+        checkField();
+    });
+    $("#regMunicipality").on("change", function(){
+        checkField();
+    });
+    $("#regBarangay").on("change", function(){
+        checkField();
+    });
+    $("#regstreet").on("keyup", function(){
+        checkField();
+    });
+    $("#regcontactType1").on("change", function(){
+        checkField();
+    });
+    $("#contact1Add").on("keyup", function(){
+        checkField();
+    });
+
+
 
 });
 
@@ -1626,6 +2087,8 @@ function viewRecord($id,$img){
                 $obj2=JSON.stringify(response.hmos);
                 // alert($obj2);
                 $hmoObjects = JSON.parse($obj2);
+
+                // alert($hmoObjects.length);
 
                 $obj3=JSON.stringify(response.img);
                 $imageObject = JSON.parse($obj3);
@@ -1774,11 +2237,13 @@ function viewRecord($id,$img){
                     $("#fatherLastName").val($hispatients.U_FATHERSLASTNAME);
                     $("#fatherMiddleName").val($hispatients.U_FATHERSMIDDLENAME);
                     $("#fatherExtName").val($hispatients.U_FATHERSEXTNAME);
+                    $("#fatherContactNo").val($hispatients.U_FATHERTELNO);
 
                     $("#motherFirstName").val($hispatients.U_MOTHERSFIRSTNAME);
                     $("#motherLastName").val($hispatients.U_MOTHERSLASTNAME);
                     $("#motherMiddleName").val($hispatients.U_MOTHERSMIDDLENAME);
                     $("#motherExtName").val($hispatients.U_MOTHERSEXTNAME);
+                    $("#motherContactNo").val($hispatients.U_MOTHERTELNO);
 
                         
 
@@ -1786,11 +2251,14 @@ function viewRecord($id,$img){
                         $("#spouseLastName").val($hispatients.U_SPOUSELASTNAME);
                         $("#spouseMiddleName").val($hispatients.U_SPOUSEMIDDLENAME);
                         $("#spouseExtName").val($hispatients.U_SPOUSEEXTNAME);
+                    $("#spouseContactNo").val($hispatients.U_SPOUSETELNO);
             
+                  $('#regFathersCountry').val($hispatients.U_FATHERCOUNTRY);
                   $('#regFathersCountry').val($hispatients.U_FATHERCOUNTRY);
                   $('#getFathersProvince').text($hispatients.U_FATHERPROVINCE);
                   $('#getFathersProvince').val($hispatients.U_FATHERPROVINCE);
                   $('#getFathersProvince').val($hispatients.U_FATHERPROVINCE);
+                  $('#getFathersProvince').text($hispatients.U_FATHERPROVINCE);
                   $('#getFathersMunicipality').val($hispatients.U_FATHERCITY);
                   $('#getFathersMunicipality').text($hispatients.U_FATHERCITY);
                   $('#getFathersBrgy').val($hispatients.U_FATHERBARANGAY);
@@ -1816,7 +2284,7 @@ function viewRecord($id,$img){
 
 
                   $('#regSpousesCountry').val($hispatients.U_SPOUSECOUNTRY);
-
+                  
                   $('#getSpouseProvince').text($hispatients.U_SPOUSEPROVINCE);
                   $('#getSpouseProvince').val($hispatients.U_SPOUSEPROVINCE);
                   $('#getSpouseCity').val($hispatients.U_SPOUSECITY);
@@ -1827,6 +2295,26 @@ function viewRecord($id,$img){
                   $('#regSpousesPostal').val($hispatients.U_SPOUSEZIP);
                   $('#spouseHouseNo').val($hispatients.U_SPOUSEHOUSENO);
                   $('#spouseStreet').val($hispatients.U_SPOUSESTREET);
+
+
+
+                    $("#emergencyLastName").val($hispatients.U_CONTACTLASTNAME);
+                    $("#emergencyFirstName").val($hispatients.U_CONTACTFIRSTNAME);
+                    $("#emergencyMiddleName").val($hispatients.U_CONTACTMIDDLENAME);
+                    $("#emergencyExtName").val($hispatients.U_CONTACTEXTNAME);
+                    $("#emergencyContactNo").val($hispatients.U_CONTACTTELNO);
+                    $("#regEmergencyCountry").val($hispatients.U_CONTACTCOUNTRY);
+                    $("#regEmergencyProvince option:selected").val($hispatients.U_CONTACTPROVINCE);
+                    $("#regEmergencyProvince option:selected").text($hispatients.U_CONTACTPROVINCE);
+                    $("#regEmergencyMunicipality option:selected").val($hispatients.U_CONTACTCITY);
+                    $("#regEmergencyMunicipality option:selected").text($hispatients.U_CONTACTCITY);
+                    $("#regEmergencyBarangay option:selected").val($hispatients.U_CONTACTBARANGAY);
+                    $("#regEmergencyBarangay option:selected").text($hispatients.U_CONTACTBARANGAY);
+                    $("#emergencyStreet").val($hispatients.U_CONTACTSTREET);
+                    $("#regEmergencyPostal").val($hispatients.U_CONTACTZIP);
+                    $("#relationToPatient").val($hispatients.U_CONTACTRELATIONSHIP);
+                //   alert($hispatients.U_SPOUSETELNO);
+                  
 
 
                 //   viewing of contact
@@ -1862,33 +2350,90 @@ function viewRecord($id,$img){
                         }
                     }
                   }
+                // if($hmoObjects!=""){
+                //         $("#providerName").val($hmoObjects[0]['hmoName']);
+                //         $("#memberID").val($hmoObjects[0]['hmoAccountID']);
+                //         $("#relationMem").val($hmoObjects[0]['clientType']);
+                //         $("#insMemTypeID").val($hmoObjects[0]['memberType']);
+                //         $("#memberLname").val($hmoObjects[0]['memberLname']);
+                //         $("#memberFname").val($hmoObjects[0]['memberFname']);
+                //         $("#memberMname").val($hmoObjects[0]['memberMname']);
+                //         $("#memberEname").val($hmoObjects[0]['memberEname']);
+                //         $("#memberSex").val($hmoObjects[0]['memberSex']);
+                //         $("#memberBDay").val($hmoObjects[0]['memberBDay']);
+                    
+                // }      
+                
+                if(response.firsthmo!=null){
+                    $("#providerName1").val(response.firsthmo['hmoName']);
+                    $("#otherHmo1").val(response.firsthmo['otherHmoName']);
+                    $("#memberID1").val(response.firsthmo['hmoAccountID']);
+                    $("#relationMem1").val(response.firsthmo['clientType']);
+                    $("#insMemTypeID1").val(response.firsthmo['memberType']);
+                    $("#memberLname1").val(response.firsthmo['memberLname']);
+                    $("#memberFname1").val(response.firsthmo['memberFname']);
+                    $("#memberMname1").val(response.firsthmo['memberMname']);
+                    $("#memberEname1").val(response.firsthmo['memberEname']);
+                    $("#memberSex1").val(response.firsthmo['memberSex']);
+                    $("#memberBDay1").val(response.firsthmo['memberBDay']);
+                }
 
+                if(response.secondhmo!=null){
+                    // alert(JSON.stringify(response.secondhmo));
+                    $("#anotherProvider1").removeClass("hidden");
+                    // providerName2 = document.getElementById("providerName2"); 
+                    // displayField(providerName2,response.secondhmo['hmoName']);
+                    $("#providerName2").val(response.secondhmo['hmoName']);
+                    $("#otherHmo2").val(response.secondhmo['otherHmoName']);
+                    $("#memberID2").val(response.secondhmo['hmoAccountID']);
+                    $("#relationMem2").val(response.secondhmo['clientType']);
+                    $("#insMemTypeID2").val(response.secondhmo['memberType']);
+                    $("#memberLname2").val(response.secondhmo['memberLname']);
+                    $("#memberFname2").val(response.secondhmo['memberFname']);
+                    $("#memberMname2").val(response.secondhmo['memberMname']);
+                    $("#memberEname2").val(response.secondhmo['memberEname']);
+                    $("#memberSex2").val(response.secondhmo['memberSex']);
+                    $("#memberBDay2").val(response.secondhmo['memberBDay']);
+                }
+
+                if(response.thirdhmo!=null){
+                    $("#dependentProvider").removeClass("hidden");
+                    $("#providerName3").val(response.thirdhmo['hmoName']);
+                    $("#otherHmo3").val(response.thirdhmo['otherHmoName']);
+                    $("#memberID3").val(response.thirdhmo['hmoAccountID']);
+                    $("#relationMem3").val(response.thirdhmo['clientType']);
+                    $("#insMemTypeID3").val(response.thirdhmo['memberType']);
+                    $("#memberLname3").val(response.thirdhmo['memberLname']);
+                    $("#memberFname3").val(response.thirdhmo['memberFname']);
+                    $("#memberMname3").val(response.thirdhmo['memberMname']);
+                    $("#memberEname3").val(response.thirdhmo['memberEname']);
+                    $("#memberSex3").val(response.thirdhmo['memberSex']);
+                    $("#memberBDay3").val(response.thirdhmo['memberBDay']);
+                }
+
+                if(response.fourthhmo!=null){
+                    $("#dependentProvider1").removeClass("hidden");
+                    $("#providerName4").val(response.fourthhmo['hmoName']);
+                    $("#otherHmo4").val(response.fourthhmo['otherHmoName']);
+                    $("#memberID4").val(response.fourthhmo['hmoAccountID']);
+                    $("#relationMem4").val(response.fourthhmo['clientType']);
+                    $("#insMemTypeID4").val(response.fourthhmo['memberType']);
+                    $("#memberLname4").val(response.fourthhmo['memberLname']);
+                    $("#memberFname4").val(response.fourthhmo['memberFname']);
+                    $("#memberMname4").val(response.fourthhmo['memberMname']);
+                    $("#memberEname4").val(response.fourthhmo['memberEname']);
+                    $("#memberSex4").val(response.fourthhmo['memberSex']);
+                    $("#memberBDay4").val(response.fourthhmo['memberBDay']);
+                }
                 // start viewing of emails
                 // alert(JSON.stringify($hmoObjects));
-                if($hmoObjects!=""){
-                    // alert($hmoObjects);
-                    $("#providerName").val($hmoObjects[0]['hmoName']);
-                    $("#memberID").val($hmoObjects[0]['hmoAccountID']);
-                    $("#relationMem").val($hmoObjects[0]['clientType']);
-                    $("#insMemTypeID").val($hmoObjects[0]['memberType']);
-                    $("#memberLname").val($hmoObjects[0]['memberLname']);
-                    $("#memberFname").val($hmoObjects[0]['memberFname']);
-                    $("#memberMname").val($hmoObjects[0]['memberMname']);
-                    $("#memberEname").val($hmoObjects[0]['memberEname']);
-                    $("#memberSex").val($hmoObjects[0]['memberSex']);
-                    $("#memberBDay").val($hmoObjects[0]['memberBDay']);
-                }
+                // alert($hmoObjects.identifier);
                 
-
                 $imageUrl = $("#storage").val();
 
 
                 $arrayLen=$idsObject.length;
                 $arrayLength=$profilesObject.length;
-                // alert($arrayLength);
-                // alert(JSON.stringify(response.medInfo.U_HEIGHT_CM));
-                // if
-                // alert($currentHPID);
                 if(response.medInfo!=null){
                     // alert(response.medInfo.U_HEIGHT_CM);
                     $("#centimeter").val(response.medInfo.U_HEIGHT_CM);
@@ -1914,15 +2459,21 @@ function viewRecord($id,$img){
                 // $hosID=
 
                 $("#hospitalIdtable").empty();//prevent adding new row when closing create visit
+
+
                 if($arrayLen!=0){
                     // alert(arrayLength);
                     for($l=0; $l<$arrayLen;$l++){
-
+                    if($idsObject[$l].HOSPITALID==null){
+                        $tempHospID[$l]="";
+                    }else{
+                        $tempHospID[$l]=$idsObject[$l].HOSPITALID;
+                    }
                     $("#hospitalIdtable").append(
                         '<tr>'+
                         '<td>'+$hispatients.CODE+'</td>'+
                         '<td>'+$idsObject[$l].HOSPITALNAME+'</td>'+
-                        '<td>'+$idsObject[$l].HOSPITALID+'</td>'+
+                        '<td>'+$tempHospID[$l]+'</td>'+
                         '<td>'+$idsObject[$l].dateCreated+'</td>'+
                         // '<td>'+$idsObject[$l].note+'</td>'+
                         '</tr>'
@@ -2093,6 +2644,10 @@ function createVisit($patientInfo,$idsObject,$currentHPID,$img){
             var visitID = $("#visitID").val();
             var selectVisit = $("#selectVisit").val();
             var chiefComplaint =$("#chiefComplaint").val();
+            var icdCode = $("#icdCode").val();
+            var icdDesc = $("#icdDesc").val();
+            var FinalDiagnosis = $("#FinalDiagnosis").val()
+
 
             var dateArrival=$("#dateArrival").val();
 
@@ -2115,6 +2670,10 @@ function createVisit($patientInfo,$idsObject,$currentHPID,$img){
                     dateArrival,
                     chiefComplaint,
                     dateDischarged,
+                    icdCode,
+                    icdDesc,
+                    FinalDiagnosis
+
                     // hospCode
 
                 },
@@ -2327,6 +2886,58 @@ function getAddress(identifier){
     });
     return;
 
+}
+function checkField(){
+    var addFirstName = $("#addFirstName").val();
+    var addLastName = $("#addLastName").val();
+    var U_MIDDLENAME = $("#addMiddleName").val();
+    var U_BIRTHDATE = $("#bday11").val();
+    var U_CIVILSTATUS = $("#regCivilStatus").val();
+    var regSex = $("#regSex").val();
+    var regCountry = $("#regCountry").val();
+    var regProvince = $("#regProvince").val();
+    var regMunicipality = $("#regMunicipality").val();
+    var regBarangay = $("#regBarangay").val();
+    var contactType1 = $("#regcontactType1").val();
+    var contact1Add = $("#contact1Add").val();
+
+
+    asdas = [
+        addFirstName,
+        addLastName,
+        U_MIDDLENAME,
+        U_BIRTHDATE,
+        U_CIVILSTATUS,
+        regSex,
+        regCountry,
+        regProvince,
+        regMunicipality,
+        regBarangay,
+        contact1Add,
+    ];
+    // alert(asdas);
+    var ifEmpty = false;
+
+    if((addFirstName&&addLastName&&U_MIDDLENAME&&U_BIRTHDATE&&U_CIVILSTATUS&&regSex&&regCountry&&regProvince&&regMunicipality&&regBarangay&&contactType1&&contact1Add)!=""){
+        ifEmpty=true;
+    }else{
+        ifEmpty=false;
+    }
+    // alert(ifEmpty);
+    if(ifEmpty){
+        $("#addPatient").attr("disabled", false);
+    }else{
+        $("#addPatient").attr("disabled", true);
+    }
+}
+// displayField(providerName2,response.secondhmo, 'hmoName');
+function displayField(id, nameObject){
+    // alert(nameObject[fieldName]);
+    if(nameObject==null){
+       
+    }else{
+        $(id).val(nameObject);
+    }
 }
 
 

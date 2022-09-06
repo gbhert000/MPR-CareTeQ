@@ -83,6 +83,10 @@ trait GetLastCode
         return $idtypes;
     }
 
+    public function getHmoarray($array){
+        dd($array);
+    }
+
 }
 
 

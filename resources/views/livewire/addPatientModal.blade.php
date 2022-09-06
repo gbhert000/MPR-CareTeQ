@@ -14,7 +14,7 @@
             </div>
             <!-- START FORM -->
             <form action="add" method="POST">
-                {{ csrf_field() }}
+               @csrf
                 {{-- <input name="_token" type="hidden" value="..."> --}}
                 <!-- START MODAL BODY -->
                 <div class="modal-body">
@@ -41,7 +41,7 @@
                                 <div class="w-100"></div>
                                 <div class="col text-center">
                                     <label for="hpidRegister"> Medical Record Number</label>
-                                    <input type="text" name="hpidRegister" id="hpidRegister" class="form-control" max="11">
+                                    <input type="text" name="hpidRegister" id="hpidRegister" class="form-control" maxlength="11">
                                 </div>
                             </div>
 
@@ -68,7 +68,7 @@
                                 
                                 <div class="col-sm px-1">
                                     <label>Middle Name <i id="requiredFields">*</i></label>
-                                    <input type="text"  class="form-control" name="U_MIDDLENAME" id="U_MIDDLENAME"  autocomplete="off" required>
+                                    <input type="text"  class="form-control" name="U_MIDDLENAME" id="addMiddleName"  autocomplete="off" required>
                                     {{-- @error('middleName') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                 </div>
                                 <div class="col-sm-2  px-1">
@@ -77,7 +77,7 @@
                                     {{-- @error('extensionName') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                 </div>
                                 <div class="w-100"></div>
-                                <div class="col-sm-2 px-1 mt-3">
+                                <div class="col-sm-2 pr-1 mt-3">
                                     <label>Birthdate <i id="requiredFields">*</i> </label>
                                 <input type="text" class="form-control px-3 datepicker1" name="U_BIRTHDATE" id="bday11" placeholder="mm-dd-yyyy" autocomplete="off" required>
                                     {{-- @error('birthDate') <span class="text-danger">{{ $message }}</span> @enderror --}}
@@ -89,7 +89,7 @@
                                 </div>
                                 <div class="col-sm-2 px-1 mt-3">
                                     <label>Civil Status <i id="requiredFields">*</i></label> 
-                                    <select class="form-control"  name="U_CIVILSTATUS" id="U_CIVILSTATUS" required>
+                                    <select class="form-control"  name="U_CIVILSTATUS" id="regCivilStatus" required>
                                         <option value="" selected></option>
                                         @foreach ($maritals as $marital)
                                             <option value="{{$marital->MaritalStatus}}">{{$marital->MaritalStatus}}</option>
@@ -149,7 +149,7 @@
                                 <div class="col px-1 mt-3">
                                     <label>Religion</label>
                                     {{-- <input type="text" class="form-control" name="religion"> --}}
-                                    <select class="form-control"  name="religion" id="religion">
+                                    <select class="form-control"  name="religion" id="regReligion">
                                         <option value="" selected></option>
                                         @foreach ($religions as $religion)
                                             <option value="{{$religion->ReligionName}}">{{$religion->ReligionName}}</option>
@@ -173,7 +173,7 @@
 
                                 
 
-                                <div class="col px-1 ">
+                                <div class="col pr-1 ">
                                     <label>Country <i id="requiredFields">*</i></label>
                                     <select name="country" id="regCountry" class="form-control" placeholder="Search" style="width: 100%;" required>
                                         <option value=""></option>
@@ -199,7 +199,7 @@
                                     </select>
                                 </div>
                                 <div class="w-100"></div>
-                                <div class="col px-1">
+                                <div class="col pr-1">
                                     <label>Barangay <i id="requiredFields">*</i></label>
                                     <select name="brgy" id="regBarangay" class="form-control" placeholder="Search" style="width: 100%;" required disabled>
                                         <option value=""></option>
@@ -208,7 +208,7 @@
                 
                                 <div class="col pr-1">
                                     <label>House No. & Street <i id="requiredFields">*</i></label>
-                                    <input type="text"class="form-control" name="street" required>
+                                    <input type="text"class="form-control" name="street" id="regstreet" required>
                                 </div>    
                                 <div class="col-sm-2 px-1">
                                     <label>Zip Code <i id="requiredFields">*</i></label>
@@ -231,7 +231,7 @@
                                 <div class="w-100"></div>
                                 <div class="col-sm-3">
                                     <label for="contactType1">Contact Type <i id="requiredFields">*</i></label>
-                                    <select name="contactType1" id="contactType1" class="form-control" required>
+                                    <select name="contactType1" id="regcontactType1" class="form-control" required>
                                         <option value="">Select Type</option>
                                         @foreach ($contTypes as $contType)
                                             <option value="{{$contType->contacttype}}">{{$contType->contacttype}}</option>
@@ -246,7 +246,7 @@
 
                                 <div class="col">
                                     <label for="noteContact1">Note:</label>
-                                    <input type="text"class="form-control"  name="noteContact1">
+                                    <input type="text"class="form-control"  name="noteContact1" id="noteContact1">
                                 </div>
                             </div>
                             <!-- END FIRST CONTACT -->
@@ -424,7 +424,7 @@
                 <div class="modal-footer">
             <!-- {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-target="#confirmModal #studentModal" id="closeAdd" wire:click="resetInputFields()">Close</button> --}} -->
                     {{-- <button type="button" class="btn btn-secondary"  id="closeReset1" onclick="resetInputAdd()">Close</button> --}}
-                    <button type="submit" class="btn btn-primary" id="addPatient" >Save changes</button>
+                    <button type="submit" class="btn btn-primary" id="addPatient" disabled >Register Patient</button>
                 </div>
                 <!-- END FOOTER -->
             </form>

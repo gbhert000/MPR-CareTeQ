@@ -2630,6 +2630,32 @@ input[type=number] {
 #seal{
   width: 18rem;
 }
+/* #regCivilStatus{
+  width: 100%;
+} */
+
+#U_RELIGION {
+  /* width: 200px!important; */
+  max-width: 100%!important;
+  overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
+  -webkit-appearance: none;
+  width: 100%;
+  /* So it doesn't overflow from it's parent */
+}
+
+#U_RELIGION option {
+  /* wrap text in compatible browsers */
+  -moz-white-space: pre-wrap !important;
+  -o-white-space: pre-wrap !important;
+  white-space: pre-wrap!important;
+  /* hide text that can't wrap with an ellipsis */
+  overflow: hidden;
+  text-overflow: ellipsis!important;
+  /* add border after every option */
+  border-bottom: 1px solid #DDD!important;
+}
 
 /* .modal-dialog{
   overflow-y: initial !important

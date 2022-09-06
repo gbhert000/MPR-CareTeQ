@@ -27,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        if($this->app->environment('production')) {
+            \URL::forceScheme('https');
+        }
         view()->composer('partials.messages', function ($view) {
 
             $messages = self::messages();
@@ -34,4 +37,6 @@ class AppServiceProvider extends ServiceProvider
             return $view->with('messages', $messages);
         });
     }
+
+
 }

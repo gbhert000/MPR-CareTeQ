@@ -13,6 +13,7 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
     {{-- SELECT 2 --}}
     <link href="{{ asset('/selectsearch/select2/dist/css/select2.min.css') }}" rel='stylesheet' type='text/css'>
@@ -24,6 +25,7 @@
     <link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+
 
     @livewireStyles
     {{-- @powerGridStyles --}}
@@ -49,6 +51,7 @@
     <script type="text/javascript" src="{{ asset('/jquery-ui-1.13.1.custom/jquery-ui.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/jquery-ui-1.13.1.custom/jquery-ui.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
+    <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
 
 {{-- 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.min.js"></script>
@@ -73,11 +76,7 @@
     <script src="{{asset('js/pdf.js')}}"></script>
     <script src="{{asset('js/format.js')}}"></script>
     <script src="{{ asset('js/careteq.js') }}"></script>
-    <script src="bower_components\jquery\dist\jquery.min.js"></script>
-    <script src="bower_components\jquery-table2excel\dist\jquery.table2excel.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
-    <script src="{{ asset('js/print.js') }}"></script>
+    <script src="{{ asset('js/print.js') }}"></script>  
 </head>
 <body>
 
@@ -148,24 +147,5 @@
         </div> 
         {{-- </div> --}}
     </div>
-    
-    {{-- <script language="JavaScript">
-        Webcam.set({
-            width: 490,
-            height: 350,
-            image_format: 'jpeg',
-            jpeg_quality: 90
-        });
-        
-        Webcam.attach( '#my_camera' );
-        
-        function take_snapshot() {
-            Webcam.snap( function(data_uri) {
-                $(".image-tag").val(data_uri);
-                document.getElementById('results').innerHTML = '<img src="'+data_uri+'"/>';
-            } );
-        }
-    </script> --}}
-
 </body>
 </html>

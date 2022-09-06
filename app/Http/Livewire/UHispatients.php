@@ -112,9 +112,6 @@ class UHispatients extends Component
     }
 
     public function savePatient(Request $request){
-        
-        // $getLastCode_temp = DB::table('u_hispatients')->select('CODE')
-        //                 ->orderBy('CODE', 'desc')->first();
 
         // GET LAST MASTER PATIENT RECORD
         $getLastCodeTemp=$this->getLastCode('u_hispatients','CODE');
@@ -189,15 +186,6 @@ class UHispatients extends Component
                 $emailArray[$ee],
             ];
         }
-        // switch($getEmailCount){
-        //     case 0:
-        //         break;
-        //     case 1:
-        //         $insertEmailArray=[
-                    
-        //         ]
-        // }
-        // dd($insertEmailArray);
         $patientInfoArray=[
                 'CODE'=>$new_code,
                 'NAME'=>$fullName,
@@ -223,6 +211,10 @@ class UHispatients extends Component
         // GET NATIONALITY
         $getCountNationality=$this->getNumberofUsed('u_nationalities','used','Nationality',$request->nationality);
 
+        // GET RELIGION
+        $getCountReligion=$this->getNumberofUsed('u_religions','used','ReligionName',$request->religion);
+
+
         // GET COUNTRY
         $getCountCountry=$this->getNumberofUsed('countries','used','country',$request->country);
 
@@ -238,23 +230,8 @@ class UHispatients extends Component
         // HOSPITAL PATIENT ID INPUT
         
 
-        
         if(!$selectRecord){
-            // dd($selectRecord);
-
-            // 11:40 AM changed
-            // $getPatientContact=$this->getContacts($fullName,$new_code,$getContactCount, $contactArray);
-            // // dd($getPatientContact);
-            
-            // if($getPatientContact==""){
-            //     $contactCounter=0;
-            //     $insertCount=$getContactCount;
-
-            // }else{
-            //     $query3=DB::table('u_hiscontacts')->insert($getPatientContact);
-            //     $insertCount=$getContactCount;
-            // }
-            
+            // dd($selectRecord);   
             $patientInfoArray2=[
                 'U_STREET' =>strtoupper($request->street),
                 
@@ -307,6 +284,9 @@ class UHispatients extends Component
             if($request->country!=""){
                 $getCountCountry=$getCountCountry->used+1;
             }
+            if($request->religion!=""){
+                $getCountReligion=$getCountReligion->used+1;
+            }
             
                 // dd($getCount);
         
@@ -329,15 +309,24 @@ class UHispatients extends Component
                         $contactArray[$ee]
                 ]);
                 }
-                
-                $updateUsedCountRegister=DB::table('u_nationalities')->where('Nationality','=',$request->nationality)->update([
+                DB::table('u_hispatients_audit_trail')->insert([
+
+                    $patientInfoArray+
+                    $patientInfoArray2+
+                    $patientInfoArray3
+                    
+                ]);
+                DB::table('u_nationalities')->where('Nationality','=',$request->nationality)->update([
                     'used'=>$getCountNationality
                 ]  
                 );
-                $updateUsedCountryRegister=DB::table('countries')->where('country','=',$request->country)->update([
+                DB::table('countries')->where('country','=',$request->country)->update([
                     'used'=>$getCountCountry
                 ]  
                 );
+                DB::table('u_religions')->where('ReligionName',$request->religion)->update([
+                    'used'=>$getCountReligion
+                ]);
                 if($request->hiddenImageRegister!=""){
                     $uploadSaveImageRegister=$this->uploadImage($request->hiddenImageRegister, $fullName,$new_code);
                 }
@@ -399,7 +388,7 @@ class UHispatients extends Component
         $post2 = DB::table('u_hiscontacts')->where(['CODE'=>$CODE])->get();
         $post4 = DB::table('u_hispatientshealthcare')->where(['patientCode'=>$CODE])->get();
         $post5 = DB::table('u_hisimages')->where(['patientCode'=>$CODE])->first();
-        $post6 = DB::table('u_hospitalids')->where('CODE','=',$CODE)->groupBy('HOSPITALCODE')->get();
+        $post6 = DB::table('u_hospitalids')->where('CODE','=',$CODE)->groupBy('HOSPITALCODE')->orderBy('id','asc')->get();
         // dd($post6);
         $post7 = DB::table('u_patienthospitalprofile')->where(['CODE'=>$CODE])->get();
         // dd($post6);
@@ -409,7 +398,14 @@ class UHispatients extends Component
         $post9 = DB::table('u_hisvisits')->where(['U_PATIENTID'=>$CODE,'DOCSTATUS'=>'Active'])->first();
         $post10 = DB::table('u_hisemails')->where(['CODE'=>$CODE])->get();
         $post11 = DB::table('u_patientprofiles')->where(['CODE'=>$CODE])->first();
-        // dd($post8);
+        $post12 = DB::table('u_hispatientshealthcare')->where(['patientCode'=>$CODE,'identifier'=>1])->first();
+        $post13 = DB::table('u_hispatientshealthcare')->where(['patientCode'=>$CODE,'identifier'=>2])->first();
+        $post14 = DB::table('u_hispatientshealthcare')->where(['patientCode'=>$CODE,'identifier'=>3])->first();
+        $post15 = DB::table('u_hispatientshealthcare')->where(['patientCode'=>$CODE,'identifier'=>4])->first();
+        // dd($post13);
+
+        // $getInfoHMO=$this->getHmoarray($post13);
+        // dd($post13);
         // return Response::json([
         //     'mpr'=>$post3,
         //     'contacts'=>$post2,
@@ -427,6 +423,10 @@ class UHispatients extends Component
             'checkVisits'=>$post9,
             'emails'=>$post10,
             'medInfo'=>$post11,
+            'firsthmo'=>$post12,
+            'secondhmo'=>$post13,
+            'thirdhmo'=>$post14,
+            'fourthhmo'=>$post15,
             // 'icd10codes'=>$post9,
         ]);
 
@@ -459,6 +459,9 @@ class UHispatients extends Component
         $updateSpousesName=strtoupper(join(' ',[$request->spouseLastName.',',$request->spouseFirstName,$request->spouseMiddleName,$request->spouseExtName ]));
         $updateSpousesAddress = strtoupper(join(' ',[$request->spouseHouseNo, ',',$request->spouseStreet,$request->spousesBrgy,$request->spousesMunicipality,$request->spousesProvince,$request->spousesCountry,$request->spousesPostal ]));
         
+        //GET EMERGENCY NAME +ADDRESS
+        $updateEmergencyName=strtoupper(join(' ',[$request->emergencyLastName.',',$request->emergencyFirstName,$request->emergencyFirstName,$request->emergencyExtName ]));
+        $updateEmergencyAddress =strtoupper(join(' ',[$request->emergencyStreet,$request->emergencyBrgy,$request->emergencyMunicipality,$request->emergencyProvince,$request->emergencyCountry,$request->emergencyPostal ])); 
         $get_code=$request->CODE;
        
         
@@ -476,6 +479,41 @@ class UHispatients extends Component
             ['emailType'=>strtoupper($request->emailType3),'emailNote'=>$request->noteEmail3,'emailAddress'=>$request->email3,'emailOwner'=>$updatefullName,  'CODE'=>$get_code],
             ['emailType'=>strtoupper($request->emailType4),'emailNote'=>$request->noteEmail4,'emailAddress'=>$request->email4,'emailOwner'=>$updatefullName,  'CODE'=>$get_code],
         ];
+
+        $hmoArray=[
+            ['hmoAccountID'=>$request->memberID,'otherHmoName'=>$request->otherHmo1, 'hmoName'=>$request->providerName,'clientType'=>$request->relationMem,'memberType'=>$request->insMemType, 'memberFname'=>$request->memberFname,'memberLname'=>$request->memberLname,
+            'memberMname'=>$request->memberMname,'memberEname'=>$request->memberEname,'memberSex'=>$request->memberSex,'memberBDay'=>$request->memberBDay,'identifier'=>$request->identifierforHMO1,'patientCode'=>$get_code,'patientName'=>$updatefullName],
+
+            ['hmoAccountID'=>$request->DPmemberID,'otherHmoName'=>$request->otherHmo2,  'hmoName'=>$request->dependentProvider,'clientType'=>$request->DPrelationMem,'memberType'=>$request->DPinsMemType, 'memberFname'=>$request->DPmemberFname,'memberLname'=>$request->DPmemberLname,
+            'memberMname'=>$request->DPmemberMname,'memberEname'=>$request->DPmemberEname,'memberSex'=>$request->DPmemberSex,'memberBDay'=>$request->DPmemberBDay,'identifier'=>$request->identifierforHMO3,'patientCode'=>$get_code,'patientName'=>$updatefullName],
+
+            
+             ['hmoAccountID'=>$request->memberID2nd,'otherHmoName'=>$request->otherHmo3,  'hmoName'=>$request->providerName2nd,'clientType'=>$request->relationMem2nd,'memberType'=>$request->insMemType2nd, 'memberFname'=>$request->memberFname2nd,'memberLname'=>$request->memberLname2nd,
+            'memberMname'=>$request->memberMname2nd,'memberEname'=>$request->memberEname2nd,'memberSex'=>$request->memberSex2nd,'memberBDay'=>$request->memberBDay2nd,'identifier'=>$request->identifierforHMO2,'patientCode'=>$get_code,'patientName'=>$updatefullName],
+
+            ['hmoAccountID'=>$request->DPmemberID1,'otherHmoName'=>$request->otherHmo4,  'hmoName'=>$request->dependentProvider1,'clientType'=>$request->DPrelationMem1,'memberType'=>$request->DPinsMemType1, 'memberFname'=>$request->DPmemberFname1,'memberLname'=>$request->DPmemberLname1,
+            'memberMname'=>$request->DPmemberMname1,'memberEname'=>$request->DPmemberEname1,'memberSex'=>$request->DPmemberSex1,'memberBDay'=>$request->DPmemberBDay1,'identifier'=>$request->identifierforHMO4,'patientCode'=>$get_code,'patientName'=>$updatefullName],
+        ];
+        // dd($hmoArray);
+        $hmoCounter=0;
+        for($hh=0;$hh<count($hmoArray);$hh++){
+            if($hmoArray[$hh]['hmoAccountID'] !=null){
+                $hmoCounter++;
+            }
+        }
+
+        for($gg=0;$gg<$hmoCounter;$gg++){
+            $insertHmoArray[]=[
+                $hmoArray[$gg]
+            ];
+        }
+
+    //    dd($insertHmoArray);
+        // dd($checkIfHMOExist);
+        // foreach($hmoArray as $hmos){
+
+        // }
+        // dd($hmoCounter);
 
         $contactCounterUpdate=0;
         for($ll=0;$ll<count($contactArrayUpdate);$ll++){
@@ -637,6 +675,27 @@ class UHispatients extends Component
              'LASTUPDATEDBY'=>Auth::user()->userName
         ];
 
+
+        $patientEmergencyInfo=[
+            // SPOUSE
+            'U_CONTACTLASTNAME'=>strtoupper($request->emergencyLastName),
+            'U_CONTACTNAME'=>$updateEmergencyName,
+            'U_CONTACTFIRSTNAME'=>strtoupper($request->emergencyFirstName),
+            'U_CONTACTMIDDLENAME'=>strtoupper($request->emergencyMiddleName),
+            'U_CONTACTEXTNAME'=>strtoupper($request->emergencyExtName),
+            'U_CONTACTTELNO'=>strtoupper($request->emergencyContactNo),
+            'U_CONTACTADDRESS'=>strtoupper($updateEmergencyAddress),
+            'U_CONTACTSTREET'=>strtoupper($request->emergencyStreet),
+            'U_CONTACTBARANGAY'=>strtoupper($request->emergencyBrgy),
+            'U_CONTACTCITY'=>strtoupper($request->emergencyMunicipality),
+            'U_CONTACTPROVINCE'=>strtoupper($request->emergencyProvince),
+            'U_CONTACTCOUNTRY'=>strtoupper($request->emergencyCountry),
+            // 'U_CONTACTHOUSENO'=>strtoupper($request->emergencyHouseNo),
+            'U_CONTACTZIP'=>strtoupper($request->emergencyPostal),
+            'U_CONTACTTELNO'=>strtoupper($request->emergencyContactNo),
+            'U_CONTACTRELATIONSHIP'=>strtoupper($request->relationToPatient),
+            'LASTUPDATEDBY'=>Auth::user()->userName
+       ];
         $updateTrail=[
                     'COMPANY'=>Auth::user()->COMPANY,
                     // DATES
@@ -663,6 +722,7 @@ class UHispatients extends Component
             $patientFatherInfo+
             $patientMotherInfo+
             $patientSpouseInfo+
+            $patientEmergencyInfo+
             $updateTrail
     
         );
@@ -709,6 +769,35 @@ class UHispatients extends Component
                 }
                 
             }
+            
+            for($ff=0;$ff<$hmoCounter;$ff++){
+
+                DB::table('u_hispatientshealthcare')->updateorInsert(
+                    [
+                        'identifier'=>$hmoArray[$ff]['identifier'],
+                        'patientCode'=>$request->hiddenCode
+                    ],
+                    $insertHmoArray[$ff][0]
+                    );
+                // $checkIfHMOExist=DB::table('u_hispatientshealthcare')->where([
+                //     'identifier'=>$hmoArray[$ff]['identifier'],
+                //     'patientCode'=>$request->hiddenCode
+                // ])->get();
+                //     // dd($checkIfHMOExist);
+                // if($checkIfHMOExist){
+                //     DB::table('u_hispatientshealthcare')->where([
+                //         'identifier'=>$hmoArray[$ff]['identifier'],
+                //         'patientCode'=>$request->hiddenCode 
+                //     ])->update(
+                //         $insertHmoArray[$ff][0]
+                //     );
+                // }else{
+                //     dd($insertHmoArray[$ff][0]);
+                //     DB::table('u_hispatientshealthcare')->insert(
+                //         $insertHmoArray[$ff][0]
+                //     );
+                // }
+            }
 
             for($jj=0; $jj<$contactCounterUpdate;$jj++){
                 $checkifContactExists=DB::table('u_hiscontacts')->where([
@@ -731,11 +820,12 @@ class UHispatients extends Component
             if($user){
                 
                 
-                $auditUpdatePatient = DB::table('u_hispatients_audit_trail')->where('CODE','=',$request->hiddenCode)->insert([
+                DB::table('u_hispatients_audit_trail')->where('CODE','=',$request->hiddenCode)->insert([
                     $patientPersonalInfo+
                     $patientFatherInfo+
                     $patientMotherInfo+
                     $patientSpouseInfo+
+                    $patientEmergencyInfo+
                     $updateTrail
                 ]);
 
@@ -810,83 +900,14 @@ class UHispatients extends Component
                     'EDITEDBY'=>Auth::user()->userName,
                     'note'=>"Update"]);
             }
-            // dd($mrnUpdate);
-            // $insertHospitalID = DB::table('u_hospitalids')->insert([
-            //             'CODE'=>$request->hiddenCode,
-            //             'NAME'=>$updatefullName,
-            //             'U_FIRSTNAME'=>strtoupper($request->U_FIRSTNAME),
-            //             'U_LASTNAME'=>strtoupper($request->U_LASTNAME),
-            //             'U_MIDDLENAME'=>strtoupper($request->U_MIDDLENAME),
-            //             'U_EXTNAME' =>strtoupper($request->extensionName),
-            //             'HOSPITALCODE'=>$hospitalCode,
-            //             'HOSPITALID'=>$newHospitalID,
-            //             'NHFR'=>$newNHFR,
-            //             'idSeries'=>$newIDSeries,
-            //             'EDITEDBY'=>Auth::user()->userName,
-            //             'note'=>"Update"
-            //     ]);   
+
         }
-        // else{
-        //     $hospitalCode=$hospitalNHFRUpdate->hospitalCode;
-        //     $newHospitalID=$checkHospitalID->HOSPITALID;
-        //     $newNHFR=$checkHospitalID->NHFR;
-        //     $newIDSeries=$checkHospitalID->idSeries;
-        // // dd($newIDupdate);
 
-           
-        // }
        
-    //     $insertHospitalID = DB::table('u_hospitalids')->insert([
-    //         'CODE'=>$request->hiddenCode,
-    //         'NAME'=>$updatefullName,
-    //         'U_FIRSTNAME'=>strtoupper($request->U_FIRSTNAME),
-    //         'U_LASTNAME'=>strtoupper($request->U_LASTNAME),
-    //         'U_MIDDLENAME'=>strtoupper($request->U_MIDDLENAME),
-    //         'U_EXTNAME' =>strtoupper($request->extensionName),
-    //         'HOSPITALCODE'=>$hospitalCode,
-    //         'HOSPITALID'=>$newHospitalID,
-    //         'NHFR'=>$newNHFR,
-    //         'idSeries'=>$newIDSeries,
-    //         'EDITEDBY'=>Auth::user()->userName,
-    //         'note'=>"Update"
-    // ]);
 
 
 
-            // ADD CONTACT INFORMATION
-        // for($p=1; $p<=$getContactCountUpdate; $p++){
-        //     $checkDBContact[$p-1]=DB::table('u_hiscontacts')->where('CODE',$request->hiddenCode)
-        //             ->where('contactID',$getUpdateContactID[$p-1])->first();
-        //             // dd($p);
 
-        //     // dd(is_null($checkDBContact[$p-1]));
-
-        //     if(is_null($checkDBContact[$p-1])){
-        //         $insertPatientContact=DB::table('u_hiscontacts')
-        //                         ->insert(
-        //                                 // dd($getPatientContactUpdate)
-        //                                 [$getPatientContactInsert[$p-1]]
-        //                                 );
-        //                 if($insertPatientContact){
-        //                     // dd("asd");
-        //                         $updateCountingContacts=DB::table('u_hispatients')
-        //                             ->where(['CODE'=>$request->hiddenCode])
-        //                             ->update(['countContacts'=>$p]);    
-        //                     }
-        //     }else{
-        //                 // dd("asd");
-        //         $updatePatientContact=DB::table('u_hiscontacts')
-        //             ->where('contactID',$getUpdateContactID[$p-1])
-        //             ->update(
-        //                 // dd($getPatientContactUpdate)
-        //                 [
-        //                     'contactNumber'=>$getContactNumber[$p-1],
-        //                 ]
-        //             );
-        //         }
-        //     }
-
-        // END CONTACT INFORMATION
 
 
 
@@ -916,12 +937,12 @@ class UHispatients extends Component
                 ];
             }
             // dd($getHMOName);
-            if($getHMOName[0]['hmoName']!=null){
-                $insertHMO=DB::table('u_hispatientshealthcare')->updateOrInsert(
-                    ['hmoName'=>$request->providerName,'patientCode'=>$request->hiddenCode,'hmoAccountID'=>$request->memberID],
+            // if($getHMOName[0]['hmoName']!=null){
+            //     $insertHMO=DB::table('u_hispatientshealthcare')->updateOrInsert(
+            //         ['hmoName'=>$request->providerName,'patientCode'=>$request->hiddenCode,'hmoAccountID'=>$request->memberID],
 
-                $getHMOName[0]);
-            }
+            //     $getHMOName[0]);
+            // }
             // dd($getHMOName);
 
             // if($getHMOName[0]['patientName']==)
@@ -988,7 +1009,7 @@ class UHispatients extends Component
         // return var_dump($request->all());
         $select1 = DB::table('provinces');
         $select1= $select1->select('zip_Code');
-        $select1 = $select1->where(['barangay'=> $request->brgy]);
+        $select1 = $select1->where(['barangay'=> $request->brgy, 'municipality'=>$request->city]);
         $select1 = $select1->groupBy('zip_Code')->get();
         return $select1;
     }
@@ -1042,7 +1063,7 @@ class UHispatients extends Component
         $get_Country=$get_Country->groupBy('country')->get();
         $get_genderList=DB::table('u_hissexes')->select('sex','sexCode')->get();
         $countries = DB::table('countries')->select('country')->orderBy('used','desc')->get();
-        $religions=DB::table('u_religions')->select('ReligionName')->get();
+        $religions=DB::table('u_religions')->select('ReligionName')->orderBy('used','desc')->get();
         $marital=DB::table('u_maritalstatus')->select('MaritalStatus')->get();
         $visitType=DB::table('u_visittypes')->select('type')->get();
         $icd10get=DB::table('u_hisicd10s')->get();

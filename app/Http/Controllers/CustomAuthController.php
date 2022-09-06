@@ -31,10 +31,19 @@ class CustomAuthController extends Controller
         return redirect("login")->withSuccess('Login details are not valid');
     }
 
-    public function registration()
+    public function registration(Request $request)
     {
-        $hospitals=DB::table('u_hishospitals')->get();
-        return view('auth.registration', ['hospitals'=>$hospitals]);
+        if (Auth::check()) {
+            if ((Auth::user()->email_verified_at != NULL)) {
+                return redirect("home");
+            } else {
+                $request->session()->flush();
+                return redirect("/register");
+            }
+        } else {
+            $hospitals=DB::table('u_hishospitals')->get();
+            return view('auth.registration', ['hospitals'=>$hospitals]);
+        }
     }
 
     public function validateuseremail(Request $request)

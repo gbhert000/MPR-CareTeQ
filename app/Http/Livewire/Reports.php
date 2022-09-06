@@ -233,7 +233,23 @@ class Reports extends Component
         $hospitals=DB::table('u_hishospitals')->get();
         $religions=DB::table('u_religions')->select('ReligionName')->get();
         $marital=DB::table('u_maritalstatus')->select('MaritalStatus')->get();
+        $getallpatients1 = DB::table('u_hispatients')->get();
+// SELECTED COMPANY NAME
+$getallpatients2 = DB::table('u_hispatients')->Where('COMPANY','like','%'.$byHospitals.'%')->get();
 
+// SELECTED START DATE AND END DATE
+$getallpatients3 = DB::table('u_hispatients')->where('DATECREATED','>=', $startDate)
+->where('DATECREATED','<=', $endDate)->get();
+
+// SELECTED START DATE AND END DATE AND NAME
+$getallpatients4 = DB::table('u_hispatients')->where('DATECREATED','>=', $startDate)
+->where('DATECREATED','<=', $endDate)->Where('NAME', 'like','%'.$search.'%')->get();
+// $patientArray=$countries;
+// SELECTED NAME
+$getallpatients5 = DB::table('u_hispatients')->Where('NAME', 'like','%'.$search.'%')->get();
+
+// SELECTED NAME AND HOSPITAL
+$getallpatients6 = DB::table('u_hispatients')->Where('NAME', 'like','%'.$search.'%') ->Where('COMPANY','like','%'.$byHospitals.'%')->get();
         
         // $patientArray=$countries;
         $this->patientsArray=$patients1;
@@ -241,7 +257,7 @@ class Reports extends Component
         //    var_dump($search);
         if(($this->startDate=="")&&($this->endDate=="")){
             return view('livewire.reports',[ 'patients'=>u_hispatient::Where('NAME', 'like','%'.$search.'%')
-                         ->orWhere('COMPANY','like','%'.$byHospitals.'%')
+                         ->Where('COMPANY','like','%'.$byHospitals.'%')
                             ->WhereRaw("CONCAT(U_FIRSTNAME, ' ', U_LASTNAME) LIKE?", '%'.$search.'%')
                             ->WhereRaw("CONCAT(U_FIRSTNAME, ' ',U_MIDDLENAME,' ', U_LASTNAME) LIKE?", '%'.$search.'%')
                            
@@ -263,6 +279,12 @@ class Reports extends Component
                     'contTypes'=>$contTypes,
                     'emailTypes'=>$emailTypes,
                     'getComps'=>$getComps,
+                    'getallpatients' => $getallpatients1,
+                    'getallpatients2'=> $getallpatients2,
+                    'getallpatients3'=> $getallpatients3,
+                    'getallpatients4'=> $getallpatients4,
+                    'getallpatients5'=> $getallpatients5,
+                    'getallpatients6'=> $getallpatients6,
                     ]);
         }
         else if(($this->byHospitals!="")){
@@ -291,6 +313,13 @@ class Reports extends Component
                     'contTypes'=>$contTypes,
                     'emailTypes'=>$emailTypes,
                     'getComps'=>$getComps,
+                    'getallpatients' => $getallpatients1,
+                    'getallpatients2'=> $getallpatients2,
+                    'getallpatients3'=> $getallpatients3,
+                    'getallpatients4'=> $getallpatients4,
+                    'getallpatients5'=> $getallpatients5,
+                    'getallpatients6'=> $getallpatients6,
+
                     
                     ]);
         }
@@ -322,6 +351,13 @@ class Reports extends Component
                     'contTypes'=>$contTypes,
                     'emailTypes'=>$emailTypes,
                     'getComps'=>$getComps,
+                    'getallpatients' => $getallpatients1,
+                    'getallpatients2'=> $getallpatients2,
+                    'getallpatients3'=> $getallpatients3,
+                    'getallpatients4'=> $getallpatients4,
+                    'getallpatients5'=> $getallpatients5,
+                    'getallpatients6'=> $getallpatients6,
+
                     ]);
         }
 

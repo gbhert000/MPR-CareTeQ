@@ -69,7 +69,7 @@
         </thead>
         <tbody>
             @foreach($patients as $item)
-            <tr wire:key="{{ $item->CODE }}" id="patientUpdate"  onclick="viewRecord('{{ $item->CODE }}','img/profile.png')">
+            <tr wire:key="{{ $item->CODE }}" id="patientUpdate"  ondblclick="viewRecord('{{ $item->CODE }}','img/profile.png')">
                 <td >{{ $item->CODE }}</td>
                 <td>{{ $item->U_LASTNAME }}</td>
                 <td>{{ $item->U_FIRSTNAME }}</td>

@@ -1,5 +1,13 @@
 {{-- NEED ILIPAT --}}
 <style>
+  i#Printthetable2, i#expexcel,i#qwerty, i#viewrecords{
+  font-size: 260%;
+  color: #387AC1;
+  cursor: pointer;
+}
+th#registeredin1 {
+  width: 10%;
+}
   /* body {
       counter-reset: page;
   } */
@@ -58,6 +66,28 @@ th#addressth {
 }
 }
 @media print {
+  #printby{
+      font-size: 10px;
+  }
+  #pageFooter1{
+      font-size: 10px;
+  }
+  .table > :not(caption) > * > * {
+  padding: 3px !important;
+}
+  #pageCounter{
+      counter-increment: page;
+  }
+  th#registeredin1 {
+  width: 40%;
+}
+th#fullnamein1 {
+  width: 42%;
+}
+
+th#addressth {
+  width: 30%;
+}
   #tablelist{
       font-size: 1px !important;
   }
@@ -70,7 +100,6 @@ margin: 11mm 17mm 17mm 17mm;
       counter-increment: page !important;
 } */
 #pageFooter1:after {
-  counter-increment: page;
 
       content: "Page " counter(page) " of " counter(page) !important;
 
@@ -99,7 +128,7 @@ margin: 11mm 17mm 17mm 17mm;
 }
 
 #pageFooter1{
-  visibility: hidden;
+  visibility: visible;
   position: fixed;
   bottom: 0px;
   right: 0;
@@ -110,19 +139,19 @@ margin: 11mm 17mm 17mm 17mm;
   /* .print+.print {
   page-break-before: always;
 } */
-  html, body {
+  /* html, body {
     height:100vh;
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden;
-  }
+  } */
 
   #tablelist{
   background-color:rgb(177, 241, 241) !important;
    -webkit-print-color-adjust: exact;
 }
 body * {
-  visibility:hidden;
+  visibility:visible;
 
 }
 #printSection, #printSection * {
@@ -149,7 +178,7 @@ th{
     font-size: 10px;
 }
 #noin1,#masterpatientin1,#fullnamein1,#agein1,#addressth,#registeredin1,#visitsin1{
-  font-size: 8px !important;
+  font-size: 7px !important;
 }
 /* @media print {
   .pagebreak {
@@ -168,14 +197,12 @@ th{
 <div class="modal-content">
   <div class="modal-header">
     <h5 class="modal-title" id="exampleModalLongTitle">MASTER PATIENT LIST</h5>
-    <button type="button" class="btn btn-success float-right" id="Printthetable">PRINT</button>
     <button class="btn btn-primary" onclick="print5()" id="exportpdf">EXPORT TO PDF</button>
     <button type="button" class="btn-close" onclick="resetInput()" data-dismiss="modal" aria-label="Close">
 
     </button>
   </div>
   <div class="modal-body" id="printme">
-
       <div class="html-content">
           <div id="pageCounter">
           <table class="table table-bordered border border-dark printsection" id="html-contents">
@@ -202,7 +229,7 @@ th{
                    <th id="noofpatients1"></th>
                  </tr>
                    <tr>
-                      @if ($startDate=="")
+                      @if ($startDate=="" )
                       @foreach ($oldest as $old)
                       <th colspan="2" >Period: from <span >{{ \Carbon\Carbon::parse($old)->format('F j, Y')}}</span> to <span >{{ \Carbon\Carbon::parse($endDate)->format('F j, Y')}}</span></th>
                       @endforeach
@@ -214,15 +241,11 @@ th{
                       <th colspan="2">Total Patient/s:</th>
                       <th >{{$pow}}</th>
                      </tr>
-                 {{-- <tr>
-                  <th colspan="4" >Period: from FEBRUARY 20 2022 TO APRIL 30 2022</th>
-                  <th colspan="3">TOTAL toRegistered Patient/s:</th>
-                  <th >100</th>
-                 </tr> --}}
+
 
 
               </thead>
-              <tbody>
+              <tbody id="tbodyz">
                   <tr style="background-color:rgb(177, 241, 241);" id="tablelist">
                       <th scope="col" class="col" style="text-align: center" id="noin1">NO.</th>
                       <th scope="col"  class="col"style="text-align: center" id="masterpatientin1">Master Patient Index</th>
@@ -233,7 +256,140 @@ th{
                       <th scope="col" class="col" style="text-align: center" id="visitsin1">Visits</th>
 
                     </tr>
-                  @php $i=1 @endphp
+                    {{-- SABI NI MANUEL PARA SA LAHAT --}}
+                    @if ($startDate=="" && $endDate=="" && $byHospitals==""&& $search=="")
+
+                    @php
+                           $i=1;
+                          //  echo('nofilters');
+                            @endphp
+                  @foreach($getallpatients as $item)
+                <tr  wire:key="{{$item->id}}">
+                  <th scope="row" style="text-align: center;">{{$i}}</th>
+                  <td style="text-align: center;">{{$item->CODE}}</td>
+                  <td >{{$item->NAME}}</td>
+                  <td style="text-align: center;">{{$item->U_AGE}}</td>
+                  <td style="text-align: center;">{{$item->U_CITY}}</td>
+                  <td style="text-align: center;">{{ date('m-d-Y', strtotime($item->DATECREATED)) }}</td>
+                  <td style="text-align: center;">{{ $item->U_VISITCOUNT }}</td>
+
+                </tr>
+                @php
+                    $i++
+                @endphp
+                @endforeach
+
+
+                   @elseif ($startDate=="" && $endDate=="" && $byHospitals!=""&& $search=="")
+                   @php
+                   $i=1;
+                  //  echo('filterbyhospital');
+                    @endphp
+          @foreach($getallpatients2 as $item)
+        <tr  wire:key="{{$item->id}}">
+          <th scope="row" style="text-align: center;">{{$i}}</th>
+          <td style="text-align: center;">{{$item->CODE}}</td>
+          <td >{{$item->NAME}}</td>
+          <td style="text-align: center;">{{$item->U_AGE}}</td>
+          <td style="text-align: center;">{{$item->U_CITY}}</td>
+          <td style="text-align: center;">{{ date('m-d-Y', strtotime($item->DATECREATED)) }}</td>
+          <td style="text-align: center;">{{ $item->U_VISITCOUNT }}</td>
+
+        </tr>
+        @php
+            $i++
+        @endphp
+        @endforeach
+        @elseif ($startDate!="" && $endDate!="" && $search=="")
+                          @php
+                          $i=1;
+                          // echo('filter by date and null search');
+                           @endphp
+                  @foreach($getallpatients3 as $item)
+                  <tr  wire:key="{{$item->id}}">
+                  <th scope="row" style="text-align: center;">{{$i}}</th>
+                  <td style="text-align: center;">{{$item->CODE}}</td>
+                  <td >{{$item->NAME}}</td>
+                  <td style="text-align: center;">{{$item->U_AGE}}</td>
+                  <td style="text-align: center;">{{$item->U_CITY}}</td>
+                  <td style="text-align: center;">{{ date('m-d-Y', strtotime($item->DATECREATED)) }}</td>
+                  <td style="text-align: center;">{{ $item->U_VISITCOUNT }}</td>
+
+                  </tr>
+                  @php
+                  $i++
+                  @endphp
+                  @endforeach
+{{-- filter by dates and search --}}
+                  @elseif ($startDate!="" && $endDate!="" && $search!="")
+                          @php
+                          $i=1;
+                          // echo('filter by dates and search');
+                          @endphp
+                  @foreach($getallpatients4 as $item)
+                  <tr  wire:key="{{$item->id}}">
+                  <th scope="row" style="text-align: center;">{{$i}}</th>
+                  <td style="text-align: center;">{{$item->CODE}}</td>
+                  <td >{{$item->NAME}}</td>
+                  <td style="text-align: center;">{{$item->U_AGE}}</td>
+                  <td style="text-align: center;">{{$item->U_CITY}}</td>
+                  <td style="text-align: center;">{{ date('m-d-Y', strtotime($item->DATECREATED)) }}</td>
+                  <td style="text-align: center;">{{ $item->U_VISITCOUNT }}</td>
+
+                  </tr>
+                  @php
+                  $i++
+                  @endphp
+                  @endforeach
+{{-- FILTER BY SEARCH --}}
+                  @elseif ( $search!="" && $byHospitals=="" && $startDate=="" && $endDate=="")
+                          @php
+                          $i=1;
+                          // echo('filter by search');
+                           @endphp
+                  @foreach($getallpatients5 as $item)
+                  <tr  wire:key="{{$item->id}}">
+                  <th scope="row" style="text-align: center;">{{$i}}</th>
+                  <td style="text-align: center;">{{$item->CODE}}</td>
+                  <td >{{$item->NAME}}</td>
+                  <td style="text-align: center;">{{$item->U_AGE}}</td>
+                  <td style="text-align: center;">{{$item->U_CITY}}</td>
+                  <td style="text-align: center;">{{ date('m-d-Y', strtotime($item->DATECREATED)) }}</td>
+                  <td style="text-align: center;">{{ $item->U_VISITCOUNT }}</td>
+
+                  </tr>
+                  @php
+                  $i++
+                  @endphp
+                  @endforeach
+
+                  @elseif ( $search!="" && $byHospitals!="")
+                          @php
+                          $i=1;
+                          // echo('filter by search and hospital');
+                           @endphp
+                  @foreach($getallpatients6 as $item)
+                  <tr  wire:key="{{$item->id}}">
+                  <th scope="row" style="text-align: center;">{{$i}}</th>
+                  <td style="text-align: center;">{{$item->CODE}}</td>
+                  <td >{{$item->NAME}}</td>
+                  <td style="text-align: center;">{{$item->U_AGE}}</td>
+                  <td style="text-align: center;">{{$item->U_CITY}}</td>
+                  <td style="text-align: center;">{{ date('m-d-Y', strtotime($item->DATECREATED)) }}</td>
+                  <td style="text-align: center;">{{ $item->U_VISITCOUNT }}</td>
+
+                  </tr>
+                  @php
+                  $i++
+                  @endphp
+                  @endforeach
+
+
+                   @else
+                        @php
+                           $i=1;
+                          //  echo('hello');
+                           @endphp
                   @foreach($patients as $item)
                 <tr  wire:key="{{$item->id}}">
                   <th scope="row" style="text-align: center;">{{$i}}</th>
@@ -249,6 +405,9 @@ th{
                     $i++
                 @endphp
                 @endforeach
+
+                    @endif
+
                 <input type="hidden" id="red2" value="{{$i-1}}">
               </tbody>
                  </div>
@@ -256,7 +415,7 @@ th{
                   <tr id="tr1" >
                       <td  id="td1" >
                             <br><br><div id="date" class="footer">
-                          <p class="page">Printed By: {{Auth::user()->name}} &nbsp; Date Printed: {{ date('m/d/Y') }} </p>
+                          <p class="page" id="printby">Printed By: {{Auth::user()->name}} &nbsp; Date Printed: {{ date('m/d/Y') }} </p>
                                </div>
                         <p id="pageFooter1" ></p></td>
                   </tr>

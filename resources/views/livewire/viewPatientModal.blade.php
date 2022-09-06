@@ -98,7 +98,7 @@
                                         </div>
                         
                                         <div class="w-100"></div>
-                                        <div class="col pr-1-cust">
+                                        <div class="col-sm-2 pr-1-cust">
                                             <label>Birthdate<i id="requiredFields">*</i></label>
                                             <input type="text" class="form-control" name="U_BIRTHDATE"id="bday1"  placeholder="mm/dd/yyyy" readonly>
                                             {{-- @error('birthDate') <span class="text-danger">{{ $message }}</span> @enderror --}}
@@ -108,7 +108,7 @@
                                             <input type="text" class="form-control" id="age" name="age" readonly>
                                             @error('age') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
-                                        <div class="pr-1-cust col">
+                                        <div class="pr-1-cust col-sm-2">
                                             <label>Sex<i id="requiredFields">*</i></label>
                                             <select name="updatesex" id="updatesex" class="form-control">
                                                 {{-- <option value="" selected></option> --}}
@@ -121,7 +121,7 @@
                                             </select>
                                             {{-- @error('sex') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                         </div>
-                                        <div class="pr-1-cust col">
+                                        <div class="pr-1-cust col-sm-2">
                                             <label>Civil Status<i id="requiredFields">*</i></label>
                                             <select class="form-control"  name="U_CIVILSTATUS" id="U_CIVILSTATUS">
                                                 <option value="" selected></option>
@@ -146,12 +146,13 @@
                                             <input type="text" class="form-control" name="idNumber" id="idNumberUpdate" placeholder="">
                                         </div>
                                         <div class="w-100"></div>
+                                        
                                         <div class="pr-1-cust col">
                                             <label>Place of Birth</label>
                                             <input type="text" class="form-control" name="U_BIRTHPLACE" id="U_BIRTHPLACE">
                                             {{-- @error('age') <span class="text-danger">{{ $message }}</span> @enderror --}}
                                         </div>
-                                        
+                                        {{-- <div class="w-100"></div> --}}
                                         <div class="pr-1-cust col">
                                             <label>Nationality</label>
                                             <select class="form-control"  name="U_NATIONALITY" id="U_NATIONALITY">
@@ -161,6 +162,10 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        {{-- <div class="w-100"></div> --}}
+                                        
+                                        {{-- <div class="w-100"></div> --}}
+                                        
                                         {{-- <div class="w-100"></div> --}}
                                         <div class="pr-1-cust col">
                                             <label>Religion</label>
@@ -264,7 +269,7 @@
                                         
                                             <div class="col">
                                                 <label>Contact Number<i id="requiredFields">*</i></label>
-                                                <input type="text"class="form-control" name="contact1" id="contact1" maxlength="13" autocomplete="off">
+                                                <input type="text"class="form-control" name="contact1" id="contact1" maxlength="13" autocomplete="off" >
                                             </div>
                                             <div class="col">
                                                 <label for="noteContact1">Note:</label>
@@ -455,6 +460,10 @@
                                     <label for="sameFatherAddress">Same As Patient Address</label>
                                     <input type="checkbox" name="sameFatherAddress" id="sameFatherAddress">
                                 </div>
+                                <div class="col">
+                                    <label for="setEmergency">Set As Emergency Contact</label>
+                                    <input type="checkbox" name="setEmergency" id="setEmergencyFather">
+                                </div>
                                 <div class="w-100"></div>
                                 <div class="col pr-1-cust" >
                                     <label>Last Name</label>
@@ -470,11 +479,11 @@
                                 </div>
                                 <div class="col-sm-1">
                                     <label>Ext</label>
-                                    <input type="text"class="form-control" name="fatherExtName" id="fatherMiddleName"  placeholder="Extension">
+                                    <input type="text"class="form-control" name="fatherExtName" id="fatherExtName"  placeholder="Extension">
                                 </div>
                                 <div class="col-sm-2">
                                     <label>Contact Number</label>
-                                    <input type="text"class="form-control" name="fatherContactNo" id="fatherContactNo"  placeholder="Contact No.">
+                                    <input type="text"class="form-control" name="fatherContactNo" id="fatherContactNo"  placeholder="Contact No." maxlength="13">
                                 </div>
                                 {{-- <div class="w-100"></div> --}}
                                 <div class="col">
@@ -540,6 +549,10 @@
                                     <label for="sameMotherAddress">Same As Patient Address</label>
                                     <input type="checkbox" name="sameMotherAddress" id="sameMotherAddress">
                                 </div>
+                                <div class="col">
+                                    <label for="setEmergency">Set As Emergency Contact</label>
+                                    <input type="checkbox" name="setEmergency" id="setEmergencyMother">
+                                </div>
                                 <div class="w-100"> </div>
                                 <div class="col pr-1-cust">
                                     <label>Last Name</label>
@@ -559,7 +572,7 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <label>Contact Number</label>
-                                    <input type="text"class="form-control" name="motherContactNo" id="motherContactNo" placeholder="Contact No.">
+                                    <input type="text"class="form-control" name="motherContactNo" id="motherContactNo" placeholder="Contact No." maxlength="13">
                                 </div>
                                 <div class="col">
                                     <label>Country</label>
@@ -601,7 +614,7 @@
                                                 </select>
                                 </div>
                                 <div class="col-sm-2">
-                                    <label>Street</label>
+                                    <label>Address</label>
                                     <input type="text"class="form-control" id="motherStreet" name="motherStreet"  placeholder="Street">
                                 </div>
                                 <div class="col-sm-2">
@@ -624,6 +637,10 @@
                                     <label for="sameSpouseAddress">Same As Patient Address</label>
                                     <input type="checkbox" name="sameSpouseAddress" id="sameSpouseAddress">
                                 </div>
+                                <div class="col">
+                                    <label for="setEmergency">Set As Emergency Contact</label>
+                                    <input type="checkbox" name="setEmergency" id="setEmergencySpouse">
+                                </div>
                                 <div class="w-100"> </div>
                                 <div class="col pr-1-cust">
                                     <label>Last Name</label>
@@ -643,18 +660,12 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <label>Contact Number</label>
-                                    <input type="text"class="form-control" name="spouseContactNo" placeholder="Contact No.">
+                                    <input type="text"class="form-control" name="spouseContactNo" id="spouseContactNo" placeholder="Contact No." maxlength="13">
                                 </div>
                                 {{-- <div class="w-100"></div> --}}
-                                <div class="col-sm-1">
-                                    <label>House No.</label>
-                                    <input type="text"class="form-control" id="spouseHouseNo" name="spouseHouseNo"  placeholder="House No">
-                                </div>
-                                <div class="col-sm-2">
-                                    <label>Street</label>
-                                    <input type="text"class="form-control" id="spouseStreet" name="spouseStreet"  placeholder="Street">
-                                </div>
-                                <div class="w-100"></div>
+                                
+                                
+                                
 
                                 <div class="col">
                                     <label>Country</label>
@@ -671,6 +682,7 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="w-100"></div>
                                 <div class="col">
                                     <label>Province</label>
                                     <select name="spousesProvince" id="regSpousesProvince" class="form-control" placeholder="Search" style="width: 100%;">
@@ -695,14 +707,108 @@
                                                 </select>
                                 </div>
                                 <div class="col-sm-2">
+                                    <label>Street</label>
+                                    <input type="text"class="form-control" id="spouseStreet" name="spouseStreet"  placeholder="Street">
+                                </div>
+                                <div class="col-sm-2">
                                     <label>Postal Code</label>
                                     <input type="text"class="form-control" name="spousesPostal" id="regSpousesPostal" readonly>
                                     {{-- <select disable name="postal" id="regPostal" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full empty" placeholder="Search" style="width: 100%; height: 100%;">
                                         <option value=""></option>
                                     </select> --}}
                                 </div>
-                                <div class="w-100"></div>      
                             </div>
+                               
+                                <br>
+                                <hr>
+                               {{-- EMERGENCY CONTACT --}}
+                               <div class="row">
+                                <div class="col">
+                                    <h5>Emergency Contact Information</h5>
+                                </div>
+                                <div class="col">
+                                    <label for="sameEmergencyAddress">Same As Patient Address</label>
+                                    <input type="checkbox" name="sameEmergencyAddress" id="sameEmergencyAddress">
+                                </div>
+                                <div class="col">
+                                    <label for="sameEmergency">Relationship</label>
+                                    <input type="text" id="relationToPatient" name="relationToPatient" class="form-control d-inline w-75" placeholder="Relationship with patient">
+                                </div>
+                                <div class="w-100"> </div>
+                                <div class="col pr-1-cust">
+                                    <label>Last Name</label>
+                                    <input type="text"class="form-control" name="emergencyLastName" id="emergencyLastName" placeholder="Last Name">
+                                </div>
+                                <div class="col pr-1-cust">
+                                    <label>First Name</label>
+                                    <input type="text"class="form-control" name="emergencyFirstName" id="emergencyFirstName" placeholder="First Name">
+                                </div>
+                                <div class="col pr-1-cust">
+                                    <label>Middle Name</label>
+                                    <input type="text"class="form-control" name="emergencyMiddleName" id="emergencyMiddleName" placeholder="Middle Name">
+                                </div>
+                                <div class="col-sm-1">
+                                    <label>Ext</label>
+                                    <input type="text"class="form-control" name="emergencyExtName" id="emergencyExtName" placeholder="Extension">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Contact Number</label>
+                                    <input type="text"class="form-control" name="emergencyContactNo" id="emergencyContactNo" placeholder="Contact No." maxlength="13">
+                                </div>
+                                <div class="col">
+                                    <label>Country</label>
+                                    <select name="emergencyCountry" id="regEmergencyCountry" class="form-control" placeholder="Search" style="width: 100%;">
+                                        <option value="" selected></option>
+                                        @foreach ($get_Country as $country)
+                                            {{-- @if($country->country!=null)
+                                                <option selected value=""></option>
+                                            @else --}}
+                                                <option value="{{$country->country}}">{{$country->country}}</option>
+                                            {{-- @endif --}}
+                                            
+                                        @endforeach
+                                    </select>
+                                </div>
+                                {{-- <div class="w-100"></div> --}}
+                                
+                                <div class="w-100"></div>
+
+                                
+                                <div class="col">
+                                    <label>Province</label>
+                                    <select name="emergencyProvince" id="regEmergencyProvince" class="form-control" placeholder="Search" style="width: 100%;">
+                                            <option selected value="" id="getEmergencyProvince"></option>
+                                        
+                                    </select>
+                                </div>
+                            
+                                <div class="col">
+                                    <label>Municipality</label>
+                                                <select name="emergencyMunicipality" id="regEmergencyMunicipality" class="form-control" placeholder="Search" style="width: 100%;">
+                                                    <option selected value="" id="getEmergencyCity"></option>
+                                                </select>
+                                </div>
+                                <div class="col">
+                                    <label>Barangay</label>
+                                                <select name="emergencyBrgy" id="regEmergencyBarangay" class="form-control" placeholder="Search" style="width: 100%;">
+                                                    <option selected value="" id="getEmergencyBrgy"></option>
+                                                </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Address</label>
+                                    <input type="text"class="form-control" id="emergencyStreet" name="emergencyStreet"  placeholder="Street">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Postal Code</label>
+                                    <input type="text"class="form-control" name="emergencyPostal" id="regEmergencyPostal" readonly>
+                                    {{-- <select disable name="postal" id="regPostal" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full empty" placeholder="Search" style="width: 100%; height: 100%;">
+                                        <option value=""></option>
+                                    </select> --}}
+                                </div>
+                                
+                                
+                            </div>
+                            
                         </fieldset>
                         <!-- END BACKGROUND INFORMATION -->
                         <!-- START HMO -->
@@ -712,10 +818,11 @@
                                 {{-- FIRST PROVIDER --}}
                                 <h5>Provider</h5>
                                 <div class="col">
+                                    <input type="text" id="identifierforHMO1" name="identifierforHMO1" value="1" class="hidden">
                                     <label for="providerName">Health Care Provider Name:</label>
                                     {{-- <div class="w-100"></div> --}}
                                     
-                                    <select name="providerName" id="providerName" class="form-control" >
+                                    <select name="providerName" id="providerName1" class="form-control" >
                                         <option value="">{{'Select HMO'}}</option>
                                         {{-- <option value=""selected></option> --}}
                                     @foreach ($insCode as $provider)
@@ -724,16 +831,16 @@
                                 </select>
                                 </div>
                                 <div class="col">
-                                    <label for="otherHmo"><i>If Others, Specify</i></label>
-                                    <input type="text" name="otherHmo" id="otherHmo" class="form-control" readonly>
+                                    <label for="otherHmo1"><i>If Others, Specify</i></label>
+                                    <input type="text" name="otherHmo1" id="otherHmo1" class="form-control" readonly>
                                 </div>
                                 <div class="col">
                                     <label for="memberID">ID/Account No.</label>
-                                    <input type="text" name="memberID" class="form-control" id="memberID">
+                                    <input type="text" name="memberID" class="form-control" id="memberID1">
                                 </div>
                                 <div class="col-sm">
                                     <label for="relationMem">Client Type</label>
-                                    <select name="relationMem" id="relationMem" class="form-control">
+                                    <select name="relationMem" id="relationMem1" class="form-control">
                                         <option value="">Select Relation</option>
                                         <option value="Member">Member</option>
                                         <option value="Dependent">Dependent</option>
@@ -741,7 +848,7 @@
                                 </div>
                                 <div class="col">
                                     <label for="insMemType">Member Type</label>
-                                    <select name="insMemType" id="insMemTypeID" class="form-control" >
+                                    <select name="insMemType" id="insMemTypeID1" class="form-control" >
                                         <option value="">{{'Select Member Type'}}</option>
                                     @foreach ($memType as $type)
                                         <option value="{{$type->NAME}}">{{$type->NAME}}</option> 
@@ -751,27 +858,26 @@
                                 <div class="w-100"></div>
                                 <div class="col">
                                     <label for="memberLname">Member Last Name</label>
-                                    <input type="text" name="memberLname" class="form-control" id="memberLname">
+                                    <input type="text" name="memberLname" class="form-control" id="memberLname1" readonly>
                                 </div>
                                 <div class="col">
-                                    <label for="memberfname">Member First Name</label>
-                                    <input type="text" name="memberFname" class="form-control" id="memberFname">
+                                    <label for="memberFname">Member First Name</label>
+                                    <input type="text" name="memberFname" class="form-control" id="memberFname1" readonly>
                                 </div>
                                 <div class="col">
                                     <label for="memberMname">Member Middle Name</label>
-                                    <input type="text" name="memberMname" class="form-control" id="memberMname">
+                                    <input type="text" name="memberMname" class="form-control" id="memberMname1" readonly>
                                 </div>
                                 <div class="col-sm-1">
                                     <label for="memberEname">Ext.</label>
-                                    <input type="text" name="memberEname" class="form-control" id="memberEname">
+                                    <input type="text" name="memberEname" class="form-control" id="memberEname1" readonly>
                                 </div>
                                 <div class="col">
                                     <label>Sex</label>
-                                    <select name="memberSex" id="memberSex" class="form-control" >
-                                        
+                                    <select name="memberSex" id="memberSex1" class="form-control" readonly>
                                         <option value=""></option>
                                         @foreach ($get_genderList as $sex)
-                                            <option value="{{$sex->sex}}">
+                                            <option value="{{$sex->sexCode}}">
                                                 {{$sex->sex}}
                                             </option>
                                         @endforeach
@@ -779,21 +885,21 @@
                                 </div>
                                 <div class="col">
                                     <label for="memberBDay">Birthdate</label>
-                                    <input type="text" name="memberBDay" class="form-control" id="memberBDay">
+                                    <input type="text" name="memberBDay" class="form-control" id="memberBDay1" readonly>
                                 </div>
                                 
                             </div>
                             <hr>
-                            <span><i id="addAnotherProvider">Add Another Provider</i></span>
-                            <div class="row hidden" id="anotherProvider">
-
-                                {{-- FIRST PROVIDER --}}
-                                <h5>Provider</h5>
+                            <div class="row hidden" id="dependentProvider" style="margin-top:25px;">
+                              
+                                {{-- DEPENDENT PROVIDER --}}
+                                <h5>Dependent Provider</h5>
                                 <div class="col">
-                                    <label for="providerName2nd">Health Care Provider Name:</label>
+                                    <input type="text" id="identifierforHMO3" name="identifierforHMO3" value="3" class="hidden">
+                                    <label for="dependentProvider">Health Care Provider Name:</label>
                                     {{-- <div class="w-100"></div> --}}
                                     
-                                    <select name="providerName2nd" id="providerName2nd" class="form-control" >
+                                    <select name="dependentProvider" id="providerName3" class="form-control" >
                                         <option value="">{{'Select HMO'}}</option>
                                     @foreach ($insCode as $provider)
                                         <option value="{{$provider->U_INSNAME}}">{{$provider->U_INSNAME}}</option> 
@@ -801,20 +907,24 @@
                                 </select>
                                 </div>
                                 <div class="col">
-                                    <label for="memberID2nd">ID/Account No.</label>
-                                    <input type="text" name="memberID2nd" class="form-control">
+                                    <label for="otherHmo3"><i>If Others, Specify</i></label>
+                                    <input type="text" name="otherHmo3" id="otherHmo3" class="form-control" readonly>
                                 </div>
                                 <div class="col">
-                                    <label for="relationMem2nd">Client Type</label>
-                                    <select name="relationMem2nd" id="relationMem2nd" class="form-control">
+                                    <label for="DPmemberID">ID/Account No.</label>
+                                    <input type="text" name="DPmemberID" class="form-control" id="memberID3">
+                                </div>
+                                <div class="col">
+                                    <label for="DPrelationMem">Client Type</label>
+                                    <select name="DPrelationMem" id="relationMem3" class="form-control">
                                         <option value="">Select Relation</option>
                                         <option value="Member">Member</option>
                                         <option value="Dependent">Dependent</option>
                                     </select>
                                 </div>
                                 <div class="col">
-                                    <label for="insMemType2nd">Member Type</label>
-                                    <select name="insMemType2nd" id="insMemTypeID2nd" class="form-control" >
+                                    <label for="DPinsMemType">Member Type</label>
+                                    <select name="DPinsMemType" id="insMemTypeID3" class="form-control" >
                                         <option value="">{{'Select Member Type'}}</option>
                                     @foreach ($memType as $type)
                                         <option value="{{$type->NAME}}">{{$type->NAME}}</option> 
@@ -823,24 +933,24 @@
                                 </div>
                                 <div class="w-100"></div>
                                 <div class="col">
-                                    <label for="memberLname2nd">Member Last Name</label>
-                                    <input type="text" name="memberLname2nd" class="form-control" id="memberLname2nd">
+                                    <label for="DPmemberLname">Member Last Name</label>
+                                    <input type="text" name="DPmemberLname" class="form-control" id="memberLname3">
                                 </div>
                                 <div class="col">
-                                    <label for="memberfname">Member First Name</label>
-                                    <input type="text" name="memberFname2nd" class="form-control" id="memberFname2nd">
+                                    <label for="DPmemberFname">Member First Name</label>
+                                    <input type="text" name="DPmemberFname" class="form-control" id="memberFname3">
                                 </div>
                                 <div class="col">
-                                    <label for="memberMname">Member Middle Name</label>
-                                    <input type="text" name="memberMname2nd" class="form-control" id="memberMname2nd">
+                                    <label for="DPmemberMname">Member Middle Name</label>
+                                    <input type="text" name="DPmemberMname" class="form-control" id="memberMname3">
                                 </div>
                                 <div class="col-sm-1">
-                                    <label for="memberEname">Ext.</label>
-                                    <input type="text" name="memberEname2nd" class="form-control" id="memberEname2nd">
+                                    <label for="DPmemberEname">Ext.</label>
+                                    <input type="text" name="DPmemberEname" class="form-control" id="memberEname3">
                                 </div>
                                 <div class="col">
                                     <label>Sex</label>
-                                    <select name="memberSex2nd" id="memberSex2nd" class="form-control" >
+                                    <select name="DPmemberSex" id="memberSex3" class="form-control" >
                                         <option value="" selected>
                                             {{-- @foreach ($getPatientSex as $getSex)
                                                 @switch($getSex)
@@ -863,46 +973,187 @@
                                     </select>
                                 </div>
                                 <div class="col">
-                                    <label for="memberBDay">Birthdate</label>
-                                    <input type="text" name="memberBDay2nd" class="form-control" id="memberBDay2nd">
+                                    <label for="DPmemberBDay">Birthdate</label>
+                                    <input type="text" name="DPmemberBDay" class="form-control" id="memberBDay3">
                                 </div>
                                 
                             </div>
                             
                             <hr>
+                            <span><i id="addAnotherProvider">Add Another Provider</i></span>
+                            <div class="row hidden" id="anotherProvider1">
 
-                            <div class="row">
+                                {{-- FIRST PROVIDER --}}
+                                <h5>Provider</h5>
                                 <div class="col">
-                                    <h5>Personal and Social History</h5>
+                                    <input type="text" id="identifierforHMO2" name="identifierforHMO2" value="2" class="hidden">
+                                    <label for="providerName2nd">Health Care Provider Name:</label>
+                                    {{-- <div class="w-100"></div> --}}
+                                    
+                                    <select name="providerName2nd" id="providerName2" class="form-control" >
+                                        <option value="">{{'Select HMO'}}</option>
+                                    @foreach ($insCode as $provider)
+                                        <option value="{{$provider->U_INSNAME}}">{{$provider->U_INSNAME}}</option> 
+                                    @endforeach
+                                </select>
+                                </div>
+
+                                <div class="col">
+                                    <label for="otherHmo"><i>If Others, Specify</i></label>
+                                    <input type="text" name="otherHmo" id="otherHmo1" class="form-control" readonly>
+                                </div>
+                                <div class="col">
+                                    <label for="memberID2nd">ID/Account No.</label>
+                                    <input type="text" name="memberID2nd" class="form-control" id="memberID2">
+                                </div>
+                                <div class="col">
+                                    <label for="relationMem2nd">Client Type</label>
+                                    <select name="relationMem2nd" id="relationMem2" class="form-control">
+                                        <option value="">Select Relation</option>
+                                        <option value="Member">Member</option>
+                                        <option value="Dependent">Dependent</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="insMemType2nd">Member Type</label>
+                                    <select name="insMemType2nd" id="insMemTypeID2" class="form-control" >
+                                        <option value="">{{'Select Member Type'}}</option>
+                                    @foreach ($memType as $type)
+                                        <option value="{{$type->NAME}}">{{$type->NAME}}</option> 
+                                    @endforeach
+                                    </select>
                                 </div>
                                 <div class="w-100"></div>
                                 <div class="col">
-                                    <label for="smoker">Smoker:</label>
-                                    <input type="checkbox" name="smoker">
+                                    <label for="memberLname2nd">Member Last Name</label>
+                                    <input type="text" name="memberLname2nd" class="form-control" id="memberLname2">
                                 </div>
                                 <div class="col">
-                                    <label for="alcoholic">Alcohol:</label>
-                                    <input type="checkbox" name="alcoholic">
+                                    <label for="memberfname">Member First Name</label>
+                                    <input type="text" name="memberFname2nd" class="form-control" id="memberFname2">
                                 </div>
                                 <div class="col">
-                                    <label for="drugs">Illicit Drugs:</label>
-                                    <input type="checkbox" name="drugs">
+                                    <label for="memberMname">Member Middle Name</label>
+                                    <input type="text" name="memberMname2nd" class="form-control" id="memberMname2">
+                                </div>
+                                <div class="col-sm-1">
+                                    <label for="memberEname">Ext.</label>
+                                    <input type="text" name="memberEname2nd" class="form-control" id="memberEname2">
                                 </div>
                                 <div class="col">
-                                    <label for="sexActive">Sexually Active:</label>
-                                    <input type="checkbox" name="sexActive">
+                                    <label>Sex</label>
+                                    <select name="memberSex2nd" id="memberSex2" class="form-control" >
+                                        <option value=""></option>
+                                        @foreach ($get_genderList as $sex)
+                                            <option value="{{$sex->sexCode}}">
+                                                {{$sex->sex}}
+                                                </option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                
+                                <div class="col">
+                                    <label for="memberBDay">Birthdate</label>
+                                    <input type="text" name="memberBDay2nd" class="form-control" id="memberBDay2">
+                                </div>
                                 
                             </div>
+                            <div class="row hidden" id="dependentProvider1" style="margin-top:25px;">
+                              
+                                {{-- DEPENDENT PROVIDER SECOND--}}
+                                <h5>Dependent Provider</h5>
+                                <div class="col">
+                                    <input type="text" id="identifierforHMO4" name="identifierforHMO4" value="4" class="hidden">
+                                    <label for="dependentProvider">Health Care Provider Name:</label>
+                                    {{-- <div class="w-100"></div> --}}
+                                    
+                                    <select name="dependentProvider1" id="providerName4" class="form-control" >
+                                        <option value="">{{'Select HMO'}}</option>
+                                    @foreach ($insCode as $provider)
+                                        <option value="{{$provider->U_INSNAME}}">{{$provider->U_INSNAME}}</option> 
+                                    @endforeach
+                                </select>
+                                </div>
+                                <div class="col">
+                                    <label for="DPmemberID1">ID/Account No.</label>
+                                    <input type="text" name="DPmemberID1" class="form-control" id="memberID4">
+                                </div>
+                                <div class="col">
+                                    <label for="DPrelationMem1">Client Type</label>
+                                    <select name="DPrelationMem1" id="relationMem4" class="form-control">
+                                        <option value="">Select Relation</option>
+                                        <option value="Member">Member</option>
+                                        <option value="Dependent">Dependent</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="DPinsMemType1">Member Type</label>
+                                    <select name="DPinsMemType1" id="insMemTypeID4" class="form-control" >
+                                        <option value="">{{'Select Member Type'}}</option>
+                                    @foreach ($memType as $type)
+                                        <option value="{{$type->NAME}}">{{$type->NAME}}</option> 
+                                    @endforeach
+                                    </select>
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col">
+                                    <label for="DPmemberLname1">Member Last Name</label>
+                                    <input type="text" name="DPmemberLname1" class="form-control" id="memberLname4">
+                                </div>
+                                <div class="col">
+                                    <label for="DPmemberfname">Member First Name</label>
+                                    <input type="text" name="DPmemberFname1" class="form-control" id="memberFname4">
+                                </div>
+                                <div class="col">
+                                    <label for="DPmemberMname">Member Middle Name</label>
+                                    <input type="text" name="DPmemberMname1" class="form-control" id="memberMname4">
+                                </div>
+                                <div class="col-sm-1">
+                                    <label for="DPmemberEname">Ext.</label>
+                                    <input type="text" name="DPmemberEname1" class="form-control" id="memberEname4">
+                                </div>
+                                <div class="col">
+                                    <label>Sex</label>
+                                    <select name="DPmemberSex1" id="memberSex4" class="form-control" >
+                                        <option value="" selected>
+                                            {{-- @foreach ($getPatientSex as $getSex)
+                                                @switch($getSex)
+                                                    @case("M")
+                                                        {{'Male'}}
+                                                        @break
+                                                    @case("F")
+                                                        {{'Female'}}
+                                                        @break
+                                                    @default
+                                                    {{'Non-Binary'}}
+                                            @endswitch
+                                            @endforeach --}}
+                                        </option>
+                                        @foreach ($get_genderList as $sex)
+                                            <option value="{{$sex->sex}}">
+                                                {{$sex->sex}}
+                                                </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="DPmemberBDay1">Birthdate</label>
+                                    <input type="text" name="DPmemberBDay" class="form-control" id="memberBDay4">
+                                </div>
+                                
+                            </div>
+                            
+                            <hr>
+                            
+                    
                         </fieldset>
                         <!-- END HMO -->
                         <!-- START MEDICAL INFORMATION -->
                         <fieldset id="tab041">
+                            
                             <div class="row">
                                 <div class="col">
                                     <label for="patientHeightcm">Height{{'(cm)'}}:</label>
-                                    <input type="number" name="patientHeightcm" id="centimeter" class="form-control" step=".01">
+                                    <input type="number" name="patientHeightcm" id="centimeter" class="form-control" step=".01" min="145" max="192.5">
                                 </div>
                                 <div class="col">
                                     <label for="patientHeightin">Height{{'(in)'}}:</label>
@@ -920,44 +1171,96 @@
                                     <label for="patientBMI">Body Mass Index{{'(BMI)'}}:</label>
                                     <input type="number" name="patientBMI" id="bmi" class="form-control" step=".01">
                                 </div>
-                                {{-- <div class="w-100"></div> --}}
                             </div>
                             <hr>
+                            <div class="w-100"></div>
+                          
                             <div class="row">
-                                <div class="col">
+                                <div class="col col-md">
+                                    <div class="row">
+                                        
+                                   
                                     <h5>Allergies</h5>
+                                            <div class="col-md-6">
+                                                <label for="allergy1">Allergic to:</label>
+                                                <input type="text" name="allergy1" id="allergy1" placeholder="Allergic to" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="allergy2">Allergic to:</label>
+                                                <input type="text" name="allergy2" id="allergy2" placeholder="Allergic to" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="allergy3">Allergic to:</label>
+                                                <input type="text" name="allergy3" id="allergy3" placeholder="Allergic to" class="form-control">
+                                            </div>
+                                         
+                                            <div class="col-md-6 hidden" id="allegyField4">
+                                                <label for="allergy4">Allergic to:</label>
+                                                <input type="text" name="allergy4" id="allergy4" placeholder="Allergic to" class="form-control w-30">
+                                            </div>
+
+                                            <div class="col-md-6 hidden" id="allegyField5">
+                                                <label for="allergy5">Allergic to:</label>
+                                                <input type="text" name="allergy4" id="allergy5" placeholder="Allergic to" class="form-control " >
+                                            </div>
+
+                                            <div class="col-md-6 hidden" id="allegyField6">
+                                                <label for="allergy6">Allergic to:</label>
+                                                <input type="text" name="allergy6" id="allergy6" placeholder="Allergic to" class="form-control " >
+                                            </div>
+
+                                            <div class="col-md-6 hidden" id="allegyField7">
+                                                <label for="allergy7">Allergic to:</label>
+                                                <input type="text" name="allergy7" id="allergy7" placeholder="Allergic to" class="form-control " >
+                                            </div>
+
+                                            <div class="w-100"></div>
+                                            <div class="col">
+                                                <span><i class="addAnotherAllergy" id="addAnotherAllergy" >Add Another Field</i> </span>
+                                            </div>
+
+                                            <div class="w-100"></div>
+                                            <div class="col" >
+                                                <span ><i class="addAnotherAllergy1 hidden" id="addAnotherAllergy1" >Add Another Field</i></span>
+                                            </div>
+
+
+                                            <div class="w-100"></div>
+                                            <div class="col" >
+                                                <span ><i class="addAnotherAllergy2 hidden" id="addAnotherAllergy2" >Add Another Field</i></span>
+                                            </div>
+
+                                            <div class="w-100"></div>
+                                            <div class="col" >
+                                                <span ><i class="addAnotherAllergy3 hidden" id="addAnotherAllergy3" >Add Another Field</i></span>
+                                            </div>
                                 </div>
-                                <div class="w-100"></div>
-                                <div class="col">
-                                    <label for="allergy1">Allergic to:</label>
-                                    <input type="text" name="allergy1" id="allergy1" placeholder="Allergic to" class="form-control">
-                                </div>
-                                <div class="col">
-                                    <label for="allergy2">Allergic to:</label>
-                                    <input type="text" name="allergy2" id="allergy2" placeholder="Allergic to" class="form-control">
-                                </div>
-                                <div class="col">
-                                    <label for="allergy3">Allergic to:</label>
-                                    <input type="text" name="allergy3" id="allergy3" placeholder="Allergic to" class="form-control">
-                                </div>
-                                <div class="w-100"></div>
-                                <div class="col hidden" id="allegyField4">
-                                    <label for="allergy4">Allergic to:</label>
-                                    <input type="text" name="allergy4" id="allergy4" placeholder="Allergic to" class="form-control w-30">
-                                </div>
-                                <div class="col hidden" id="allegyField5">
-                                    <label for="allergy5">Allergic to:</label>
-                                    <input type="text" name="allergy4" id="allergy5" placeholder="Allergic to" class="form-control " >
-                                </div>
-                                <div class="w-100"></div>
-                                <div class="col">
-                                    <span><i class="addAnotherAllergy" id="addAnotherAllergy">Add Another Field</i></span>
-                                </div>
-                                <div class="w-100"></div>
-                                <div class="col ">
-                                    <span><i class="addAnotherAllergy1 hidden" id="addAnotherAllergy1" >Add Another Field</i></span>
+                                </div>              
+                                <div class="col col-md">
+                                    <h5>Personal and Social History</h5>
+                                    <div class="row">
+                                    <div class="col-6">
+                                           <label for="smoker">Smoker:</label>
+                                           <input type="checkbox" name="smoker">
+                                       </div>
+                                       <div class="col-6">
+                                           <label for="alcoholic">Alcohol:</label>
+                                           <input type="checkbox" name="alcoholic">
+                                       </div>
+                                       <div class="w-100"></div>
+                                       <div class="col-6">
+                                           <label for="drugs">Illicit Drugs:</label>
+                                           <input type="checkbox" name="drugs">
+                                       </div>
+                                       
+                                       <div class="col-6">
+                                           <!-- <label for="sexActive">Sexually Active:</label> -->
+                                           <p>Sexually Active: <input type="checkbox" name="sexActive"></p>
+                                       </div>
+                                    </div>
                                 </div>
                             </div>
+                           
                         </fieldset>
                         <!-- END MEDICAL INFORMATION -->
 
@@ -1014,3 +1317,34 @@
     </div>
 
 </div>
+
+<style>
+    #addAnotherAllergy{
+        font-style: normal;
+    }
+    #addAnotherAllergy1{
+        font-style: normal;
+    }
+    #addAnotherAllergy2{
+        font-style: normal;
+    }
+    #addAnotherAllergy3{
+        font-style: normal;
+    }
+    #addAnotherAllergy:hover{
+        cursor:cell
+    }
+    #addAnotherAllergy1:hover{
+        cursor:cell
+    }
+    #addAnotherAllergy2:hover{
+        cursor:cell
+    }
+    #addAnotherAllergy3:hover{
+        cursor:cell
+    }
+    #addAnotherProvider:hover{
+        cursor:cell
+    }
+    
+</style>
