@@ -236,7 +236,7 @@ class Reports extends Component
         $getallpatients1 = DB::table('u_hispatients')->get();
 // SELECTED COMPANY NAME
 $getallpatients2 = DB::table('u_hispatients')->Where('COMPANY','like','%'.$byHospitals.'%')->get();
-
+$getallpatientsincom = DB::table('u_hispatients') ->Where('COMPANY','=',$byHospitals)->count();
 // SELECTED START DATE AND END DATE
 $getallpatients3 = DB::table('u_hispatients')->where('DATECREATED','>=', $startDate)
 ->where('DATECREATED','<=', $endDate)->get();
@@ -250,7 +250,8 @@ $getallpatients5 = DB::table('u_hispatients')->Where('NAME', 'like','%'.$search.
 
 // SELECTED NAME AND HOSPITAL
 $getallpatients6 = DB::table('u_hispatients')->Where('NAME', 'like','%'.$search.'%') ->Where('COMPANY','like','%'.$byHospitals.'%')->get();
-        
+$getallpatients7 = DB::table('u_hispatients')->Where('COMPANY','like','%'.$byHospitals.'%')->where('DATECREATED','>=', $startDate)
+        ->where('DATECREATED','<=', $endDate)->get();
         // $patientArray=$countries;
         $this->patientsArray=$patients1;
         
@@ -285,6 +286,47 @@ $getallpatients6 = DB::table('u_hispatients')->Where('NAME', 'like','%'.$search.
                     'getallpatients4'=> $getallpatients4,
                     'getallpatients5'=> $getallpatients5,
                     'getallpatients6'=> $getallpatients6,
+                    'getallpatients7'=>$getallpatients7,
+                    'getallpatientsincom'=>$getallpatientsincom,
+                    ]);
+        }
+        else if(($this->byHospitals!="") && ($this->startDate!="") && ($this->endDate!="")){
+            return view('livewire.reports',[ 'patients'=>u_hispatient::Where('NAME', 'like','%'.$search.'%')
+                                    ->where('DATECREATED','>=', $startDate)
+                                    ->Where('COMPANY','=',$byHospitals)
+                                    ->where('DATECREATED','<=', $endDate)
+                                    ->Where('NAME', 'like','%'.$search.'%')
+                                    // ->ORWhere('U_FIRSTNAME', 'like','%'.$search.'%')
+                                    // ->ORWhere('U_LASTNAME', 'like','%'.$search.'%')
+                                    // ->ORWhere('U_MIDDLENAME', 'like','%'.$search.'%')
+                                    // ->orWhereRaw("CONCAT(U_FIRSTNAME, ' ', U_LASTNAME) LIKE?", '%'.$search.'%')
+                                    // ->orWhereRaw("CONCAT(U_FIRSTNAME, ' ',U_MIDDLENAME,' ', U_LASTNAME) LIKE?", '%'.$search.'%')
+                                    ->orderBy($this->sortColumnName, $this->sortDirection)
+                                    ->paginate($this->perPage),
+                                    'hospitals'=>$hospitals,
+                    'get_Country'=>$get_Country,
+                    'gender'=>$getPatientSex,
+                    'nationalities'=>$nationalities,
+                    'insCode'=>$getProvider,
+                    'memType'=>$getMemType,
+                    'get_genderList'=>$get_genderList,
+                    'countries'=>$countries,
+                    'religions'=>$religions,
+                    'maritals'=>$marital,
+                    'pow'=>$pow,
+                    'oldest'=>$oldest,
+                    'idTypes'=>$idTypes,
+                    'contTypes'=>$contTypes,
+                    'emailTypes'=>$emailTypes,
+                    'getComps'=>$getComps,
+                    'getallpatients' => $getallpatients1,
+                    'getallpatients2'=> $getallpatients2,
+                    'getallpatients3'=> $getallpatients3,
+                    'getallpatients4'=> $getallpatients4,
+                    'getallpatients5'=> $getallpatients5,
+                    'getallpatients6'=> $getallpatients6,
+                    'getallpatients7'=>$getallpatients7,
+                    'getallpatientsincom'=>$getallpatientsincom,
                     ]);
         }
         else if(($this->byHospitals!="")){
@@ -319,6 +361,8 @@ $getallpatients6 = DB::table('u_hispatients')->Where('NAME', 'like','%'.$search.
                     'getallpatients4'=> $getallpatients4,
                     'getallpatients5'=> $getallpatients5,
                     'getallpatients6'=> $getallpatients6,
+                    'getallpatients7'=>$getallpatients7,
+                    'getallpatientsincom'=>$getallpatientsincom,
 
                     
                     ]);
@@ -357,6 +401,8 @@ $getallpatients6 = DB::table('u_hispatients')->Where('NAME', 'like','%'.$search.
                     'getallpatients4'=> $getallpatients4,
                     'getallpatients5'=> $getallpatients5,
                     'getallpatients6'=> $getallpatients6,
+                    'getallpatients7'=>$getallpatients7,
+                    'getallpatientsincom'=>$getallpatientsincom,
 
                     ]);
         }

@@ -75,7 +75,7 @@
                 <td>{{ $item->U_FIRSTNAME }}</td>
                 <td>{{ $item->U_MIDDLENAME }}</td>
                 <td>{{ $item->U_EXTNAME }}</td>
-                <td>{{ date('d/m/Y', strtotime($item->U_BIRTHDATE)) }}</td>
+                <td>{{ date('m/d/Y', strtotime($item->U_BIRTHDATE)) }}</td>
                 <td>
                     {{ $item->U_GENDER }}</td>
                 <td>{{ $item->U_VISITCOUNT }}</td>         

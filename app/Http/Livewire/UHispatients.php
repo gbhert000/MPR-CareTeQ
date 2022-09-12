@@ -247,7 +247,7 @@ class UHispatients extends Component
 
             $patientInfoArray3=[
                     'U_ACTIVE'=>1,
-                    'U_VISITCOUNT'=>1,
+                    'U_VISITCOUNT'=>0,
                     'countContacts'=>$getContactCount,
                     'countEmail'=>$getEmailCount,
                     'LASTUPDATEDBY'=>Auth::user()->userName,
@@ -388,13 +388,13 @@ class UHispatients extends Component
         $post2 = DB::table('u_hiscontacts')->where(['CODE'=>$CODE])->get();
         $post4 = DB::table('u_hispatientshealthcare')->where(['patientCode'=>$CODE])->get();
         $post5 = DB::table('u_hisimages')->where(['patientCode'=>$CODE])->first();
-        $post6 = DB::table('u_hospitalids')->where('CODE','=',$CODE)->groupBy('HOSPITALCODE')->orderBy('id','asc')->get();
+        $post6 = DB::table('u_hospitalids')->where('CODE','=',$CODE)->groupBy('HOSPITALCODE')->orderBy('id','desc')->get();
         // dd($post6);
         $post7 = DB::table('u_patienthospitalprofile')->where(['CODE'=>$CODE])->get();
         // dd($post6);
-        $post8 = DB::table('u_hospitalids')->where(['CODE'=>$CODE, 'HOSPITALCODE'=>Auth::user()->companyCode])->first();
+        $post8 = DB::table('u_hospitalids')->where(['CODE'=>$CODE, 'HOSPITALCODE'=>Auth::user()->companyCode])->orderBy('id','desc')->first();
         // dd($post8);
-        $post9 = DB::table('u_hisicd10s')->get();
+        // $post9 = DB::table('u_hisicd10s')->get();
         $post9 = DB::table('u_hisvisits')->where(['U_PATIENTID'=>$CODE,'DOCSTATUS'=>'Active'])->first();
         $post10 = DB::table('u_hisemails')->where(['CODE'=>$CODE])->get();
         $post11 = DB::table('u_patientprofiles')->where(['CODE'=>$CODE])->first();
@@ -463,6 +463,10 @@ class UHispatients extends Component
         $updateEmergencyName=strtoupper(join(' ',[$request->emergencyLastName.',',$request->emergencyFirstName,$request->emergencyFirstName,$request->emergencyExtName ]));
         $updateEmergencyAddress =strtoupper(join(' ',[$request->emergencyStreet,$request->emergencyBrgy,$request->emergencyMunicipality,$request->emergencyProvince,$request->emergencyCountry,$request->emergencyPostal ])); 
         $get_code=$request->CODE;
+
+        // dd($request->personalHistory);
+
+
        
         
         $contactArrayUpdate=[
@@ -479,21 +483,37 @@ class UHispatients extends Component
             ['emailType'=>strtoupper($request->emailType3),'emailNote'=>$request->noteEmail3,'emailAddress'=>$request->email3,'emailOwner'=>$updatefullName,  'CODE'=>$get_code],
             ['emailType'=>strtoupper($request->emailType4),'emailNote'=>$request->noteEmail4,'emailAddress'=>$request->email4,'emailOwner'=>$updatefullName,  'CODE'=>$get_code],
         ];
-
+        $memberBday1=Carbon::parse($request->memberBDay)->format("Y-m-d");
+        $memberBday2=Carbon::parse($request->DPmemberBDay)->format("Y-m-d");
+        $memberBday3=Carbon::parse($request->memberBDay2nd)->format("Y-m-d");
+        $memberBday4=Carbon::parse($request->DPmemberBDay1)->format("Y-m-d");
+        // dd($memberBday1);
         $hmoArray=[
             ['hmoAccountID'=>$request->memberID,'otherHmoName'=>$request->otherHmo1, 'hmoName'=>$request->providerName,'clientType'=>$request->relationMem,'memberType'=>$request->insMemType, 'memberFname'=>$request->memberFname,'memberLname'=>$request->memberLname,
-            'memberMname'=>$request->memberMname,'memberEname'=>$request->memberEname,'memberSex'=>$request->memberSex,'memberBDay'=>$request->memberBDay,'identifier'=>$request->identifierforHMO1,'patientCode'=>$get_code,'patientName'=>$updatefullName],
+            'memberMname'=>$request->memberMname,'memberEname'=>$request->memberEname,'memberSex'=>$request->memberSex,'memberBDay'=>$memberBday1,'identifier'=>$request->identifierforHMO1,'patientCode'=>$get_code,'patientName'=>$updatefullName],
 
             ['hmoAccountID'=>$request->DPmemberID,'otherHmoName'=>$request->otherHmo2,  'hmoName'=>$request->dependentProvider,'clientType'=>$request->DPrelationMem,'memberType'=>$request->DPinsMemType, 'memberFname'=>$request->DPmemberFname,'memberLname'=>$request->DPmemberLname,
-            'memberMname'=>$request->DPmemberMname,'memberEname'=>$request->DPmemberEname,'memberSex'=>$request->DPmemberSex,'memberBDay'=>$request->DPmemberBDay,'identifier'=>$request->identifierforHMO3,'patientCode'=>$get_code,'patientName'=>$updatefullName],
+            'memberMname'=>$request->DPmemberMname,'memberEname'=>$request->DPmemberEname,'memberSex'=>$request->DPmemberSex,'memberBDay'=>$memberBday2,'identifier'=>$request->identifierforHMO3,'patientCode'=>$get_code,'patientName'=>$updatefullName],
 
             
              ['hmoAccountID'=>$request->memberID2nd,'otherHmoName'=>$request->otherHmo3,  'hmoName'=>$request->providerName2nd,'clientType'=>$request->relationMem2nd,'memberType'=>$request->insMemType2nd, 'memberFname'=>$request->memberFname2nd,'memberLname'=>$request->memberLname2nd,
-            'memberMname'=>$request->memberMname2nd,'memberEname'=>$request->memberEname2nd,'memberSex'=>$request->memberSex2nd,'memberBDay'=>$request->memberBDay2nd,'identifier'=>$request->identifierforHMO2,'patientCode'=>$get_code,'patientName'=>$updatefullName],
+            'memberMname'=>$request->memberMname2nd,'memberEname'=>$request->memberEname2nd,'memberSex'=>$request->memberSex2nd,'memberBDay'=>$memberBday3,'identifier'=>$request->identifierforHMO2,'patientCode'=>$get_code,'patientName'=>$updatefullName],
 
             ['hmoAccountID'=>$request->DPmemberID1,'otherHmoName'=>$request->otherHmo4,  'hmoName'=>$request->dependentProvider1,'clientType'=>$request->DPrelationMem1,'memberType'=>$request->DPinsMemType1, 'memberFname'=>$request->DPmemberFname1,'memberLname'=>$request->DPmemberLname1,
-            'memberMname'=>$request->DPmemberMname1,'memberEname'=>$request->DPmemberEname1,'memberSex'=>$request->DPmemberSex1,'memberBDay'=>$request->DPmemberBDay1,'identifier'=>$request->identifierforHMO4,'patientCode'=>$get_code,'patientName'=>$updatefullName],
+            'memberMname'=>$request->DPmemberMname1,'memberEname'=>$request->DPmemberEname1,'memberSex'=>$request->DPmemberSex1,'memberBDay'=>$memberBday4,'identifier'=>$request->identifierforHMO4,'patientCode'=>$get_code,'patientName'=>$updatefullName],
         ];
+        // dd($hmoArray);
+        $allergyArray = [
+            'U_ALLERGY1'=>$request->allergy1,
+            'U_ALLERGY2'=>$request->allergy2,
+            'U_ALLERGY3'=>$request->allergy3,
+            'U_ALLERGY4'=>$request->allergy4,
+            'U_ALLERGY5'=>$request->allergy5,
+            'U_ALLERGY6'=>$request->allergy6,
+            'U_ALLERGY7'=>$request->allergy7
+
+        ];
+        $socialHistory=$request->personalHistory;
         // dd($hmoArray);
         $hmoCounter=0;
         for($hh=0;$hh<count($hmoArray);$hh++){
@@ -723,9 +743,36 @@ class UHispatients extends Component
             $patientMotherInfo+
             $patientSpouseInfo+
             $patientEmergencyInfo+
-            $updateTrail
+            $updateTrail+
+            $allergyArray
     
         );
+        // dd($request->personalHistory);
+        // foreach($request->personalHistory as $personalHistory){
+        //     switch($personalHistory){
+        //         case "alcoholic":
+        //             $personalandSocialHistory[]="alcoholic";
+        //             break;
+
+        //         case "sexActive":
+        //             $personalandSocialHistory[]="sexActive";
+        //             break;
+
+        //         case "drugs":
+        //             $personalandSocialHistory[]="drugs";
+        //             break;
+        //         case "smoker":
+        //             $personalandSocialHistory[]="smoker";
+        //             break;
+        //         default:
+        //             $personalandSocialHistory[]="";
+        //     }
+        // }
+        // dd($personalandSocialHistory);
+        // if($request->personalHistory[0]!=sn)
+        // $personalandSocialHistory=[
+        //     ''
+        // ];
 
         $updatePatientProfile=DB::table('u_patientprofiles')->where('CODE','=',$request->hiddenCode)
             ->update(
@@ -826,7 +873,8 @@ class UHispatients extends Component
                     $patientMotherInfo+
                     $patientSpouseInfo+
                     $patientEmergencyInfo+
-                    $updateTrail
+                    $updateTrail+
+                    $allergyArray
                 ]);
 
                 

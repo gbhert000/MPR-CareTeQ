@@ -11,7 +11,7 @@
                         <h6 class="text-muted">Background Information</h6>
                     </div>
                     <div class="col tabs" id="tab03">
-                        <h6 class="text-muted">Health Maintenance Organization</h6>
+                        <h6 class="text-muted">Health Insurance</h6>
                     </div>
                     <div class="col tabs" id="tab04">
                         <h6 class="text-muted">Medical Information</h6>
@@ -223,7 +223,7 @@
                                                                 </select>
                                                 </div>
                                                 <div class="col ">
-                                                    <label>Address</label>
+                                                    <label>House No. & Street<i id="requiredFields">*</i></label>
                                                     <input type="text"class="form-control" id="street" name="street">
                                                 </div>
 
@@ -365,12 +365,12 @@
                                         </div>
                                         <div class="col" >
                                             <label for="email1">Email</label>
-                                            <input type="email" name="email1" id="email1Update" class="form-control">
+                                            <input type="email" name="email1" id="email1Update" class="form-control" disabled>
                                         </div>
                                         <div class="col">
                                             <label for="noteEmail1">Note</label>
-                                            <input type="text" name="noteEmail1" id="noteEmail1Update" class="form-control">
-                                            <input type="text" class="hidden" name="hiddenEmmailId1" id="hiddenEmailId1">
+                                            <input type="text" name="noteEmail1" id="noteEmail1Update" class="form-control" disabled>
+                                            <input type="text" class="hidden" name="hiddenEmmailId1" id="hiddenEmailId1" >
                                         </div>
                                     </div>
                             <!-- END FIRST EMAIL -->
@@ -387,11 +387,11 @@
                                         </div>
                                         <div class="col" >
                                             <!-- <label for="email2">Email</label> -->
-                                            <input type="email" name="email2" id="email2Update" class="form-control">
+                                            <input type="email" name="email2" id="email2Update" class="form-control" disabled>
                                         </div>
                                         <div class="col">
                                             <!-- <label for="noteEmail2">Note</label> -->
-                                            <input type="text" name="noteEmail2" id="noteEmail2Update" class="form-control">
+                                            <input type="text" name="noteEmail2" id="noteEmail2Update" class="form-control" disabled>
                                             <input type="text" class="hidden" name="hiddenEmmailId2" id="hiddenEmailId2">
                                         </div>
                                     </div>
@@ -409,11 +409,11 @@
                                         </div>
                                         <div class="col" >
                                             <!-- <label for="email3">Email</label> -->
-                                            <input type="email" name="email3" id="email3Update" class="form-control">
+                                            <input type="email" name="email3" id="email3Update" class="form-control" disabled>
                                         </div>
                                         <div class="col">
                                             <!-- <label for="noteEmail3">Note</label> -->
-                                            <input type="text" name="noteEmail3" id="noteEmail3Update" class="form-control">
+                                            <input type="text" name="noteEmail3" id="noteEmail3Update" class="form-control" disabled>
                                             <input type="text" class="hidden" name="hiddenEmmailId3" id="hiddenEmailId3">
                                         </div>
                                     </div>
@@ -431,11 +431,11 @@
                                         </div>
                                         <div class="col" >
                                             <!-- <label for="email4">Email</label> -->
-                                            <input type="email" name="email4" id="email4Update" class="form-control">
+                                            <input type="email" name="email4" id="email4Update" class="form-control" disabled>
                                         </div>
                                         <div class="col">
                                             <!-- <label for="noteEmail4">Note</label> -->
-                                            <input type="text" name="noteEmail4" id="noteEmail4Update" class="form-control">
+                                            <input type="text" name="noteEmail4" id="noteEmail4Update" class="form-control" disabled>
                                             <input type="text" class="hidden" name="hiddenEmmailId4" id="hiddenEmailId4">
                                         </div>
                                     </div>
@@ -727,8 +727,7 @@
                                     <h5>Emergency Contact Information</h5>
                                 </div>
                                 <div class="col">
-                                    <label for="sameEmergencyAddress">Same As Patient Address</label>
-                                    <input type="checkbox" name="sameEmergencyAddress" id="sameEmergencyAddress">
+                                    
                                 </div>
                                 <div class="col">
                                     <label for="sameEmergency">Relationship</label>
@@ -974,7 +973,7 @@
                                 </div>
                                 <div class="col">
                                     <label for="DPmemberBDay">Birthdate</label>
-                                    <input type="text" name="DPmemberBDay" class="form-control" id="memberBDay3">
+                                    <input type="text" name="DPmemberBDay" class="form-control datepicker1" id="memberBDay3">
                                 </div>
                                 
                             </div>
@@ -1026,23 +1025,23 @@
                                 <div class="w-100"></div>
                                 <div class="col">
                                     <label for="memberLname2nd">Member Last Name</label>
-                                    <input type="text" name="memberLname2nd" class="form-control" id="memberLname2">
+                                    <input type="text" name="memberLname2nd" class="form-control" id="memberLname2" readonly>
                                 </div>
                                 <div class="col">
                                     <label for="memberfname">Member First Name</label>
-                                    <input type="text" name="memberFname2nd" class="form-control" id="memberFname2">
+                                    <input type="text" name="memberFname2nd" class="form-control" id="memberFname2" readonly>
                                 </div>
                                 <div class="col">
                                     <label for="memberMname">Member Middle Name</label>
-                                    <input type="text" name="memberMname2nd" class="form-control" id="memberMname2">
+                                    <input type="text" name="memberMname2nd" class="form-control" id="memberMname2" readonly>
                                 </div>
                                 <div class="col-sm-1">
                                     <label for="memberEname">Ext.</label>
-                                    <input type="text" name="memberEname2nd" class="form-control" id="memberEname2">
+                                    <input type="text" name="memberEname2nd" class="form-control" id="memberEname2" readonly>
                                 </div>
                                 <div class="col">
                                     <label>Sex</label>
-                                    <select name="memberSex2nd" id="memberSex2" class="form-control" >
+                                    <select name="memberSex2nd" id="memberSex2" class="form-control" readonly>
                                         <option value=""></option>
                                         @foreach ($get_genderList as $sex)
                                             <option value="{{$sex->sexCode}}">
@@ -1053,7 +1052,7 @@
                                 </div>
                                 <div class="col">
                                     <label for="memberBDay">Birthdate</label>
-                                    <input type="text" name="memberBDay2nd" class="form-control" id="memberBDay2">
+                                    <input type="text" name="memberBDay2nd" class="form-control datepicker1" id="memberBDay2" readonly>
                                 </div>
                                 
                             </div>
@@ -1137,7 +1136,7 @@
                                 </div>
                                 <div class="col">
                                     <label for="DPmemberBDay1">Birthdate</label>
-                                    <input type="text" name="DPmemberBDay" class="form-control" id="memberBDay4">
+                                    <input type="text" name="DPmemberBDay" class="form-control datepicker1" id="memberBDay4">
                                 </div>
                                 
                             </div>
@@ -1153,7 +1152,7 @@
                             <div class="row">
                                 <div class="col">
                                     <label for="patientHeightcm">Height{{'(cm)'}}:</label>
-                                    <input type="number" name="patientHeightcm" id="centimeter" class="form-control" step=".01" min="145" max="192.5">
+                                    <input type="number" name="patientHeightcm" id="centimeter" class="form-control" step=".01" >
                                 </div>
                                 <div class="col">
                                     <label for="patientHeightin">Height{{'(in)'}}:</label>
@@ -1185,11 +1184,11 @@
                                                 <label for="allergy1">Allergic to:</label>
                                                 <input type="text" name="allergy1" id="allergy1" placeholder="Allergic to" class="form-control">
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-6 hidden" id="allegyField2">
                                                 <label for="allergy2">Allergic to:</label>
                                                 <input type="text" name="allergy2" id="allergy2" placeholder="Allergic to" class="form-control">
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-6 hidden" id="allegyField3">
                                                 <label for="allergy3">Allergic to:</label>
                                                 <input type="text" name="allergy3" id="allergy3" placeholder="Allergic to" class="form-control">
                                             </div>
@@ -1201,7 +1200,7 @@
 
                                             <div class="col-md-6 hidden" id="allegyField5">
                                                 <label for="allergy5">Allergic to:</label>
-                                                <input type="text" name="allergy4" id="allergy5" placeholder="Allergic to" class="form-control " >
+                                                <input type="text" name="allergy5" id="allergy5" placeholder="Allergic to" class="form-control " >
                                             </div>
 
                                             <div class="col-md-6 hidden" id="allegyField6">
@@ -1216,7 +1215,7 @@
 
                                             <div class="w-100"></div>
                                             <div class="col">
-                                                <span><i class="addAnotherAllergy" id="addAnotherAllergy" >Add Another Field</i> </span>
+                                                <span><i class="addAnotherAllergy hidden" id="addAnotherAllergy" >Add Another Field</i> </span>
                                             </div>
 
                                             <div class="w-100"></div>
@@ -1234,28 +1233,44 @@
                                             <div class="col" >
                                                 <span ><i class="addAnotherAllergy3 hidden" id="addAnotherAllergy3" >Add Another Field</i></span>
                                             </div>
+                                            <div class="w-100"></div>
+                                            <div class="col" >
+                                                <span ><i class="addAnotherAllergy3" id="addAnotherAllergy4" >Add Another Field</i></span>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col" >
+                                                <span ><i class="addAnotherAllergy3 hidden" id="addAnotherAllergy5" >Add Another Field</i></span>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col" >
+                                                <span ><i class="addAnotherAllergy3 hidden" id="addAnotherAllergy7" >Add Another Field</i></span>
+                                            </div>
                                 </div>
                                 </div>              
                                 <div class="col col-md">
                                     <h5>Personal and Social History</h5>
                                     <div class="row">
                                     <div class="col-6">
-                                           <label for="smoker">Smoker:</label>
-                                           <input type="checkbox" name="smoker">
+                                        <input type="checkbox" name="personalHistory[]" value="smoker">
+                                           <label for="smoker">Smoker</label>
+                                           
                                        </div>
                                        <div class="col-6">
-                                           <label for="alcoholic">Alcohol:</label>
-                                           <input type="checkbox" name="alcoholic">
+                                        <input type="checkbox" name="personalHistory[]" value="alcoholic">
+                                           <label for="alcoholic">Alcohol</label>
+                                           
                                        </div>
                                        <div class="w-100"></div>
                                        <div class="col-6">
-                                           <label for="drugs">Illicit Drugs:</label>
-                                           <input type="checkbox" name="drugs">
+                                            <input type="checkbox" name="personalHistory[]" value="drugs">
+                                           <label for="drugs">Illicit Drugs</label>
+                                           
                                        </div>
                                        
                                        <div class="col-6">
-                                           <!-- <label for="sexActive">Sexually Active:</label> -->
-                                           <p>Sexually Active: <input type="checkbox" name="sexActive"></p>
+                                            <input type="checkbox" name="personalHistory[]" value="sexActive">
+                                            <label for="sexActive">Sexually Active</label>
+                                           {{-- <p>Sexually Active: <input type="checkbox" name="sexActive"></p> --}}
                                        </div>
                                     </div>
                                 </div>

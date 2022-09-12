@@ -52,6 +52,37 @@ $(document).ready(function(){
         
     });
 
+    $("#emailType1Update").change(function(){
+        if($("#emailType1Update").val()!=""){
+            // alert("asd");
+            $("#email1Update").prop("disabled",false);
+            $("#noteEmail1Update").prop("disabled", false);
+        }
+    });
+    $("#emailType2Update").change(function(){
+        if($("#emailType2Update").val()!=""){
+            // alert("asd");
+            $("#email2Update").prop("disabled",false);
+            $("#noteEmail2Update").prop("disabled", false);
+        }
+    });
+
+    $("#emailType3Update").change(function(){
+        if($("#emailType3Update").val()!=""){
+            // alert("asd");
+            $("#email3Update").prop("disabled",false);
+            $("#noteEmail3Update").prop("disabled", false);
+        }
+    });
+
+    $("#emailType4Update").change(function(){
+        if($("#emailType4Update").val()!=""){
+            // alert("asd");
+            $("#email4Update").prop("disabled",false);
+            $("#noteEmail4Update").prop("disabled", false);
+        }
+    });
+
     $('#Printthetable2').click(function() {
         $('#noofpatients1').html($('#red2').val());
         if($( "#byHospitals" ).val()!=""){
@@ -124,8 +155,8 @@ $(document).ready(function(){
             // alert("asd");
             // alert($("#regFathersProvince").val());
             
-            $("#setEmergencyMother").prop("disabled", true);
-            $("#setEmergencySpouse").prop("disabled", true);
+            $("#setEmergencyMother").prop("checked", false);
+            $("#setEmergencySpouse").prop("checked", false);
 
             // $("#regEmergencyCountry").empty();
             // $("#regEmergencyProvince").empty();
@@ -135,6 +166,7 @@ $(document).ready(function(){
             // $("#emergencyPostal").empty();
 
             $("#relationToPatient").val("Father");
+            $("#relationToPatient").css("pointer-events","none");
 
             $("#emergencyLastName").val($("#fatherLastName").val());
             $("#emergencyFirstName").val($("#fatherFirstName").val());
@@ -154,6 +186,7 @@ $(document).ready(function(){
         }
         else{
             $("#relationToPatient").val("");
+            $("#relationToPatient").css("pointer-events","auto");
             $("#setEmergencyMother").prop("disabled", false);
             $("#setEmergencySpouse").prop("disabled", false);
 
@@ -180,8 +213,9 @@ $(document).ready(function(){
             // alert("asd");
             // alert($("#regFathersProvince").val());
             $("#relationToPatient").val("Mother");
-            $("#setEmergencyFather").prop("disabled", true);
-            $("#setEmergencySpouse").prop("disabled", true);
+            $("#relationToPatient").css("pointer-events","none");
+            $("#setEmergencyFather").prop("checked", false);
+            $("#setEmergencySpouse").prop("checked", false);
             $("#emergencyLastName").val($("#motherLastName").val());
             $("#emergencyFirstName").val($("#motherFirstName").val());
             $("#emergencyMiddleName").val($("#motherMiddleName").val());
@@ -200,6 +234,7 @@ $(document).ready(function(){
         }
         else{
             $("#relationToPatient").val("");
+            $("#relationToPatient").css("pointer-events","auto");
             $("#setEmergencyFather").prop("disabled", false);
             $("#setEmergencySpouse").prop("disabled", false);
 
@@ -224,10 +259,11 @@ $(document).ready(function(){
     $("#setEmergencySpouse").change(function(){
         if(this.checked){
             $("#relationToPatient").val("Spouse");
+            $("#relationToPatient").css("pointer-events","none");
             // alert("asd");
             // alert($("#regFathersProvince").val());
-            $("#setEmergencyFather").prop("disabled", true);
-            $("#setEmergencyMother").prop("disabled", true);
+            $("#setEmergencyFather").prop("checked", false);
+            $("#setEmergencyMother").prop("checked", false);
             $("#emergencyLastName").val($("#spouseLastName").val());
             $("#emergencyFirstName").val($("#spouseFirstName").val());
             $("#emergencyMiddleName").val($("#spouseMiddleName").val());
@@ -246,6 +282,7 @@ $(document).ready(function(){
         }
         else{
             $("#relationToPatient").val("");
+            $("#relationToPatient").css("pointer-events","auto");
             $("#setEmergencyFather").prop("disabled", false);
             $("#setEmergencyMother").prop("disabled", false);
 
@@ -856,7 +893,7 @@ $(document).ready(function(){
             url: '/postalUpdate',
             method: 'get',
             data: {'brgy': $(this).val(),
-                    'cityUpdate':cityUpdate        
+                    'city':cityUpdate        
             },
             success:function(data){
                 // prompt('',data); return false;
@@ -959,6 +996,7 @@ $(document).ready(function(){
     });
     $("#regFathersBarangay").on('change' ,function(){
         // alert('asd');
+        var cityUpdateFather=$("#regfathersMunicipality").val();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -967,7 +1005,8 @@ $(document).ready(function(){
         $.ajax({
             url: '/postalFather',
             method: 'get',
-            data: {'brgy': $(this).val()},
+            data: {'brgy': $(this).val(),
+            'city':cityUpdateFather },
             success:function(data){
                 // prompt('',data); return false;
                 // $("#regPostal1").empty();
@@ -1047,6 +1086,7 @@ $(document).ready(function(){
 
     $("#regMothersMunicipality").on('change',function(){
         // alert('asd');
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1069,6 +1109,7 @@ $(document).ready(function(){
     });
     $("#regMothersBarangay").on('change' ,function(){
         // alert('asd');
+        var cityUpdateMother=$("#regMothersMunicipality").val();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1077,7 +1118,8 @@ $(document).ready(function(){
         $.ajax({
             url: '/postalMother',
             method: 'get',
-            data: {'brgy': $(this).val()},
+            data: {'brgy': $(this).val(),
+            'city':cityUpdateMother },
             success:function(data){
                 // prompt('',data); return false;
                 // $("#regPostal1").empty();
@@ -1178,6 +1220,7 @@ $(document).ready(function(){
     });
     $("#regSpousesBarangay").on('change' ,function(){
         // alert('asd');
+        var cityUpdateSpouse=$("#regSpousesBarangay").val();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1186,7 +1229,8 @@ $(document).ready(function(){
         $.ajax({
             url: '/postalSpouse',
             method: 'get',
-            data: {'brgy': $(this).val()},
+            data: {'brgy': $(this).val(),
+            'city':cityUpdateSpouse },
             success:function(data){
                 // prompt('',data); return false;
                 // $("#regPostal1").empty();
@@ -1265,6 +1309,7 @@ $(document).ready(function(){
 
     $("#regEmergencyMunicipality").on('change',function(){
         // alert('asd');
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1274,6 +1319,7 @@ $(document).ready(function(){
             url: '/brgysEmergency',
             method: 'get',
             data: {'municipality': $(this).val()},
+            
             success:function(data){
                 // prompt('',data); return false;
                 $("#regEmergencyBarangay").empty();
@@ -1288,6 +1334,7 @@ $(document).ready(function(){
 
     $("#regEmergencyBarangay").on('change' ,function(){
         // alert('asd');
+        var cityUpdateEmergency=$("#regEmergencyMunicipality").val();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1296,12 +1343,13 @@ $(document).ready(function(){
         $.ajax({
             url: '/postalEmergency',
             method: 'get',
-            data: {'brgy': $(this).val()},
+            data: {'brgy': $(this).val(),
+            'city':cityUpdateEmergency },
             success:function(data){
                 // prompt('',data); return false;
                 // $("#regPostal1").empty();
                 // alert(data[0]['zip_Code']);
-                $("#emergencyPostal").val(data[0]['zip_Code']);
+                $("#regEmergencyPostal").val(data[0]['zip_Code']);
             }
         });
     });
@@ -1490,7 +1538,7 @@ $(document).ready(function(){
             $("#memberEname1").val( $("#extensionName").val());
             
             $("#memberSex1").val( $("#updatesex").val());
-            $("#memberSex1").css("pointer-events","none");;
+            $("#memberSex1").css("pointer-events","none");
             $("#memberBDay1").val( $("#bday1").val()); 
         }else{
             $("#memberLname1").val('');
@@ -1517,12 +1565,31 @@ $(document).ready(function(){
             // $("#insMemTypeID").text('');
 
         }
+
+        if($("#relationMem1").val()=="Dependent"){
+            $("#providerName3").val($("#providerName1").val());
+        }
+        else{
+            $("#providerName3").val("");
+        }
+
+        // if( $('#dependentProvider').)
       });
 
       $("#relationMem1").on('change',function() {
         // alert(("#U_BIRTHDATE").val());
         if ($(this).val() == "Member") {
             $("#insMemTypeID1").attr("readonly", false);
+            
+            $("#insMemTypeID1").val("");
+            $("#insMemTypeID1").css("pointer-events","auto");
+            $('#dependentProvider').addClass('hidden');
+            $("#providerName3").val("");
+            $("#otherHmo3").val("");
+            $("#providerName3").css("pointer-events","auto");
+            $("#relationMem3").val("");
+            $("#relationMem3").css("pointer-events","auto");
+
         }
         else if($(this).val() == "Dependent") {
 
@@ -1546,6 +1613,15 @@ $(document).ready(function(){
         // alert(("#U_BIRTHDATE").val());
         if ($(this).val() == "Member") {
             $("#insMemTypeID2").attr("readonly", false);
+            // $("#insMemTypeID2").attr("readonly", true);
+            $("#insMemTypeID2").val();
+            $("#insMemTypeID2").css("pointer-events","auto");
+            $('#dependentProvider1').addClass('hidden');
+            $("#otherHmo4").val('');
+            $("#providerName4").val('');
+            $("#providerName4").css("pointer-events","auto");
+            $("#relationMem4").val('');
+            $("#relationMem4").css("pointer-events","auto");
         }
         else if($(this).val() == "Dependent") {
 
@@ -1602,6 +1678,13 @@ $(document).ready(function(){
             $("#insMemTypeID").val('');
             // $("#insMemTypeID").text('');
 
+        }
+
+        if($("#relationMem2").val()=="Dependent"){
+            $("#providerName4").val($("#providerName2").val());
+        }
+        else{
+            $("#providerName4").val("");
         }
       });
 
@@ -1838,6 +1921,20 @@ $(document).ready(function(){
     // });
 
     // ADD ANOTHER FIELD
+    $("#addAnotherAllergy4").on('click',function(){
+        $('#allegyField2').removeClass('hidden');
+        $('#addAnotherAllergy4').addClass('hidden');
+        $('#addAnotherAllergy5').removeClass('hidden');
+        // alert('as');
+    });
+
+    $("#addAnotherAllergy5").on('click',function(){
+        $('#allegyField3').removeClass('hidden');
+        $('#addAnotherAllergy5').addClass('hidden');
+        $('#addAnotherAllergy').removeClass('hidden');
+        // alert('as');
+    });
+
     $("#addAnotherAllergy").on('click',function(){
         $('#allegyField4').removeClass('hidden');
         $('#addAnotherAllergy').addClass('hidden');
@@ -1862,6 +1959,10 @@ $(document).ready(function(){
         
         // alert('as');
     });
+
+    // $("#selectVisit").on("change", function(){
+
+    // });
 
 
     // show view visit modal
@@ -2313,6 +2414,51 @@ function viewRecord($id,$img){
                     $("#emergencyStreet").val($hispatients.U_CONTACTSTREET);
                     $("#regEmergencyPostal").val($hispatients.U_CONTACTZIP);
                     $("#relationToPatient").val($hispatients.U_CONTACTRELATIONSHIP);
+
+
+                    // ALLERGY
+
+                    // for($ss=1;$ss<=7;$ss++){
+                    //     var allergy="U_ALLERGY1"+$ss;
+                    //     // alert($hispatients.U_ALLERGY1);
+                    //     $("#allergy"+$ss).val($hispatients.allergy);
+                    // }
+
+                    if($hispatients.U_ALLERGY1!=null){
+                        $("#allergy1").val($hispatients.U_ALLERGY1);
+                    }
+
+                    if($hispatients.U_ALLERGY2!=null){
+                        $("#addAnotherAllergy4").addClass("hidden");
+                        $("#allegyField2").removeClass("hidden");
+                        $("#allergy2").val($hispatients.U_ALLERGY2);
+                    }
+
+                    if($hispatients.U_ALLERGY3!=null){
+                        $("#addAnotherAllergy5").addClass("hidden");
+                        $("#allegyField3").removeClass("hidden");
+                        $("#allergy3").val($hispatients.U_ALLERGY3);
+                    }
+                    if($hispatients.U_ALLERGY4!=null){
+                        $("#addAnotherAllergy").addClass("hidden");
+                        $("#allegyField4").removeClass("hidden");
+                        $("#allergy4").val($hispatients.U_ALLERGY4);
+                    }
+                    if($hispatients.U_ALLERGY5!=null){
+                        $("#addAnotherAllergy1").addClass("hidden");
+                        $("#allegyField5").removeClass("hidden");
+                        $("#allergy5").val($hispatients.U_ALLERGY5);
+                    }
+                    if($hispatients.U_ALLERGY6!=null){
+                        $("#addAnotherAllergy2").addClass("hidden");
+                        $("#allegyField6").removeClass("hidden");
+                        $("#allergy6").val($hispatients.U_ALLERGY6);
+                    }
+                    if($hispatients.U_ALLERGY7!=null){
+                        $("#addAnotherAllergy3").addClass("hidden");
+                        $("#allegyField7").removeClass("hidden");
+                        $("#allergy7").val($hispatients.U_ALLERGY7);
+                    }
                 //   alert($hispatients.U_SPOUSETELNO);
                   
 
@@ -2626,10 +2772,9 @@ function createVisit($patientInfo,$idsObject,$currentHPID,$img){
         });
         $("#dateArrival").on('keyup change ',function(){
             // alert($("#dateArrival").val());
-            if($("#selectVisit").val()=="outpatient"){
-                $("#dateDischarged").val($("#dateArrival").val());
-            }
-            
+            // if($("#selectVisit").val()=="outpatient"){
+            //     $("#dateDischarged").val($("#dateArrival").val());
+            // }            
         });
         // if(visitType!=""){
         //     $("#createVisit").attr("disabled", false);
@@ -2730,7 +2875,7 @@ function getICDS($code){
             success: function(response) {
                 $("#icdCode").val(response.icdGet['icd10Code']);
                 $("#icdDesc").val(response.icdGet['DESCRIPTION']);
-                $("#dateDischarged").val(disDate);
+                // $("#dateDischarged").val(disDate);
             }
         });
     }else{
@@ -2745,7 +2890,7 @@ function getICDS($code){
             url: `icd10/`+$code,
             method: "GET",
             success: function(response) {
-                $("#dateDischargedUpdate").val(disDate);
+                // $("#dateDischargedUpdate").val(disDate);
                 $("#icdCodeUpdate").val(response.icdGet['icd10Code']);
                 $("#icdDescUpdate").val(response.icdGet['DESCRIPTION']);
                 

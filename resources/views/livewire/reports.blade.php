@@ -1,3 +1,4 @@
+
 {{-- PALAGAY AKO NETO KIER --}}
 <div>
     @include('livewire.addImageModal')
@@ -9,7 +10,7 @@
    <div class="row patient-list">
     <div class="row mb-2">
 
-        <label for="">Check Data To Display</label>
+        <label for="">Filter by Hospital:</label>
         <br>
         {{-- <div class="col">
             <label for="MPI text-left">Master Patient Index</label>
@@ -36,12 +37,12 @@
 
         <div class="col">
             <select name="byHospitals" id="byHospitals" wire:model="byHospitals">
-                <option value="">Filter By Hospital</option>
+                <option value="">All Hospitals</option>
                 @foreach ($hospitals as $hospital)
                     <option value="{{$hospital->hospitalName}}">{{$hospital->hospitalName}}</option>
                 @endforeach
             </select>
-            <i class="bi bi-printer-fill" id="Printthetable2" style="margin-left: 61%;"></i>
+            <i class="bi bi-printer-fill" id="Printthetable2" style="margin-left: 58%;"></i>
             {{-- <i class="bi bi-file-pdf-fill viewReportModal"  id="viewrecords" ></i> --}}
             <i class="bi bi-file-pdf-fill "  id="qwerty" ></i>
             {{-- <button id="qwerty">EXPORT</button> --}}
@@ -229,13 +230,7 @@
 
 
 $('#Printthetable2').click(function() {
-    // $('#html-contents').printThis();
-    $("#html-contents").printThis({
-
-footer:null ,               // postfix to html
-
-});
-
+    $("#html-contents").printThis();
     });
 
     $('#expexcel').click(function() {
@@ -277,12 +272,11 @@ else if($startDate!="" && $endDate!="" && $byhospital==""){
 }
 else if($byhospital!="" && $startDate=="" && $endDate==""){
     // alert('FILTER BY HOSPITAL');
-
-    window.location.href = "/exporttopdf/"+$byhospital ;
+    window.location.href = "/exporttopdf2/"+$byhospital ;
 }
 else{
-    alert('NO FILTER!');
- //   window.location.href = "/exporttopdf";
+    alert('NO FILTERS SELECTED!');
+//    window.location.href = "/exporttopdf2";
 
 }
 

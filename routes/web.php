@@ -78,9 +78,9 @@ Route::get('/postalEmergency', [App\Http\Livewire\UHispatients::class, 'postal']
 
 
 Route::get('/getCountry', [App\Http\Livewire\UHispatients::class, 'getAllCountries']);
-Route::get('/municipalitiesSpouse', [App\Http\Livewire\UHispatients::class, 'municipalities']);
-Route::get('/brgysSpouse', [App\Http\Livewire\UHispatients::class, 'barangays']);
-Route::get('/postalSpouse', [App\Http\Livewire\UHispatients::class, 'postal']);
+// Route::get('/municipalitiesSpouse', [App\Http\Livewire\UHispatients::class, 'municipalities']);
+// Route::get('/brgysSpouse', [App\Http\Livewire\UHispatients::class, 'barangays']);
+// Route::get('/postalSpouse', [App\Http\Livewire\UHispatients::class, 'postal']);
 
 
 Route::get('/home/{id}', [App\Http\Livewire\UHispatients::class, 'getBackground']);
@@ -121,11 +121,10 @@ Route::post('home/image/{id}', [App\Http\Controllers\WebcamController::class, 's
 Route::post('createVisit', [App\Http\Livewire\CreateVisit::class, 'store']);
 Route::post('home/image', [App\Http\Controllers\WebcamController::class, 'store']);
 
-
 Route::get('/exporttopdf/{startDate}/{endDate}', [exportpdfcontroller::class, 'getDate'])->name('exportpdf1');
 Route::get('/exporttopdf/{startDate}/{endDate}/{byHospitals}', [exportpdfcontroller::class, 'getDateandhospital'])->name('exportpdf2');
-Route::get('/exporttopdf/{byHospitals}', [exportpdfcontroller::class, 'getHospital'])->name('exportpdf3');
-Route::get('/exporttopdf', [exportpdfcontroller::class, 'nofilters'])->name('exportpdf');
+Route::get('/exporttopdf2/{byHospitals}', [exportpdfcontroller::class, 'getHospital'])->name('exportpdf3');
+Route::get('/exporttopdf2', [exportpdfcontroller::class, 'nofilters'])->name('exportpdf');
 Route::post('/getDate',[exportpdfcontroller::class, 'getDate']);
 
 

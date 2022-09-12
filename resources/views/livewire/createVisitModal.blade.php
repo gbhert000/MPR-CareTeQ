@@ -60,8 +60,16 @@
                 <input type="text" value="" id="dateArrival" name="dateArrival" class="form-control datepicker">
               </div>
               <div class="col mt-3">
+                <label for="timeArrival">Admit Time</label>
+                <input type="time" value="" id="timeArrival" name="timeArrival" class="form-control">
+              </div>
+              <div class="col mt-3">
                 <label for="dateDischarged">Discharged Date</label>
-                <input type="text" value="" id="dateDischarged" name="dateDischarged" class="form-control datepicker" readonly>
+                <input type="text" value="" id="dateDischarged" name="dateDischarged" class="form-control datepicker">
+              </div>
+              <div class="col mt-3">
+                <label for="timeDischarged">Discharged Time</label>
+                <input type="time" value="" id="timeDischarged" name="timeDischarged" class="form-control">
               </div>
               <div class="w-100"></div>
               {{-- <div class="w-100"></div> --}}

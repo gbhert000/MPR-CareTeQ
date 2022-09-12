@@ -22,9 +22,9 @@ top: 50%;
 transform: translateY(-50%);
 
 }
-.break{
+/* .break{
   page-break-before: always;
-}
+} */
 th{
 text-align: center;
 }
@@ -45,11 +45,11 @@ button#exportpdf {
   visibility: hidden;
 }
 .table > :not(caption) > * > *{
-  padding: 5px !important;
+  padding: 3px !important;
 }
-.break{
+/* .break{
   page-break-before: always;
-}
+} */
 #tfoot1,#tr1,#td1{
   border: none ;
 }
@@ -94,16 +94,20 @@ th#addressth {
   @page {
 size: A4;
 margin: 11mm 17mm 17mm 17mm;
+
 /* counter-reset: page !important; */
 }
 /* #tfoot1{
       counter-increment: page !important;
 } */
-#pageFooter1:after {
+#pageFooter1 {
 
-      content: "Page " counter(page) " of " counter(page) !important;
-
+/* counter-increment: page; */
 }
+/* #pageFooter1:after {
+
+content: "Page " counter(page) " of "!important;
+} */
 .printsection thead, tbody{
   border: 1px solid black;
 }
@@ -214,7 +218,7 @@ th{
 
                   <thead class="tablerep">
                  <tr>
-                    <th  rowspan="4 " colspan="2" id="imagepangath" style="    width: 18%;"><img src="img/panga.png" id="imagepanga" class="rounded mx-auto d-block"
+                    <th  rowspan="3 " colspan="2" id="imagepangath" style="    width: 18%;"><img src="img/panga.png" id="imagepanga" class="rounded mx-auto d-block"
                          style="    width: 90%;
                          margin-left: 5% !important;
                         "></th>
@@ -238,15 +242,16 @@ th{
                           <th colspan="2" >Period: from <span >{{ \Carbon\Carbon::parse($startDate)->format('F j, Y')}}</span> to <span >{{ \Carbon\Carbon::parse($endDate)->format('F j, Y')}}</span></th>
 
                   @endif
-                      <th colspan="2">Total Patient/s:</th>
-                      <th >{{$pow}}</th>
-                     </tr>
+                  <th colspan="2">Total Patient/s:</th>
+                  @if ($byHospitals=="")
+                  <th>{{$pow}}</th>
+                  @else
+                  <th >{{$getallpatientsincom}}</th>
+                  @endif
+                 </tr>
 
 
-
-              </thead>
-              <tbody id="tbodyz">
-                  <tr style="background-color:rgb(177, 241, 241);" id="tablelist">
+                     <tr style="background-color:rgb(177, 241, 241);" id="tablelist">
                       <th scope="col" class="col" style="text-align: center" id="noin1">NO.</th>
                       <th scope="col"  class="col"style="text-align: center" id="masterpatientin1">Master Patient Index</th>
                       <th scope="col" class="col" style="text-align: center" id="fullnamein1">Full Name</th>
@@ -256,12 +261,17 @@ th{
                       <th scope="col" class="col" style="text-align: center" id="visitsin1">Visits</th>
 
                     </tr>
+
+
+              </thead>
+              <tbody id="tbodyz">
+
                     {{-- SABI NI MANUEL PARA SA LAHAT --}}
                     @if ($startDate=="" && $endDate=="" && $byHospitals==""&& $search=="")
 
                     @php
                            $i=1;
-                          //  echo('nofilters');
+                           echo('nofilters');
                             @endphp
                   @foreach($getallpatients as $item)
                 <tr  wire:key="{{$item->id}}">
@@ -283,7 +293,7 @@ th{
                    @elseif ($startDate=="" && $endDate=="" && $byHospitals!=""&& $search=="")
                    @php
                    $i=1;
-                  //  echo('filterbyhospital');
+                   echo('filterbyhospital');
                     @endphp
           @foreach($getallpatients2 as $item)
         <tr  wire:key="{{$item->id}}">
@@ -300,10 +310,30 @@ th{
             $i++
         @endphp
         @endforeach
+        @elseif ( $search=="" && $byHospitals!="" && $startDate!="" && $endDate!="")
+                          @php
+                          $i=1;
+                          echo('filter by search and hospital');
+                           @endphp
+                  @foreach($getallpatients7 as $item)
+                  <tr  wire:key="{{$item->id}}">
+                  <th scope="row" style="text-align: center;">{{$i}}</th>
+                  <td style="text-align: center;">{{$item->CODE}}</td>
+                  <td >{{$item->NAME}}</td>
+                  <td style="text-align: center;">{{$item->U_AGE}}</td>
+                  <td style="text-align: center;">{{$item->U_CITY}}</td>
+                  <td style="text-align: center;">{{ date('m-d-Y', strtotime($item->DATECREATED)) }}</td>
+                  <td style="text-align: center;">{{ $item->U_VISITCOUNT }}</td>
+
+                  </tr>
+                  @php
+                  $i++
+                  @endphp
+                  @endforeach
         @elseif ($startDate!="" && $endDate!="" && $search=="")
                           @php
                           $i=1;
-                          // echo('filter by date and null search');
+                          echo('filter by date and null search');
                            @endphp
                   @foreach($getallpatients3 as $item)
                   <tr  wire:key="{{$item->id}}">
@@ -324,7 +354,7 @@ th{
                   @elseif ($startDate!="" && $endDate!="" && $search!="")
                           @php
                           $i=1;
-                          // echo('filter by dates and search');
+                          echo('filter by dates and search');
                           @endphp
                   @foreach($getallpatients4 as $item)
                   <tr  wire:key="{{$item->id}}">
@@ -341,11 +371,11 @@ th{
                   $i++
                   @endphp
                   @endforeach
-{{-- FILTER BY SEARCH --}}
+                  {{-- FILTER BY SEARCH --}}
                   @elseif ( $search!="" && $byHospitals=="" && $startDate=="" && $endDate=="")
                           @php
                           $i=1;
-                          // echo('filter by search');
+                          echo('filter by search');
                            @endphp
                   @foreach($getallpatients5 as $item)
                   <tr  wire:key="{{$item->id}}">
@@ -366,7 +396,7 @@ th{
                   @elseif ( $search!="" && $byHospitals!="")
                           @php
                           $i=1;
-                          // echo('filter by search and hospital');
+                          echo('filter by search and hospital');
                            @endphp
                   @foreach($getallpatients6 as $item)
                   <tr  wire:key="{{$item->id}}">
@@ -388,7 +418,7 @@ th{
                    @else
                         @php
                            $i=1;
-                          //  echo('hello');
+                           echo('hello');
                            @endphp
                   @foreach($patients as $item)
                 <tr  wire:key="{{$item->id}}">
@@ -415,12 +445,15 @@ th{
                   <tr id="tr1" >
                       <td  id="td1" >
                             <br><br><div id="date" class="footer">
-                          <p class="page" id="printby">Printed By: {{Auth::user()->name}} &nbsp; Date Printed: {{ date('m/d/Y') }} </p>
+                          {{-- <p class="page" id="printby">Printed By: {{Auth::user()->name}} &nbsp; Date Printed: {{ date('m/d/Y') }} </p> --}}
+                          <p class="page" id="printby">Printed By: {{Auth::user()->name}}  </p>
+
                                </div>
                         <p id="pageFooter1" ></p></td>
                   </tr>
               </tfoot>
             </table>
+
 
                </div>
 
@@ -432,6 +465,8 @@ th{
   </div>
 
         </div>
+
+
   <div class="modal-footer">
     {{-- <button type="button" class="btn btn-success" id="Printthetable">PRINT</button>
     <button class="btn btn-primary" onclick="print5()">EXPORT TO PDF</button> --}}
@@ -439,6 +474,7 @@ th{
 </div>
 </div>
 </div>
+
 
 {{-- END NEED ILIPAT --}}
 

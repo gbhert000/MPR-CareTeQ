@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Components\FlashMessages;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,9 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        if($this->app->environment('production')) {
-            \URL::forceScheme('https');
-        }
+        // URL::forceScheme('https');
         view()->composer('partials.messages', function ($view) {
 
             $messages = self::messages();

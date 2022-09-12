@@ -80,6 +80,7 @@ class ReportController extends Controller
        //$users = User::get();
       $last_visit = DB::table('u_hisvisits')->where('U_PATIENTID','=',$CODE)->orderBy('DOCNO','DESC')->first();
       $start_visit = DB::table('u_hisvisits')->where('U_PATIENTID','=',$CODE)->orderBy('U_STARTDATE','ASC')->first();
+      $patient_HMO = DB::table('v_patientshmo')->distinct()->where('Code','=',$CODE)->first();
       // dd($last_visit);
       $PatientContact = DB::table('u_hiscontacts')
        ->where ('CODE', $CODE)
@@ -100,6 +101,7 @@ class ReportController extends Controller
       // $result = str_replace(array('[', ']','"'), '', htmlspecialchars(json_encode($PatientInfos2), ENT_NOQUOTES));
   
       // $path = public_path().'/myfiles/uploads/'.$result;
+      
       $imageF=File::get(public_path('/myfiles/uploads/'.$PatientInfos2[0]));
         // dd($imageF);
       //   $pathimage ='C:\Users\ADMIN\Documents\Laravel\CareTeQ (2)\CareTeQ\storage\app\public\images\6305b6a9dbedb.png';
@@ -149,6 +151,7 @@ class ReportController extends Controller
             'U_CONTACTADDRESS'=>$value->U_CONTACTADDRESS,
             'U_CONTACTTELNO'=>$value->U_CONTACTTELNO,
             'U_CONTACTRELATIONSHIP'=>$value->U_CONTACTRELATIONSHIP,
+            'patient_HMO'=>$patient_HMO
             
             
           ]; 
@@ -200,6 +203,7 @@ class ReportController extends Controller
             'U_CONTACTADDRESS'=>$value->U_CONTACTADDRESS,
             'U_CONTACTTELNO'=>$value->U_CONTACTTELNO,
             'U_CONTACTRELATIONSHIP'=>$value->U_CONTACTRELATIONSHIP,
+            'patient_HMO'=>$patient_HMO
           ]; 
         }
        
@@ -215,8 +219,12 @@ class ReportController extends Controller
         
         // $canvas =  $pdf ->get_canvas();
         // $canvas->page_text(0, 0, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
+        $pdf->output();
+        $dom_pdf = $pdf->getDomPDF();
         
-        return $pdf->download('MPIForm.pdf');
+        $canvas = $dom_pdf ->get_canvas();
+        $canvas->page_text(520, 815, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
+        return $pdf->download('MPR-'.$CODE.'.pdf');
         // return view('Reports.masterpatientrecord',compact('PatientInfos','imageF'));//tapos paste mo to
 
 

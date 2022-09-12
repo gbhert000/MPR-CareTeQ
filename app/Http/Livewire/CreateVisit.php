@@ -46,7 +46,7 @@ class CreateVisit extends Component
         // if($request->hospCode!=Auth::user()->COMPANY){
         //     $newHospitalIdget=DB::table('u_hospitalids');
         // }
-
+            // $admitTime=Carbon::parse;
         $getLastVisitCode=$this->getLastCode('u_hisvisits','visitID');
         // dd($getLastVisitCode);
         // dd(Carbon::now('Y'));
@@ -158,6 +158,7 @@ class CreateVisit extends Component
 
         }
         if($createVisitRecord){
+            // dd("done");
             $visitCount=DB::table('u_hispatients')->select('U_VISITCOUNT')->where('CODE',$request->mpi)->first();
 
             $newCount=(int)($visitCount->U_VISITCOUNT) + 1;
@@ -165,7 +166,7 @@ class CreateVisit extends Component
             $getCodeHospcode=DB::table('u_hospitalids')->where(['CODE'=>$request->mpi, 'HOSPITALCODE'=>Auth::user()->companyCode])->first();
             // dd($hospitalNHFRVisit);
             // dd($getCodeHospcode->HOSPITALID);
-            if($request->mrnUpdate!=""){
+            if($request->hpidVisit!=""){
                 $hospitalIDget=join('-',[$hospitalNHFRVisit->NHFR,$request->hpidVisit]);
                 $idSeriesGet=$request->hpidVisit;
                 $nhfrGet=$hospitalNHFRVisit->NHFR;

@@ -46,6 +46,11 @@ class exportpdfcontroller extends Controller
             //   return view('livewire.exporttopdf',compact('patientstotal','pow','PatientInfos2','imageLogo','byHospitals','sd','ed'));
 
             $pdf = PDF::setPaper('a4', 'portrait')->setOptions(['dpi' => 100, 'defaultFont' => 'cambria', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'isJavascriptEnabled' => true])->loadView('livewire.exporttopdf', $data)->setWarnings(false);
+            $pdf->output();
+          $dom_pdf = $pdf->getDomPDF();
+
+      $canvas = $dom_pdf ->get_canvas();
+      $canvas->page_text(520, 815, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
             return $pdf->download('MasterPatientList.pdf');
 
 
@@ -61,7 +66,7 @@ class exportpdfcontroller extends Controller
       $byHospitals = $request->byHospitals;
 
 
-      $pow = DB::table('u_hispatients')->count();
+      $pow = DB::table('u_hispatients') ->Where('COMPANY','=',$byHospitals)->count();
       $patientstotal = DB::table('u_hispatients')
 
 
@@ -92,6 +97,11 @@ class exportpdfcontroller extends Controller
             ];
             // return view('livewire.exporttopdf',compact('patientstotal','pow','PatientInfos2','imageLogo','byHospitals','sd','ed'));
           $pdf = PDF::setPaper('a4', 'portrait')->setOptions(['dpi' => 100, 'defaultFont' => 'cambria', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'isJavascriptEnabled' => true])->loadView('livewire.exporttopdf', $data)->setWarnings(false);
+          $pdf->output();
+          $dom_pdf = $pdf->getDomPDF();
+
+      $canvas = $dom_pdf ->get_canvas();
+      $canvas->page_text(520, 815, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
           return $pdf->download('MasterPatientList.pdf');
 
     }
@@ -101,9 +111,7 @@ class exportpdfcontroller extends Controller
         $imageLogo = base64_encode(file_get_contents( $LogoF));
         $oldest = DB::table('u_hispatients')->select('DATECREATED')->orderBy('DATECREATED')->first();
       $sd = $oldest;
-      $ed = '09-06-2022';
-
-     // dd( $ed );
+      $ed = now();
       $byHospitals = 'All Hospitals';
 
 
@@ -126,17 +134,24 @@ class exportpdfcontroller extends Controller
             ];
             // return view('livewire.exporttopdf',compact('patientstotal','pow','PatientInfos2','imageLogo','byHospitals','sd','ed'));
           $pdf = PDF::setPaper('a4', 'portrait')->setOptions(['dpi' => 100, 'defaultFont' => 'cambria', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'isJavascriptEnabled' => true])->loadView('livewire.exporttopdf', $data)->setWarnings(false);
+          $pdf->output();
+          $dom_pdf = $pdf->getDomPDF();
+
+      $canvas = $dom_pdf ->get_canvas();
+      $canvas->page_text(520, 815, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
           return $pdf->download('MasterPatientList.pdf');
 
     }
     public function getHospital(Request $request){
         $LogoF = public_path().'/myfiles/uploads/logo.jpg';
         $imageLogo = base64_encode(file_get_contents( $LogoF));
+        $oldest = DB::table('u_hispatients')->select('DATECREATED')->orderBy('DATECREATED')->first();
 
-      $byHospitals = $request->byHospitals;
+        $byHospitals = $request->byHospitals;
+        $sd = $oldest;
+        $ed = now();
 
-
-      $pow = DB::table('u_hispatients')->count();
+      $pow = DB::table('u_hispatients') ->Where('COMPANY','=',$byHospitals)->count();
       $patientstotal = DB::table('u_hispatients')
 
 
@@ -158,11 +173,18 @@ class exportpdfcontroller extends Controller
               'byHospitals' => $byHospitals,
               'pow'=>$pow,
               'patientstotal'=>$patientstotal,
+              'sd'=>$sd,
+              'ed'=>$ed,
 
 
             ];
             // return view('livewire.exporttopdf',compact('patientstotal','pow','PatientInfos2','imageLogo','byHospitals','sd','ed'));
-          $pdf = PDF::setPaper('a4', 'portrait')->setOptions(['dpi' => 100, 'defaultFont' => 'cambria', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'isJavascriptEnabled' => true])->loadView('livewire.exporttopdf', $data)->setWarnings(false);
+          $pdf = PDF::setPaper('a4', 'portrait')->setOptions(['dpi' => 100, 'defaultFont' => 'cambria', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'isJavascriptEnabled' => true])->loadView('livewire.exporttopdf2', $data)->setWarnings(false);
+          $pdf->output();
+          $dom_pdf = $pdf->getDomPDF();
+
+      $canvas = $dom_pdf ->get_canvas();
+      $canvas->page_text(520, 815, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
           return $pdf->download('MasterPatientList.pdf');
 
     }

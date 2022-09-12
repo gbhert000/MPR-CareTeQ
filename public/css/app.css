@@ -2531,12 +2531,20 @@ span#removeaContact ,
 span#addaContact,
 #addaContactUpdate,
 #addaEmail,
-#addaEmailUpdate
-{
-  display: inline-block !important;
+#addaEmailUpdate,
+#addAnotherProvider,
+#addAnotherAllergy1,
+#addAnotherAllergy2,
+#addAnotherAllergy3,
+#addAnotherAllergy,
+#addAnotherAllergy4,
+#addAnotherAllergy5,
+#addAnotherAllergy6
+{ 
+  /* display: inline-block !important; */
   /* width: 5rem; */
   color: #0b5ed7;
-  cursor: pointer;
+  cursor: pointer!important;
 }
 #selectICD,
 #selectICDUpdate{
@@ -2660,3 +2668,8 @@ input[type=number] {
 /* .modal-dialog{
   overflow-y: initial !important
 } */
+
+#memberSex2,
+#memberBDay2{
+  pointer-events: none;
+}
