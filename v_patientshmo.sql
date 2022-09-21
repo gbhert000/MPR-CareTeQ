@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `careteq`
+-- Database: `CareTeQ`
 --
 
 -- --------------------------------------------------------
@@ -39,3 +39,19 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+
+CREATE 
+ 
+VIEW `CareTeQ`.`v_multipleicd` AS
+    SELECT DISTINCT
+        `a`.`U_PATIENTID` AS `U_PATIENTID`,
+        `b`.`visitID` AS `visitID`,
+        `a`.`DOCNO` AS `docno`,
+        `b`.`U_ICDCODE` AS `U_ICDCODE`,
+        `b`.`U_ICDDESC` AS `U_ICDDESC`,
+        `a`.`COMPANY` AS `company`
+    FROM
+        (`CareTeQ`.`u_hisvisits` `a`
+        LEFT JOIN `CareTeQ`.`u_hispatienticds` `b` ON (`b`.`visitID` = `a`.`DOCNO`))

@@ -42,7 +42,7 @@ return [
             'url' => env('APP_URL').'/public',
             'visibility' => 'public',
         ],
-        'my_files' => [
+        'myfiles' => [
             'driver' => 'local',
             'root'   => public_path() . '/myfiles',
             // 'url' => env('APP_URL').'/public/myFiles',

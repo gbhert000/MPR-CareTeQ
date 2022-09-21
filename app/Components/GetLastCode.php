@@ -25,7 +25,7 @@ trait GetLastCode
         $img_name=uniqid().'.txt';
         $folderPath = "uploads/";
         $file = $folderPath . $img_name;
-        $uploadStorage=Storage::disk('my_files')->put($file,$img);
+        $uploadStorage=Storage::disk('myfiles')->put($file,$img);
         if($uploadStorage){
                     // dd("asd");
                     // $checkImage=DB::table("u_hisimages")->where("patientCode",$MPID)->first();
